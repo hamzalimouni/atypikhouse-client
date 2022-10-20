@@ -1,0 +1,40 @@
+/*     */
+.atypik-btn {
+    background-color: #8ED081 !important;
+    color: white;
+    border-radius: 0;
+}
+
+.atypik-btn:hover {
+    background-color: #80b974 !important;
+    color: white;
+}
+
+.dropdown-toggle::after {
+    display: none !important;
+}
+
+.dropdown-menu {
+    border-radius: 0;
+    border: none;
+    box-shadow: 0 0 9px 0px #e5e5e5;
+}
+
+.dropdown-divider {
+    border-top: 1px solid #f2f2f2;
+}
+
+.atypik-input .icon {
+    background: white;
+    color: #FFB703;
+}
+
+.atypik-input .input {
+    border-left: none !important;
+    margin-left: -12px !important;
+}
+
+.atypik-input .input:focus {
+    box-shadow: none !important;
+    /* border: 1px solid #8ED081 */
+}
