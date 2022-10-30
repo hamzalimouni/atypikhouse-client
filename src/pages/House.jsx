@@ -77,7 +77,9 @@ const House = () => {
                     <span>1</span>
                   </div>
                 </div>
-                <button>Réserver</button>
+                <div className="reserver">
+                  <button>Réserver</button>
+                </div>
                 <div className="price-details">
                   <div className="price-night">
                     <span>165 € x 1 nuit :</span>

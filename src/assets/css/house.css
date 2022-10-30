@@ -10,7 +10,8 @@
 }
 
 .house-container .house-detail-price {
-    border: 1px solid black;
+    box-shadow: 0 2px 15px rgb(0 0 0 / 10%);
+    border-radius: 10px;
 }
 
 .house-container .house-detail-price .price-rate {
@@ -20,12 +21,10 @@
 }
 
 .house-container .houses-informations {
-    /* display: flex;
-    justify-content: space-around;
-    flex-direction: row-reverse; */
     display: grid;
-    grid-template-columns: 1fr 400px;
+    grid-template-columns: 2fr 350px;
     gap: 40px;
+    margin: 80px 20px;
 }
 
 .house-container .houses-informations .house-details {
@@ -39,11 +38,40 @@
 }
 
 .travel-detail .house-details {
-    border: 1px solid black;
+    box-shadow: 0 2px 15px rgb(0 0 0 / 10%);
+    border-radius: 10px;
+    margin: 20px;
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
+    gap: 10px;
 }
 
 .travel-detail .house-details img {
     max-width: 100px;
+    border-radius: 10px;
+}
+
+.travel-detail .reserver {
+    text-align: center;
+}
+
+.travel-detail .reserver button {
+    border-radius: 10px;
+    width: 200px;
+    height: 40px;
+    border: 0;
+    background-color: #8ED081;
+    color: #FDFDFD;
+    margin: 30px;
+}
+
+.travel-detail .price-details {
+    padding: 20px;
+}
+
+.price-night,
+.price-taxe,
+.price-total {
+    display: flex;
+    justify-content: space-between;
 }
