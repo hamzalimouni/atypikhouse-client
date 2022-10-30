@@ -19,7 +19,7 @@ const AppNavbar = () => {
                         <Nav.Link href="">À propos</Nav.Link>
                     </Nav>
                     <Nav>
-                        <Nav.Link href=""><Button variant="flat" className='atypik-btn'>Devenir hôte</Button></Nav.Link>
+                        <Nav.Link href=""><Button variant="atypik">Devenir hôte</Button></Nav.Link>
                         <Nav.Link>
                             <NavDropdown title="Mon compte">
                                 <NavDropdown.Item href="">Connexion</NavDropdown.Item>

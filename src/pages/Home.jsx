@@ -9,13 +9,13 @@ const Home = () => {
         <div>
             <Navbar />
             <SearchForm />
-            <Container>
+            {/* <Container>
                 <Row>
                     <Col><CardHouse /></Col>
                     <Col><CardHouse /></Col>
                     <Col><CardHouse /></Col>
                 </Row>
-            </Container>
+            </Container> */}
         </div >
     )
 }
