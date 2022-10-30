@@ -1,25 +1,29 @@
 import React from 'react'
 import bg from '../assets/img/bg.png';
 import '../assets/css/CardHouse.css';
+import { Card, Row } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 
-const CardHouse = () => {
+const CardHouse = (props) => {
     return (
-        <div>
-            <div className="box">
-                <img src={bg} alt="" />
-                <div className="content">
-                    <h3>Test Title</h3>
-                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Reprehenderit</p>
-                </div>
-                <div className="info">
-                    <a href="">Read More</a>
-                    <div className="rate">
-                        <span>star-icon </span>
-                        <span>rating</span>
+        <Card className='mt-4'>
+            <Card.Img variant="top" src={bg} height="300px" />
+            <Card.Body>
+                <Card.Title>{props.title}</Card.Title>
+                <Card.Text>{props.destination}</Card.Text>
+            </Card.Body>
+            <Card.Body>
+                <div class="d-flex justify-content-between">
+                    <strong>
+                        {props.price} € / nuit
+                    </strong>
+                    <div>
+                        <FontAwesomeIcon icon={faStar} color="#ffb406" /> {props.reviews}
                     </div>
                 </div>
-            </div>
-        </div>
+            </Card.Body>
+        </Card>
     )
 }
 
