@@ -1,13 +1,64 @@
 /*     */
+/* Start Global Rules */
+
+:root {
+    --main-color: #8ED081;
+    --second-color: #FDFDFD;
+    --icon-color: #FFB703;
+    --transition-main-value: 0.3s;
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+html {
+    /* scroll-behavior: smooth; */
+}
+
+body {
+    /* font-family: 'Courier New', Courier, monospace; */
+}
+
 .atypik-btn {
-    background-color: #8ED081 !important;
+    background-color: var(--main-color) !important;
     color: white;
     border-radius: 0;
 }
 
+/* .container {
+    padding-left: 15px;
+    padding-right: 15px;
+    margin: 0 auto;
+} */
+
+/* Small Screen  */
+/* @media (min-width: 768px) {
+    .container {
+        width: 750px;
+    }
+} */
+
+/* Medium Screen  */
+/* @media (min-width: 992px) {
+    .container {
+        width: 970px;
+    }
+} */
+
+/* Large Screen  */
+/* @media (min-width: 1200px) {
+    .container {
+        width: 1170px;
+    }
+} */
+
 .atypik-btn:hover {
-    background-color: #80b974 !important;
-    color: white;
+    background-color: var(--main-color) !important;
+    color: var(--second-color);
 }
 
 .dropdown-toggle::after {
@@ -25,8 +76,8 @@
 }
 
 .atypik-input .icon {
-    background: white;
-    color: #FFB703;
+    background: var(--second-color);
+    color: var(--icon-color);
 }
 
 .atypik-input .input {
@@ -38,3 +89,5 @@
     box-shadow: none !important;
     /* border: 1px solid #8ED081 */
 }
+
+/* End Global Rules */

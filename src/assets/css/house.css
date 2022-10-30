@@ -1,0 +1,49 @@
+.house-container .house-images {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 10px;
+    margin: 20px;
+}
+
+.house-container .house-images .house-img-wrapper .house-img {
+    max-width: 100%;
+}
+
+.house-container .house-detail-price {
+    border: 1px solid black;
+}
+
+.house-container .house-detail-price .price-rate {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px;
+}
+
+.house-container .houses-informations {
+    /* display: flex;
+    justify-content: space-around;
+    flex-direction: row-reverse; */
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 40px;
+}
+
+.house-container .houses-informations .house-details {
+    grid-row-start: 1;
+    grid-column-start: 1;
+}
+
+.travel-detail .travel-client-detail {
+    display: flex;
+    justify-content: space-around;
+}
+
+.travel-detail .house-details {
+    border: 1px solid black;
+    display: flex;
+    justify-content: space-around;
+}
+
+.travel-detail .house-details img {
+    max-width: 100px;
+}
