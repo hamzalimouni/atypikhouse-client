@@ -1,11 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/css/main.css'
 import '../assets/css/navbar.css'
 import logo from '../assets/img/logo.png';
-import { Navbar, Container, Nav, NavDropdown, Button, Image } from 'react-bootstrap';
+import { Navbar, Container, Nav, NavDropdown, Button, Image, Modal } from 'react-bootstrap';
+import LoginModal from './LoginModal';
+import RegisterModal from './RegisterModal';
 
 const AppNavbar = () => {
+
+    const [showLogin, setShowLogin] = useState(false);
+    const [showRegister, setShowRegister] = useState(false);
+
+    const handleCloseLogin = () => setShowLogin(false);
+    const handleShowLogin = () => setShowLogin(true);
+    const handleCloseRegister = () => setShowRegister(false);
+    const handleShowRegister = () => setShowRegister(true);
+
     return (
         <Navbar collapseOnSelect expand="lg">
             <Container>
@@ -22,8 +33,8 @@ const AppNavbar = () => {
                         <Nav.Link href=""><Button variant="atypik">Devenir hôte</Button></Nav.Link>
                         <Nav.Link>
                             <NavDropdown title="Mon compte">
-                                <NavDropdown.Item href="">Connexion</NavDropdown.Item>
-                                <NavDropdown.Item href="">Inscription</NavDropdown.Item>
+                                <NavDropdown.Item onClick={handleShowLogin} >Connexion</NavDropdown.Item>
+                                <NavDropdown.Item onClick={handleShowRegister}>Inscription</NavDropdown.Item>
                             </NavDropdown>
                         </Nav.Link>
                     </Nav>
@@ -42,6 +53,8 @@ const AppNavbar = () => {
                     </Nav> */}
                 </Navbar.Collapse>
             </Container>
+            <LoginModal show={showLogin} onClose={handleCloseLogin} />
+            <RegisterModal show={showRegister} onClose={handleCloseRegister} />
         </Navbar >
     )
 }
