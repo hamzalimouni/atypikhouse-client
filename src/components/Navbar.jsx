@@ -7,11 +7,13 @@ import { Navbar, Container, Nav, NavDropdown, Button, Image, Modal, Row, Col } f
 import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal';
 import { Drawer, Badge, Avatar } from 'antd';
+import { useNavigate } from "react-router-dom";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons';
 const AppNavbar = () => {
 
+    let navigate = useNavigate();
     const [showLogin, setShowLogin] = useState(false);
     const [showRegister, setShowRegister] = useState(false);
     const [open, setOpen] = useState(false);
@@ -41,16 +43,16 @@ const AppNavbar = () => {
                         <Nav.Link href="">Nous contacter</Nav.Link>
                         <Nav.Link href="">À propos</Nav.Link>
                     </Nav>
-                    <Nav>
-                        <Nav.Link href=""><Button variant="atypik">Devenir hôte</Button></Nav.Link>
+                    {/* <Nav>
+                        <Nav.Link onClick={() => { navigate("/posts") }}><Button variant="atypik">Devenir hôte</Button></Nav.Link>
                         <Nav.Link>
                             <NavDropdown title="Mon compte">
                                 <NavDropdown.Item onClick={handleShowLogin} >Connexion</NavDropdown.Item>
                                 <NavDropdown.Item onClick={handleShowRegister}>Inscription</NavDropdown.Item>
                             </NavDropdown>
                         </Nav.Link>
-                    </Nav>
-                    {/* <Nav>
+                    </Nav> */}
+                    <Nav>
                         <Nav.Link href=""><Button variant="atypik">Publier une annonce</Button></Nav.Link>
                         <Nav.Link onClick={showDrawer} className='p-3'>
                             <Badge count={2}>
@@ -59,16 +61,16 @@ const AppNavbar = () => {
                         </Nav.Link>
                         <Nav.Link>
                             <NavDropdown title="Mon compte">
-                            <NavDropdown.Item href="">Gérer mon compte</NavDropdown.Item>
+                            <NavDropdown.Item onClick={() => { navigate("/account") }}>Gérer mon compte</NavDropdown.Item>
                             <NavDropdown.Item href="">Messages</NavDropdown.Item>
                             <NavDropdown.Item href="">Mes annonces</NavDropdown.Item>
                             <NavDropdown.Item href="">Mes réservations</NavDropdown.Item>
-                            <NavDropdown.Item href="">Mon profil</NavDropdown.Item>
+                            <NavDropdown.Item href="">Commentaires</NavDropdown.Item>
                             <NavDropdown.Divider></NavDropdown.Divider>
                             <NavDropdown.Item href="">Se déconnecter</NavDropdown.Item>
                             </NavDropdown>
                         </Nav.Link>
-                    </Nav> */}
+                    </Nav>
                 </Navbar.Collapse>
             </Container>
             <LoginModal show={showLogin} onClose={handleCloseLogin} />
