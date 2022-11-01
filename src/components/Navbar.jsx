@@ -18,7 +18,7 @@ const AppNavbar = () => {
     const handleShowRegister = () => setShowRegister(true);
 
     return (
-        <Navbar collapseOnSelect expand="lg">
+        <Navbar collapseOnSelect expand="lg" className='border-bottom'>
             <Container>
                 <Navbar.Brand><Image className="logo" src={logo} height='30px' /></Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -42,12 +42,13 @@ const AppNavbar = () => {
                         <Nav.Link href=""><Button variant="flat" className='atypik-btn'>Publier une annonce</Button></Nav.Link>
                         <Nav.Link>
                             <NavDropdown title="Mon compte">
-                                <NavDropdown.Item href="">Mon compte</NavDropdown.Item>
-                                <NavDropdown.Item href="">Mes annonces</NavDropdown.Item>
-                                <NavDropdown.Item href="">Mes réservations</NavDropdown.Item>
-                                <NavDropdown.Item href="">Mon profil</NavDropdown.Item>
-                                <NavDropdown.Divider></NavDropdown.Divider>
-                                <NavDropdown.Item href="">Se déconnecter</NavDropdown.Item>
+                            <NavDropdown.Item href="">Gérer mon compte</NavDropdown.Item>
+                            <NavDropdown.Item href="">Messages</NavDropdown.Item>
+                            <NavDropdown.Item href="">Mes annonces</NavDropdown.Item>
+                            <NavDropdown.Item href="">Mes réservations</NavDropdown.Item>
+                            <NavDropdown.Item href="">Mon profil</NavDropdown.Item>
+                            <NavDropdown.Divider></NavDropdown.Divider>
+                            <NavDropdown.Item href="">Se déconnecter</NavDropdown.Item>
                             </NavDropdown>
                         </Nav.Link>
                     </Nav> */}
