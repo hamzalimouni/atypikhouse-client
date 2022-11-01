@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect } from 'react';
-import { Button, Container, Form, Nav, Row } from 'react-bootstrap'
+import { Button, Col, Container, Form, Nav, Row } from 'react-bootstrap'
 import Navbar from '../components/Navbar'
 import { Radio, Space, Tabs } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -138,6 +138,53 @@ const EditProfile = () => {
                 Merci de remplir ce champ.
             </Form.Control.Feedback>
         </Form.Group>
+
+        <Form.Group className="mb-3">
+            <Form.Label>Pays/région</Form.Label>
+            <Form.Select required aria-label="">
+                <option></option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+            </Form.Select>
+            <Form.Control.Feedback type="invalid">
+                Merci de remplir ce champ.
+            </Form.Control.Feedback>
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+            <Form.Label>Adresse</Form.Label>
+            <Form.Control type="text" placeholder="" required
+                name="address" />
+            <Form.Control.Feedback type="invalid">
+                Merci de remplir ce champ.
+            </Form.Control.Feedback>
+        </Form.Group>
+
+        <Row>
+            <Col>
+                <Form.Group className="mb-3">
+                    <Form.Label>Ville</Form.Label>
+                    <Form.Control type="text" placeholder="" required
+                        name="city" />
+                    <Form.Control.Feedback type="invalid">
+                        Merci de remplir ce champ.
+                    </Form.Control.Feedback>
+                </Form.Group>
+            </Col>
+            <Col>
+                <Form.Group className="mb-3">
+                    <Form.Label>Code postal</Form.Label>
+                    <Form.Control type="text" placeholder="" required
+                        name="zipcode" />
+                    <Form.Control.Feedback type="invalid">
+                        Merci de remplir ce champ.
+                    </Form.Control.Feedback>
+                </Form.Group>
+            </Col>
+
+        </Row>
+
 
         <div className='text-center mb-5 d-flex'>
             <Button
