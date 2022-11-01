@@ -3,14 +3,26 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/css/main.css'
 import '../assets/css/navbar.css'
 import logo from '../assets/img/logo.png';
-import { Navbar, Container, Nav, NavDropdown, Button, Image, Modal } from 'react-bootstrap';
+import { Navbar, Container, Nav, NavDropdown, Button, Image, Modal, Row, Col } from 'react-bootstrap';
 import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal';
+import { Drawer, Badge, Avatar } from 'antd';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import * as Icons from '@fortawesome/free-solid-svg-icons';
 const AppNavbar = () => {
 
     const [showLogin, setShowLogin] = useState(false);
     const [showRegister, setShowRegister] = useState(false);
+    const [open, setOpen] = useState(false);
+
+    const showDrawer = () => {
+        setOpen(true);
+    };
+
+    const onClose = () => {
+        setOpen(false);
+    };
 
     const handleCloseLogin = () => setShowLogin(false);
     const handleShowLogin = () => setShowLogin(true);
@@ -39,7 +51,12 @@ const AppNavbar = () => {
                         </Nav.Link>
                     </Nav>
                     {/* <Nav>
-                        <Nav.Link href=""><Button variant="flat" className='atypik-btn'>Publier une annonce</Button></Nav.Link>
+                        <Nav.Link href=""><Button variant="atypik">Publier une annonce</Button></Nav.Link>
+                        <Nav.Link onClick={showDrawer} className='p-3'>
+                            <Badge count={2}>
+                                <FontAwesomeIcon icon={Icons.faBell} color="#8ed081" size="2x" />
+                            </Badge>
+                        </Nav.Link>
                         <Nav.Link>
                             <NavDropdown title="Mon compte">
                             <NavDropdown.Item href="">Gérer mon compte</NavDropdown.Item>
@@ -56,6 +73,32 @@ const AppNavbar = () => {
             </Container>
             <LoginModal show={showLogin} onClose={handleCloseLogin} />
             <RegisterModal show={showRegister} onClose={handleCloseRegister} />
+            <Drawer title="Notifications" placement="right" onClose={onClose} open={open}>
+                <Row className='border-bottom py-3'>
+                    <Col md={2}>
+                        <Avatar icon={<FontAwesomeIcon icon={Icons.faUserAlt} color="#fff" />} />
+                    </Col>
+                    <Col md={8}>
+                        <p className='p-0 m-0'>Veuillez confirmer votre adresse e-mail en cliquant sur le lien que nous venons de vous adresser par e-mail.</p>
+                        <small>20 Octobre 2022</small>
+                    </Col>
+                    <Col md={2}>
+                        <FontAwesomeIcon icon={Icons.faClose} color="#000" />
+                    </Col>
+                </Row>
+                <Row className='border-bottom py-3 bg-light'>
+                    <Col md={2}>
+                        <Avatar icon={<FontAwesomeIcon icon={Icons.faUserAlt} color="#fff" />} />
+                    </Col>
+                    <Col md={8}>
+                        <p className='p-0 m-0'>Vous avez des nouveaux messages.</p>
+                        <small className='text-muted'>20 Octobre 2022</small>
+                    </Col>
+                    <Col md={2}>
+                        <FontAwesomeIcon icon={Icons.faClose} color="#000" />
+                    </Col>
+                </Row>
+            </Drawer>
         </Navbar >
     )
 }
