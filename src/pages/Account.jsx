@@ -8,6 +8,10 @@ import * as Icons from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import PhoneInput from 'react-phone-input-2';
 import Footer from '../components/Footer';
+import { API_URL } from '../Variables';
+import { Skeleton } from 'antd';
+import Cookies from 'js-cookie';
+import { format } from 'date-fns';
 
 
 const Account = () => {
@@ -16,7 +20,30 @@ const Account = () => {
     }, []);
     const [isEdit, setIsEdit] = useState(false);
     const [isPwEdit, setPwIsEdit] = useState(false);
-
+    const [items, setItems] = useState([]);
+    const [isLoaded, setIsLoaded] = useState(false)
+    useEffect(() => {
+        fetch(API_URL + '/me', {
+            headers: new Headers({
+                'Authorization': 'bearer ' + Cookies.get("token"),
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }),
+        })
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    setIsLoaded(true);
+                    setItems(result);
+                },
+                // Note: it's important to handle errors here
+                // instead of a catch() block so that we don't swallow
+                // exceptions from actual bugs in components.
+                (error) => {
+                    setIsLoaded(false);
+                    console.log(error)
+                }
+            )
+    }, [])
     return (
         <div>
             < Navbar />
@@ -30,27 +57,31 @@ const Account = () => {
                                 onClick={() => setIsEdit(!isEdit)}> {isEdit ? 'Annuler' : 'Modifier'}</Button>
                         </div>
                         <div className='mt-5 px-5'>
-
                             {!isEdit ? <div>
                                 <div className='px-lg-5'>
                                     <strong>Prénom</strong>
-                                    <p>Mohammed</p>
+                                    <Skeleton loading={!isLoaded} active={!isLoaded} paragraph={false}><p>{items['firstname']}</p></Skeleton>
                                 </div>
                                 <div className='px-lg-5'>
                                     <strong>Nom</strong>
-                                    <p>MOUDOU</p>
+                                    <Skeleton loading={!isLoaded} active={!isLoaded} paragraph={false}><p>{items['lastname']}</p></Skeleton>
                                 </div>
                                 <div className='px-lg-5'>
                                     <strong>Email</strong>
-                                    <p>MOUDOU Mohammed</p>
+                                    <Skeleton loading={!isLoaded} active={!isLoaded} paragraph={false}><p>{items['email']}</p></Skeleton>
                                 </div>
                                 <div className='px-lg-5'>
                                     <strong>Téléphone</strong>
-                                    <p>+33635586982</p>
+                                    <Skeleton loading={!isLoaded} active={!isLoaded} paragraph={false}><p>{items['number']}</p></Skeleton>
                                 </div>
                                 <div className='px-lg-5'>
                                     <strong>Date de naissance</strong>
-                                    <p>08/05/1998</p>
+                                    <Skeleton loading={!isLoaded} active={!isLoaded} paragraph={false}>
+                                        <p>
+                                            {/* {items['birthday']} */}
+                                            {format(new Date(items['birthday'] ? items['birthday'] : '02/11/22'), 'dd/MM/yyyy')}
+                                        </p>
+                                    </Skeleton>
                                 </div>
                                 <div className='px-lg-5'>
                                     <strong>Address</strong>

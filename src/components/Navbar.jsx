@@ -8,11 +8,12 @@ import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal';
 import { Drawer, Badge, Avatar } from 'antd';
 import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons';
 const AppNavbar = () => {
-
+    let curUser = Cookies.get('user');
     let navigate = useNavigate();
     const [showLogin, setShowLogin] = useState(false);
     const [showRegister, setShowRegister] = useState(false);
@@ -43,34 +44,39 @@ const AppNavbar = () => {
                         <Nav.Link href="">Nous contacter</Nav.Link>
                         <Nav.Link href="">À propos</Nav.Link>
                     </Nav>
-                    {/* <Nav>
-                        <Nav.Link onClick={() => { navigate("/posts") }}><Button variant="atypik">Devenir hôte</Button></Nav.Link>
-                        <Nav.Link>
-                            <NavDropdown title="Mon compte">
-                                <NavDropdown.Item onClick={handleShowLogin} >Connexion</NavDropdown.Item>
-                                <NavDropdown.Item onClick={handleShowRegister}>Inscription</NavDropdown.Item>
-                            </NavDropdown>
-                        </Nav.Link>
-                    </Nav> */}
-                    <Nav>
-                        <Nav.Link href=""><Button variant="atypik">Publier une annonce</Button></Nav.Link>
-                        <Nav.Link onClick={showDrawer} className='p-3'>
-                            <Badge count={2}>
-                                <FontAwesomeIcon icon={Icons.faBell} color="#8ed081" size="2x" />
-                            </Badge>
-                        </Nav.Link>
-                        <Nav.Link>
-                            <NavDropdown title="Mon compte">
-                            <NavDropdown.Item onClick={() => { navigate("/account/settings") }}>Gérer mon compte</NavDropdown.Item>
-                            <NavDropdown.Item href="">Messages</NavDropdown.Item>
-                            <NavDropdown.Item onClick={() => { navigate("/account/annonces") }}>Mes annonces</NavDropdown.Item>
-                            <NavDropdown.Item href="">Mes réservations</NavDropdown.Item>
-                            <NavDropdown.Item href="">Commentaires</NavDropdown.Item>
-                            <NavDropdown.Divider></NavDropdown.Divider>
-                            <NavDropdown.Item href="">Se déconnecter</NavDropdown.Item>
-                            </NavDropdown>
-                        </Nav.Link>
-                    </Nav>
+                    {!curUser ?
+                        <Nav>
+                            <Nav.Link onClick={() => { navigate("/posts") }}><Button variant="atypik">Devenir hôte</Button></Nav.Link>
+                            <Nav.Link>
+                                <NavDropdown title="Mon compte">
+                                    <NavDropdown.Item onClick={handleShowLogin} >Connexion</NavDropdown.Item>
+                                    <NavDropdown.Item onClick={handleShowRegister}>Inscription</NavDropdown.Item>
+                                </NavDropdown>
+                            </Nav.Link>
+                        </Nav> :
+                        <Nav>
+                            <Nav.Link href=""><Button variant="atypik">Publier une annonce</Button></Nav.Link>
+                            <Nav.Link onClick={showDrawer} className='p-3'>
+                                <Badge count={2}>
+                                    <FontAwesomeIcon icon={Icons.faBell} color="#8ed081" size="2x" />
+                                </Badge>
+                            </Nav.Link>
+                            <Nav.Link>
+                                <NavDropdown title="Mon compte">
+                                    <NavDropdown.Item onClick={() => { navigate("/account/settings") }}>Gérer mon compte</NavDropdown.Item>
+                                    <NavDropdown.Item href="">Messages</NavDropdown.Item>
+                                    <NavDropdown.Item onClick={() => { navigate("/account/annonces") }}>Mes annonces</NavDropdown.Item>
+                                    <NavDropdown.Item href="">Mes réservations</NavDropdown.Item>
+                                    <NavDropdown.Item href="">Commentaires</NavDropdown.Item>
+                                    <NavDropdown.Divider></NavDropdown.Divider>
+                                    <NavDropdown.Item onClick={() => {
+                                        Cookies.remove("token");
+                                        Cookies.remove("user");
+                                        window.location.href = "/"
+                                    }}>Se déconnecter</NavDropdown.Item>
+                                </NavDropdown>
+                            </Nav.Link>
+                        </Nav>}
                 </Navbar.Collapse>
             </Container>
             <LoginModal show={showLogin} onClose={handleCloseLogin} />

@@ -1,13 +1,19 @@
 import React from 'react'
 import '../assets/css/CardHouse.css';
-import { Button, Card, Dropdown, Form, Modal, Row } from 'react-bootstrap';
+import { Button, Card, Alert, Form, Modal, Row } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/bootstrap.css'
 import { useState } from 'react';
+import { API_URL } from '../Variables';
+import { Spin } from 'antd';
+import Cookies from 'js-cookie'
 
 const RegisterModal = props => {
     const [validated, setValidated] = useState(false);
     const [valid, setValid] = useState(false);
+    const [alertShow, setAlertShow] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('Something went wrong.');
+    const [loading, setLoading] = useState(false);
     const [pwMessage, setPwMessage] = useState('Merci de remplir ce champ.');
     const [isInvalid, setIsInvalid] = useState({
         firstname: false,
@@ -32,14 +38,41 @@ const RegisterModal = props => {
         passwordc: ''
     })
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
+        setLoading(true);
         setValidated(true);
         const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
+        event.preventDefault();
         setValidated(true);
+        let firstname = form.firstname.value;
+        let lastname = form.lastname.value;
+        let email = form.email.value;
+        let birthday = form.birthday.value;
+        let number = form.number.value;
+        let password = form.password.value;
+        const response = await register({
+            firstname, lastname, email, birthday, number, password,
+        });
+        if ('email' in response) {
+            let login = fetch(API_URL + '/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username: email, password: password })
+            })
+                .then(data => data.json())
+            Cookies.set('token', response['token'], { expires: 1 })
+            Cookies.set('user', JSON.stringify(response['data']), { expires: 1 })
+            onClose(true);
+            console.log("true");
+            window.location.href = "/";
+
+        } else {
+            setAlertMessage(response['hydra:description'])
+            setAlertShow(true);
+        }
+        setLoading(false);
     };
 
     const onInputChange = e => {
@@ -58,6 +91,17 @@ const RegisterModal = props => {
         setValid(isValid.firstname && isValid.lastname && isValid.email && isValid.birthday && isValid.password && isValid.passwordc);
         setpwInput({ ...pwInput, [e.target.name]: e.target.value.trim() });
         verifyPassword(e);
+    }
+
+    async function register(data) {
+        return fetch(API_URL + '/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(data => data.json())
     }
 
     const verifyPassword = (evnt) => {
@@ -102,119 +146,128 @@ const RegisterModal = props => {
     const { show, onClose } = props;
     return (
         <Modal show={show} onHide={onClose} centered
-            scrollable>
+        >
             <Modal.Header closeButton>
                 <Modal.Title >Inscription</Modal.Title>
             </Modal.Header>
             {/* <h3 className='text-center p-3'>Connexion</h3> */}
-            <Modal.Body>
-                <Form className='px-3 pt-3' noValidate validated={validated} onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Prénom</Form.Label>
-                        <Form.Control type="text" placeholder="Votre prénom" required
-                            isInvalid={isInvalid.firstname}
-                            isValid={isValid.firstname}
-                            name="firstname"
-                            onChange={onInputChange}
-                            onBlur={onInputChange} />
-                        <Form.Control.Feedback type="invalid">
-                            Merci de remplir ce champ.
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Nom</Form.Label>
-                        <Form.Control type="text" placeholder="Votre nom" required
-                            isInvalid={isInvalid.lastname}
-                            isValid={isValid.lastname}
-                            name="lastname"
-                            onChange={onInputChange}
-                            onBlur={onInputChange} />
-                        <Form.Control.Feedback type="invalid">
-                            Merci de remplir ce champ.
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control type="email" placeholder="Votre email address" required
-                            isInvalid={isInvalid.email}
-                            isValid={isValid.email}
-                            name="email"
-                            onChange={onInputChange}
-                            onBlur={onInputChange} />
-                        <Form.Control.Feedback type="invalid">
-                            Merci de renseigner une adresse mail valide.
-                        </Form.Control.Feedback>
-                    </Form.Group>
+            <Spin spinning={loading}>
+                <Modal.Body>
+                    <Form className='px-3 pt-3' noValidate validated={validated} onSubmit={handleSubmit}>
+                        {alertShow ? <Alert
+                            className='mb-3 border-0'
+                            variant='danger'
+                        >{alertMessage}</Alert> : ''}
+                        <Form.Group className="mb-3">
+                            <Form.Label>Prénom</Form.Label>
+                            <Form.Control type="text" placeholder="Votre prénom" required
+                                isInvalid={isInvalid.firstname}
+                                isValid={isValid.firstname}
+                                name="firstname"
+                                onChange={onInputChange}
+                                onBlur={onInputChange} />
+                            <Form.Control.Feedback type="invalid">
+                                Merci de remplir ce champ.
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Nom</Form.Label>
+                            <Form.Control type="text" placeholder="Votre nom" required
+                                isInvalid={isInvalid.lastname}
+                                isValid={isValid.lastname}
+                                name="lastname"
+                                onChange={onInputChange}
+                                onBlur={onInputChange} />
+                            <Form.Control.Feedback type="invalid">
+                                Merci de remplir ce champ.
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control type="email" placeholder="Votre email address" required
+                                isInvalid={isInvalid.email}
+                                isValid={isValid.email}
+                                name="email"
+                                onChange={onInputChange}
+                                onBlur={onInputChange} />
+                            <Form.Control.Feedback type="invalid">
+                                Merci de renseigner une adresse mail valide.
+                            </Form.Control.Feedback>
+                        </Form.Group>
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>Numéro de téléphone</Form.Label>
-                        <PhoneInput
-                            country={'fr'}
-                            inputClass="py-2 w-100"
-                            specialLabel=''
-                            required
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            Merci de remplir ce champ.
-                        </Form.Control.Feedback>
-                    </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Numéro de téléphone</Form.Label>
+                            <PhoneInput
+                                country={'fr'}
+                                inputClass="py-2 w-100"
+                                specialLabel=''
+                                inputProps={{
+                                    name: 'number',
+                                    required: true
+                                }}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Merci de remplir ce champ.
+                            </Form.Control.Feedback>
+                        </Form.Group>
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>Date de naissance</Form.Label>
-                        <Form.Control type="date" placeholder="" required
-                            isInvalid={isInvalid.birthday}
-                            isValid={isValid.birthday}
-                            name="birthday"
-                            onChange={onInputChange}
-                            onBlur={onInputChange} />
-                        <Form.Control.Feedback type="invalid">
-                            Merci de remplir ce champ.
-                        </Form.Control.Feedback>
-                    </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Date de naissance</Form.Label>
+                            <Form.Control type="date" placeholder="" required
+                                isInvalid={isInvalid.birthday}
+                                isValid={isValid.birthday}
+                                name="birthday"
+                                onChange={onInputChange}
+                                onBlur={onInputChange} />
+                            <Form.Control.Feedback type="invalid">
+                                Merci de remplir ce champ.
+                            </Form.Control.Feedback>
+                        </Form.Group>
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>Mot de passe</Form.Label>
-                        <Form.Control type="password" placeholder="Votre mot de passe" required
-                            isInvalid={isInvalid.password}
-                            isValid={isValid.password}
-                            name="password"
-                            onChange={onInputChange}
-                            onKeyUp={verifyPassword}
-                            onBlur={onInputChange}
-                            value={pwInput.password} />
-                        <Form.Control.Feedback type="invalid">
-                            {pwMessage}
-                        </Form.Control.Feedback>
-                    </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Mot de passe</Form.Label>
+                            <Form.Control type="password" placeholder="Votre mot de passe" required
+                                isInvalid={isInvalid.password}
+                                isValid={isValid.password}
+                                name="password"
+                                onChange={onInputChange}
+                                onKeyUp={verifyPassword}
+                                onBlur={onInputChange}
+                                value={pwInput.password} />
+                            <Form.Control.Feedback type="invalid">
+                                {pwMessage}
+                            </Form.Control.Feedback>
+                        </Form.Group>
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>Confirmation du mot de passe</Form.Label>
-                        <Form.Control type="password" placeholder="Confirmation du mot de passe" required
-                            isInvalid={isInvalid.passwordc}
-                            isValid={isValid.passwordc}
-                            name="passwordc"
-                            onChange={onInputChange}
-                            onKeyUp={verifyPassword}
-                            onBlur={onInputChange}
-                            value={pwInput.passwordc} />
-                        <Form.Control.Feedback type="invalid">
-                            Ces mots de passe ne correspondent pas.
-                        </Form.Control.Feedback>
-                    </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Confirmation du mot de passe</Form.Label>
+                            <Form.Control type="password" placeholder="Confirmation du mot de passe" required
+                                isInvalid={isInvalid.passwordc}
+                                isValid={isValid.passwordc}
+                                name="passwordc"
+                                onChange={onInputChange}
+                                onKeyUp={verifyPassword}
+                                onBlur={onInputChange}
+                                value={pwInput.passwordc} />
+                            <Form.Control.Feedback type="invalid">
+                                Ces mots de passe ne correspondent pas.
+                            </Form.Control.Feedback>
+                        </Form.Group>
 
-                    <div className='text-center mb-5'>
-                        <Button
-                            variant="atypik"
-                            className='w-50 d-flex mx-auto justify-content-center'
-                            type="submit"
-                            disabled={!valid}>
-                            Se connecter
-                        </Button>
-                    </div>
+                        <div className='text-center mb-5'>
+                            <Button
+                                variant="atypik"
+                                className='w-50 d-flex mx-auto justify-content-center'
+                                type="submit"
+                                disabled={!valid}>
+                                Inscription
+                            </Button>
+                        </div>
 
-                </Form>
+                    </Form>
 
-            </Modal.Body>
+                </Modal.Body>
+            </Spin>
         </Modal>
     )
 }

@@ -62,8 +62,12 @@
     color: var(--main-color)
 }
 
-.text-blue{
+.text-blue {
     color: #0A2D74 !important
+}
+
+.ant-spin-dot-item {
+    background-color: var(--icon-color) !important;
 }
 
 /* .container {
