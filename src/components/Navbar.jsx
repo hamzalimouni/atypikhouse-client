@@ -34,7 +34,7 @@ const AppNavbar = () => {
     return (
         <Navbar collapseOnSelect expand="lg" className='border-bottom'>
             <Container>
-                <Navbar.Brand><Image className="logo" src={logo} height='30px' /></Navbar.Brand>
+                <Navbar.Brand><Image onClick={() => { navigate("/") }} className="logo" src={logo} height='30px' /></Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="mx-auto">
@@ -61,9 +61,9 @@ const AppNavbar = () => {
                         </Nav.Link>
                         <Nav.Link>
                             <NavDropdown title="Mon compte">
-                            <NavDropdown.Item onClick={() => { navigate("/account") }}>Gérer mon compte</NavDropdown.Item>
+                            <NavDropdown.Item onClick={() => { navigate("/account/settings") }}>Gérer mon compte</NavDropdown.Item>
                             <NavDropdown.Item href="">Messages</NavDropdown.Item>
-                            <NavDropdown.Item href="">Mes annonces</NavDropdown.Item>
+                            <NavDropdown.Item onClick={() => { navigate("/account/annonces") }}>Mes annonces</NavDropdown.Item>
                             <NavDropdown.Item href="">Mes réservations</NavDropdown.Item>
                             <NavDropdown.Item href="">Commentaires</NavDropdown.Item>
                             <NavDropdown.Divider></NavDropdown.Divider>
