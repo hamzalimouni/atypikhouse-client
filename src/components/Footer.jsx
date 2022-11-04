@@ -58,7 +58,7 @@ const Footer = () => {
                     </Col>
                 </Row>
                 <Row>
-                    <span className='bg-light text-atypik text-center'>© 2022 AtypikHouse - Tous droits réservés</span>
+                    <span className='bg-light text-atypik text-center py-2'>© 2022 AtypikHouse - Tous droits réservés</span>
                 </Row>
             </footer>
         </div>

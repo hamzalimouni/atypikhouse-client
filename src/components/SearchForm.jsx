@@ -11,10 +11,10 @@ import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import moment from 'moment';
 import { DatePicker, Popover } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 
 const { RangePicker } = DatePicker;
-
 
 const SearchForm = () => {
     const disabledDate = (current) => {
@@ -24,13 +24,26 @@ const SearchForm = () => {
         travelers: 2,
         rooms: 1
     });
+    const [destination, setDestination] = useState("");
+    const [date, setDate] = useState([
+        {
+            startDate: new Date(),
+            endDate: new Date(),
+            Key: "selection"
+        }
+    ]);
+
     const handleOptions = (name, operation) => {
         setOptions(prev => {
             return {
                 ...prev, [name]: operation === "+" ? options[name] + 1 : options[name] - 1
             }
         })
-    }
+    };
+    const navigate = useNavigate();
+    const handleSearch = () => {
+        navigate("/houses", { state: { destination, date, options } })
+    };
     return (
         <Container fluid className='p-0 d-flex align-items-center justify-content-center' style={{
             height: 500, backgroundImage: `url(${bg})`, backgroundPosition: 'center',
@@ -47,7 +60,7 @@ const SearchForm = () => {
                         <InputGroup className='atypik-input'>
                             <InputGroup.Text className='icon'><FontAwesomeIcon icon={faLocationPin} /></InputGroup.Text>
                             <Form.Control className='input'
-                                placeholder="Destination"
+                                placeholder="Destination" onChange={(e) => setDestination(e.target.value)}
                             />
                         </InputGroup>
                     </Col>
@@ -62,9 +75,7 @@ const SearchForm = () => {
                                     suffixIcon=""
                                     separator="" />
                             </div>
-
                         </div>
-
                     </Col>
                     <Col lg className='py-2'>
                         <div className='atypik-input form-control py-0'>
@@ -120,7 +131,7 @@ const SearchForm = () => {
                         </div>
                     </Col>
                     <Col lg className='py-2'>
-                        <Button variant="atypik" className="w-100" >Rercherche</Button>
+                        <Button variant="atypik" className="w-100" onClick={handleSearch}>Rercherche</Button>
                     </Col>
 
                 </Row>

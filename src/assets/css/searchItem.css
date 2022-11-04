@@ -1,0 +1,36 @@
+* {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+.search-item {
+    box-shadow: 0 2px 15px rgb(0 0 0 / 10%);
+    background-color: #FFF;
+    padding: 0;
+    cursor: pointer;
+}
+
+.search-item:hover {
+    border: 3px solid #8ED081;
+}
+
+.search-info {
+    min-height: 100px;
+}
+
+h2 {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.search-location .icon {
+    color: #8ED081;
+}
+
+img {
+    max-width: 270px;
+    max-height: 200px;
+    margin: 10px;
+}
