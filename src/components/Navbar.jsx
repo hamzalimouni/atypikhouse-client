@@ -55,12 +55,21 @@ const AppNavbar = () => {
                             </Nav.Link>
                         </Nav> :
                         <Nav>
-                            <Nav.Link href=""><Button variant="atypik">Publier une annonce</Button></Nav.Link>
-                            <Nav.Link onClick={showDrawer} className='p-3'>
-                                <Badge count={2}>
-                                    <FontAwesomeIcon icon={Icons.faBell} color="#8ed081" size="2x" />
-                                </Badge>
-                            </Nav.Link>
+                            {console.log(JSON.parse(curUser))}
+                            {JSON.parse(curUser)['roles'].indexOf('ROLE_ADMIN') > -1 ?
+                                <Nav.Link href=""><Button variant="blue" onClick={() => { navigate("/admin/dashboard") }}>Admin panel</Button></Nav.Link>
+                                :
+                                <div>
+                                    <Nav.Link href=""><Button variant="atypik">Publier une annonce</Button></Nav.Link>
+                                    <Nav.Link onClick={showDrawer} className='pt-3 px-3'>
+                                        <Badge count={2}>
+                                            <FontAwesomeIcon icon={Icons.faBell} color="#8ed081" size="2x" />
+                                        </Badge>
+                                    </Nav.Link>
+                                </div>
+                            }
+
+
                             <Nav.Link>
                                 <NavDropdown title="Mon compte">
                                     <NavDropdown.Item onClick={() => { navigate("/account/settings") }}>Gérer mon compte</NavDropdown.Item>

@@ -10,6 +10,7 @@
     --transition-main-value: 0.3s;
     --bs-primary: #8ED081;
     --blue-color: #0a2d74;
+    --blue-color-hovered: #07245f;
     --bs-nav-link-color: #0a2d74;
     /* redeclared */
 }
@@ -47,6 +48,21 @@
 
 .btn-atypik:active {
     background-color: var(--main-color-hovered) !important;
+    color: white !important;
+}
+
+.btn-blue {
+    background-color: var(--blue-color) !important;
+    color: white !important;
+}
+
+.btn-blue:hover {
+    background-color: var(--blue-color-hovered) !important;
+    color: white !important;
+}
+
+.btn-blue:active {
+    background-color: var(--blue-color-hovered) !important;
     color: white !important;
 }
 
