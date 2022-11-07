@@ -1,10 +1,5 @@
 .search-item-card {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 20px;
     box-shadow: 0 2px 15px rgb(0 0 0 / 10%);
-    padding: 0;
 }
 
 .house-images img {
@@ -14,20 +9,10 @@
 .house-details h2 {
     font-size: 20px;
     font-weight: bold;
-    margin: 10px 0;
 }
 
 .house-details p {
     font-size: 13px;
-    margin-right: 25px;
-    margin: 10px 0;
-}
-
-.house-details .location {
-    display: flex;
-    justify-content: flex-start;
-    gap: 5px;
-    margin: 10px 0;
 }
 
 .house-details .location h3 {
@@ -35,9 +20,5 @@
 }
 
 .search-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-right: 10px;
     height: 50px;
 }
