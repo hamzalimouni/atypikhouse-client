@@ -9,6 +9,19 @@
     --icon-color: #FFB703;
     --transition-main-value: 0.3s;
     --bs-primary: #8ED081;
+    --blue-color: #0a2d74;
+    --bs-nav-link-color: #0a2d74;
+    /* redeclared */
+}
+
+.nav-pills {
+    --bs-nav-pills-border-radius: 0.375rem;
+    --bs-nav-pills-link-active-color: #fff;
+    --bs-nav-pills-link-active-bg: #0a2d74 !important;
+}
+
+.nav {
+    --bs-nav-link-color: #0a2d74;
 }
 
 * {
@@ -16,6 +29,10 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     -moz-box-sizing: border-box;
+}
+
+.bg-blue {
+    background-color: var(--blue-color);
 }
 
 .btn-atypik {
@@ -68,6 +85,28 @@
 
 .ant-spin-dot-item {
     background-color: var(--icon-color) !important;
+}
+
+#components-layout-demo-custom-trigger .trigger {
+    padding: 0 24px;
+    font-size: 18px;
+    line-height: 64px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+#components-layout-demo-custom-trigger .trigger:hover {
+    color: #1890ff;
+}
+
+#components-layout-demo-custom-trigger .logo {
+    height: 32px;
+    margin: 16px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.site-layout .site-layout-background {
+    background: #fff;
 }
 
 /* .container {
