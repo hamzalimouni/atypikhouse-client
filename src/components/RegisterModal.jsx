@@ -61,12 +61,14 @@ const RegisterModal = props => {
                 },
                 body: JSON.stringify({ username: email, password: password })
             })
-                .then(data => data.json())
-            Cookies.set('token', response['token'], { expires: 1 })
-            Cookies.set('user', JSON.stringify(response['data']), { expires: 1 })
+                .then(data => {
+                    console.log(data)
+                    Cookies.set('token', data['token'], { expires: 1 })
+                    Cookies.set('user', JSON.stringify(data['data']), { expires: 1 })
+                })
             onClose(true);
             console.log("true");
-            window.location.href = "/";
+            //window.location.href = "/";
 
         } else {
             setAlertMessage(response['hydra:description'])

@@ -12,17 +12,17 @@ import { API_URL } from '../Variables';
 import { Skeleton } from 'antd';
 import Cookies from 'js-cookie';
 import { format } from 'date-fns';
+import countries from "i18n-iso-countries";
+import { Spin } from 'antd';
 
+import { useNavigate } from "react-router-dom";
 
 const Account = () => {
+    if (!Cookies.get("user")) {
+        window.location.href = "/"
+    }
     useEffect(() => {
         document.title = "Mon compte - Atypikhouse"
-    }, []);
-    const [isEdit, setIsEdit] = useState(false);
-    const [isPwEdit, setPwIsEdit] = useState(false);
-    const [items, setItems] = useState([]);
-    const [isLoaded, setIsLoaded] = useState(false)
-    useEffect(() => {
         fetch(API_URL + '/me', {
             headers: new Headers({
                 'Authorization': 'bearer ' + Cookies.get("token"),
@@ -43,7 +43,11 @@ const Account = () => {
                     console.log(error)
                 }
             )
-    }, [])
+    }, []);
+    const [isEdit, setIsEdit] = useState(false);
+    const [isPwEdit, setPwIsEdit] = useState(false);
+    const [items, setItems] = useState([]);
+    const [isLoaded, setIsLoaded] = useState(false)
     return (
         <div>
             < Navbar />
@@ -84,9 +88,23 @@ const Account = () => {
                                     </Skeleton>
                                 </div>
                                 <div className='px-lg-5'>
-                                    <strong>Address</strong>
-                                    <p>11 AV AUGUSTE RODIN, 94350 VILLIERS-SUR-MARNE, FRANCE</p>
-                                </div></div> : <EditProfile />}
+                                    <strong>Adresse</strong>
+                                    <Skeleton loading={!isLoaded} active={!isLoaded} paragraph={false}>
+                                        <p>{
+                                            items['address'] ?
+                                                items['address']['address'] + ', ' +
+                                                items['address']['zipcode'] + ' ' +
+                                                items['address']['city'] + ', ' +
+                                                items['address']['country']
+                                                :
+                                                'Adresse non renseigné'
+                                        }</p>
+
+
+                                    </Skeleton>
+
+                                    {/* <p>11 AV AUGUSTE RODIN, 94350 VILLIERS-SUR-MARNE, FRANCE</p> */}
+                                </div></div> : <EditProfile items={items} />}
 
                         </div>
                     </div>
@@ -99,7 +117,7 @@ const Account = () => {
                                 onClick={() => setPwIsEdit(!isPwEdit)}> {isPwEdit ? 'Annuler' : 'Modifier'}</Button>
                         </div>
                         {isPwEdit ?
-                            <div className='mt-5 px-5'><EditPassword /></div> : ''}
+                            <div className='mt-5 px-5'><EditPassword items={items}/></div> : ''}
                     </div>
                 </div>
             </Container >
@@ -111,21 +129,74 @@ const Account = () => {
     )
 }
 
-const EditProfile = () => {
+async function edit(data) {
+    //console.log(data)
+    return fetch(API_URL + '/users/' + data.id + '/update', {
+        method: 'PATCH',
+        headers: {
+            'Authorization': 'bearer ' + Cookies.get("token"),
+            'Content-Type': 'application/merge-patch+json'
+        },
+        body: JSON.stringify(data)
+    })
+        .then(data => data.json())
+}
+
+const EditProfile = (items) => {
+    let navigate = useNavigate();
+
+    countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
     const [validated, setValidated] = useState(false);
-    const handleSubmit = (event) => {
-        const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-        setValidated(true);
+    const [loading, setLoading] = useState(false);
+
+    const [editAddress, setEditAddress] = useState({
+        address: items.items['address'] ? items.items['address']['address'] : '',
+        city: items.items['address'] ? items.items['address']['city'] : '',
+        zipcode: items.items['address'] ? items.items['address']['zipcode'] : '',
+        country: items.items['address'] ? items.items['address']['country'] : '',
+    })
+    const [editInfo, setEditInfo] = useState({
+        id: items.items['id'],
+        firstname: items.items['firstname'],
+        lastname: items.items['lastname'],
+        email: items.items['email'],
+        number: items.items['number'],
+        birthday: format(new Date(items.items['birthday'] ? items.items['birthday'] : '02/11/22'), 'yyyy-MM-dd'),
+        address: editAddress,
+    });
+
+    const handleChange = (e) => {
+        setEditInfo({ ...editInfo, [e.target.name]: e.target.value });
     };
-    return (<Form className='px-3 pt-3' noValidate validated={validated} onSubmit={handleSubmit}>
+    const handleChangeAddress = (e) => {
+        setEditAddress({ ...editAddress, [e.target.name]: e.target.value });
+        setEditInfo({ ...editInfo, ['address']: editAddress });
+    };
+    const handleSubmit = async (event) => {
+        setLoading(true);
+        event.preventDefault();
+        setValidated(true);
+        const response = await edit(editInfo);
+        if ('email' in response) {
+            window.location.reload();
+        } else {
+            console.log("ERR")
+        }
+        setLoading(false);
+    };
+    const countryArr = Object.entries(countries.getNames("fr", { select: "official" })).map(([key, value]) => {
+        return {
+            label: value,
+            value: key
+        };
+    });
+    return (<Spin spinning={loading}><Form className='px-3 pt-3' noValidate validated={validated} onSubmit={handleSubmit}>
+
         <Form.Group className="mb-3">
             <Form.Label>Prénom</Form.Label>
             <Form.Control type="text" placeholder="Votre prénom" required
-                value="MOUDOU"
+                value={editInfo.firstname}
+                onChange={e => handleChange(e)}
                 name="firstname" />
             <Form.Control.Feedback type="invalid">
                 Merci de remplir ce champ.
@@ -134,6 +205,8 @@ const EditProfile = () => {
         <Form.Group className="mb-3">
             <Form.Label>Nom</Form.Label>
             <Form.Control type="text" placeholder="Votre nom" required
+                value={editInfo.lastname}
+                onChange={e => handleChange(e)}
                 name="lastname" />
             <Form.Control.Feedback type="invalid">
                 Merci de remplir ce champ.
@@ -142,6 +215,8 @@ const EditProfile = () => {
         <Form.Group className="mb-3">
             <Form.Label>Email</Form.Label>
             <Form.Control type="email" placeholder="Votre email address" required
+                value={editInfo.email}
+                onChange={e => handleChange(e)}
                 name="email" />
             <Form.Control.Feedback type="invalid">
                 Merci de renseigner une adresse mail valide.
@@ -153,8 +228,13 @@ const EditProfile = () => {
             <PhoneInput
                 country={'fr'}
                 inputClass="py-2 w-100"
+                onChange={value => setEditInfo({ ...editInfo, number: value })}
+                value={editInfo.number}
                 specialLabel=''
-                required
+                inputProps={{
+                    name: 'number',
+                    required: true
+                }}
             />
             <Form.Control.Feedback type="invalid">
                 Merci de remplir ce champ.
@@ -164,6 +244,8 @@ const EditProfile = () => {
         <Form.Group className="mb-3">
             <Form.Label>Date de naissance</Form.Label>
             <Form.Control type="date" placeholder="" required
+                value={editInfo.birthday}
+                onChange={e => handleChange(e)}
                 name="birthday" />
             <Form.Control.Feedback type="invalid">
                 Merci de remplir ce champ.
@@ -172,11 +254,19 @@ const EditProfile = () => {
 
         <Form.Group className="mb-3">
             <Form.Label>Pays/région</Form.Label>
-            <Form.Select required aria-label="">
+            <Form.Select
+                required
+                aria-label=""
+                name="country"
+                value={editAddress.country}
+                onChange={e => handleChangeAddress(e)}
+                onBlur={e => handleChangeAddress(e)}
+            >
                 <option></option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                {!!countryArr?.length &&
+                    countryArr.map(({ label, value }) => (
+                        <option value={label}>{label}</option>
+                    ))}
             </Form.Select>
             <Form.Control.Feedback type="invalid">
                 Merci de remplir ce champ.
@@ -186,6 +276,9 @@ const EditProfile = () => {
         <Form.Group className="mb-3">
             <Form.Label>Adresse</Form.Label>
             <Form.Control type="text" placeholder="" required
+                value={editAddress.address}
+                onChange={e => handleChangeAddress(e)}
+                onBlur={e => handleChangeAddress(e)}
                 name="address" />
             <Form.Control.Feedback type="invalid">
                 Merci de remplir ce champ.
@@ -197,6 +290,9 @@ const EditProfile = () => {
                 <Form.Group className="mb-3">
                     <Form.Label>Ville</Form.Label>
                     <Form.Control type="text" placeholder="" required
+                        value={editAddress.city}
+                        onChange={e => handleChangeAddress(e)}
+                        onBlur={e => handleChangeAddress(e)}
                         name="city" />
                     <Form.Control.Feedback type="invalid">
                         Merci de remplir ce champ.
@@ -207,15 +303,16 @@ const EditProfile = () => {
                 <Form.Group className="mb-3">
                     <Form.Label>Code postal</Form.Label>
                     <Form.Control type="text" placeholder="" required
+                        value={editAddress.zipcode}
+                        onChange={e => handleChangeAddress(e)}
+                        onBlur={e => handleChangeAddress(e)}
                         name="zipcode" />
                     <Form.Control.Feedback type="invalid">
                         Merci de remplir ce champ.
                     </Form.Control.Feedback>
                 </Form.Group>
             </Col>
-
         </Row>
-
 
         <div className='text-center mb-5 d-flex'>
             <Button
@@ -226,13 +323,13 @@ const EditProfile = () => {
             </Button>
         </div>
 
-    </Form>)
+    </Form></Spin>)
 }
 
-const EditPassword = () => {
+const EditPassword = (items) => {
     const [validated, setValidated] = useState(false);
     const [pwMessage, setPwMessage] = useState('Merci de remplir ce champ.');
-    const [oldPwMessage, setOldPwMessage] = useState('Merci de remplir ce champ.');
+    const [loading, setLoading] = useState(false);
     const [isInvalid, setIsInvalid] = useState({
         password: false,
         passwordc: false,
@@ -244,23 +341,31 @@ const EditPassword = () => {
     })
 
     const [pwInput, setpwInput] = useState({
+        id: items.items['id'],
         password: '',
         passwordc: ''
     })
-    const handleSubmit = (event) => {
-        const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
+
+    const handleSubmit = async (event) => {
+        setLoading(true);
+        event.preventDefault();
         setValidated(true);
-    };
+        const response = await edit(pwInput);
+        if ('email' in response) {
+            window.location.reload();
+        } else {
+            console.log("ERR")
+        }
+        setLoading(false);
+    }
+
     const onInputChange = e => {
         setpwInput({ ...pwInput, [e.target.name]: e.target.value.trim() });
         verifyPassword(e);
     }
 
     const verifyPassword = (evnt) => {
+        setValidated(isValid['password'] && isValid['passwordc']);
         const field = evnt.target.name;
         if (field === 'password') {
             let errMsg = "";
@@ -298,15 +403,7 @@ const EditPassword = () => {
             }
         }
     }
-    return (<Form className='px-3 pt-3' noValidate validated={validated} onSubmit={handleSubmit}>
-        <Form.Group className="mb-3">
-            <Form.Label>Mot de passe actuel</Form.Label>
-            <Form.Control type="password" required
-                name="oldpassword" />
-            <Form.Control.Feedback type="invalid">
-                Merci de remplir ce champ.
-            </Form.Control.Feedback>
-        </Form.Group>
+    return (<Spin spinning={loading}><Form className='px-3 pt-3' noValidate validated={validated} onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
             <Form.Label>Nouveau mot de passe</Form.Label>
             <Form.Control type="password" required
@@ -339,12 +436,13 @@ const EditPassword = () => {
             <Button
                 variant="atypik"
                 className='w-50 d-flex mx-auto justify-content-center'
+                disabled={!validated}
                 type="submit">
-                Enregistrer
+                Changer le mot de passe
             </Button>
         </div>
 
-    </Form>)
+    </Form></Spin>)
 }
 
 export default Account
