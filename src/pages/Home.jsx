@@ -23,17 +23,17 @@ const Home = () => {
                     <h2 className='atypik-cur-title'> Les meilleurs endroits</h2>
                 </div>
                 <Row className='container'>
-                    <Col lg><CardHouse
+                    <Col sm={12} md={6} lg={4}><CardHouse
                         title="Hello"
                         destination="Location"
                         price="350"
                         reviews="4.8" /></Col>
-                    <Col lg><CardHouse
+                    <Col sm={12} md={6} lg={4}><CardHouse
                         title="Hello"
                         destination="Location"
                         price="350"
                         reviews="4.8" /></Col>
-                    <Col lg><CardHouse
+                    <Col sm={12} md={6} lg={4}><CardHouse
                         title="Hello"
                         destination="Location"
                         price="350"
@@ -46,19 +46,19 @@ const Home = () => {
                     <h2 className='atypik-cur-title'> Ce que les gens disaient</h2>
                 </div>
                 <Row className='container'>
-                    <Col lg><ReviewCard
+                    <Col sm={12} md={6} lg={4}><ReviewCard
                         name="Sarah M."
                         location="Paris, France "
                         house="Lorem ipsum dolor sit amet"
                         review="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
                         stars={4.8} /></Col>
-                    <Col lg><ReviewCard
+                    <Col sm={12} md={6} lg={4}><ReviewCard
                         name="Sarah M."
                         location="Paris, France "
                         house="Lorem ipsum dolor sit amet"
                         review="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
                         stars={4.8} /></Col>
-                    <Col lg><ReviewCard
+                    <Col sm={12} md={6} lg={4}><ReviewCard
                         name="Sarah M."
                         location="Paris, France "
                         house="Lorem ipsum dolor sit amet"
