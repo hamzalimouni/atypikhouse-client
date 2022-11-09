@@ -11,6 +11,7 @@ import AnnoncesAdmin from './pages/admin/Annonces';
 import Dashboard from './pages/admin/Dashboard';
 import Categories from './pages/admin/Categories';
 import Equipment from './pages/admin/Equipment';
+import Properties from './pages/admin/Properties';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/admin/annonces" element={<AnnoncesAdmin />}></Route>
         <Route path="/admin/categories" element={<Categories />}></Route>
         <Route path="/admin/equipment" element={<Equipment />}></Route>
+        <Route path="/admin/properties" element={<Properties />}></Route>
       </Routes>
     </BrowserRouter>
   );

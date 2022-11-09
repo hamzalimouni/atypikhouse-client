@@ -20,7 +20,7 @@ const Sidebar = () => {
                 <Nav.Link eventKey="reservations" className='my-1'><FontAwesomeIcon icon={Icons.faHistory} className='me-3' /><strong>Réservations</strong></Nav.Link>
                 <Nav.Link eventKey="categories" className='my-1' onClick={() => navigate('/admin/categories')} ><FontAwesomeIcon icon={Icons.faTable} className='me-3' /><strong>Catégories</strong></Nav.Link>
                 <Nav.Link eventKey="equipment" className='my-1' onClick={() => navigate('/admin/equipment')} ><FontAwesomeIcon icon={Icons.faTv} className='me-3' /><strong>Équipements</strong></Nav.Link>
-                <Nav.Link eventKey="link-5" className='my-1' ><FontAwesomeIcon icon={Icons.faListCheck} className='me-3' /><strong>Propriétés</strong></Nav.Link>
+                <Nav.Link eventKey="properties" className='my-1' onClick={() => navigate('/admin/properties')} ><FontAwesomeIcon icon={Icons.faListCheck} className='me-3' /><strong>Propriétés</strong></Nav.Link>
                 <Nav.Link eventKey="link-6" className='my-1' ><FontAwesomeIcon icon={Icons.faUserGroup} className='me-3' /><strong>Utilisateurs</strong></Nav.Link>
             </Nav>
 
