@@ -12,6 +12,7 @@
     --blue-color: #0a2d74;
     --blue-color-hovered: #07245f;
     --bs-nav-link-color: #0a2d74;
+    --main-padding-value: 100px;
     /* redeclared */
 }
 
@@ -21,15 +22,19 @@
     --bs-nav-pills-link-active-bg: #0a2d74 !important;
 }
 
-.nav {
-    --bs-nav-link-color: #0a2d74;
-}
-
 * {
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     -moz-box-sizing: border-box;
+}
+
+.main-background-color {
+    background-color: #F3F3F3;
+}
+
+.nav {
+    --bs-nav-link-color: #0a2d74;
 }
 
 .bg-blue {
@@ -75,6 +80,16 @@
     font-family: 'Amatic SC', cursive;
     color: var(--main-color);
     font-size: 4em;
+}
+
+@media (max-width: 768px) {
+    .atypik-cur-title {
+        font-size: 3em;
+    }
+
+    .atypik-img-title {
+        height: 50px;
+    }
 }
 
 .card {

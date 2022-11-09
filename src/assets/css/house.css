@@ -9,44 +9,43 @@
     max-width: 100%;
 }
 
-.house-container .house-detail-price {
+.house-detail-price {
     box-shadow: 0 2px 15px rgb(0 0 0 / 10%);
     border-radius: 10px;
 }
 
-.house-container .house-detail-price .price-rate {
+.house-detail-price .price-rate {
     display: flex;
     justify-content: space-between;
     margin: 10px;
 }
 
-.house-container .houses-informations {
+/* .houses-informations {
     display: grid;
     grid-template-columns: 2fr 350px;
     gap: 40px;
     margin: 80px 20px;
-}
+} */
 
-.house-container .houses-informations .house-details {
+/* .houses-informations .house-details {
     grid-row-start: 1;
     grid-column-start: 1;
-}
+} */
 
 .travel-detail .travel-client-detail {
     display: flex;
     justify-content: space-around;
 }
 
-.travel-detail .house-details {
+.travel-detail .reservation-detail {
     box-shadow: 0 2px 15px rgb(0 0 0 / 10%);
     border-radius: 10px;
-    margin: 20px;
     display: flex;
     justify-content: flex-start;
     gap: 10px;
 }
 
-.travel-detail .house-details img {
+.travel-detail .reservation-detail img {
     max-width: 100px;
     border-radius: 10px;
 }
@@ -55,18 +54,8 @@
     text-align: center;
 }
 
-.travel-detail .reserver button {
-    border-radius: 10px;
-    width: 200px;
-    height: 40px;
-    border: 0;
-    background-color: #8ED081;
-    color: #FDFDFD;
-    margin: 30px;
-}
-
 .travel-detail .price-details {
-    padding: 20px;
+    padding: 10px;
 }
 
 .price-night,
@@ -74,4 +63,8 @@
 .price-total {
     display: flex;
     justify-content: space-between;
+}
+
+.comment-form h4 {
+    font-size: 17px;
 }

@@ -14,7 +14,7 @@ const ReviewCard = (props) => {
             <Card.Body>
                 <Row className='text-center'>
                     <h5>{props.name}</h5>
-                    <small style={{ color: '#b2b2b2' }}><FontAwesomeIcon icon={faLocationDot} /> {props.location}</small>
+                    <small style={{ color: '#b2b2b2' }}><FontAwesomeIcon icon={faLocationDot} color="#8ED081" /> {props.location}</small>
                 </Row>
             </Card.Body>
             <Card.Body className='text-center mt-2'>
