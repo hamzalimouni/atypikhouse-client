@@ -4,7 +4,7 @@ import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
 import { Divider, Steps } from 'antd';
 import countries from "i18n-iso-countries";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import 'leaflet/dist/leaflet.css';
 import { Calendar } from "react-multi-date-picker"
@@ -12,6 +12,8 @@ import Moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons';
 import CardHouse from '../components/CardHouse'
+import { API_URL } from '../Variables';
+import { Map } from 'leaflet';
 
 const { Step } = Steps;
 
@@ -24,7 +26,6 @@ const NewHouse = () => {
 
     const getMapAdress = async () => {
         let result = await provider.search({ query: data.address + ', ' + data.city + ', ' + data.zipcode + ', ' + data.country });
-        console.log(result[0].x);
         if (result.length > 0) {
             setCoordinates({ lat: result[0].y, long: result[0].x })
         }
@@ -37,16 +38,48 @@ const NewHouse = () => {
     const [disabled, setDisabled] = useState(true);
     const [current, setCurrent] = useState(0);
     const [data, setData] = useState([]);
+    const [categories, setCategories] = useState([])
+    const [equipments, setEquipments] = useState([])
+    const [properties, setProperties] = useState([])
     const [isInvalid, setIsInvalid] = useState([])
     const [isValid, setIsValid] = useState([])
     const [dates, setDates] = useState([])
     const [images, setImages] = useState([])
     const [dragActive, setDragActive] = React.useState(false);
     const inputRef = React.useRef(null);
+    const map = null;
+    //const map = useMap();
+
+    useEffect(() => {
+        getCategories()
+        getEquipments()
+    }, []);
+
+    const getCategories = () => {
+        fetch(API_URL + '/categories')
+            .then(res => res.json())
+            .then((result) => { setCategories(result["hydra:member"]) })
+    }
+
+    const getEquipments = () => {
+        fetch(API_URL + '/equipements')
+            .then(res => res.json())
+            .then((result) => { setEquipments(result["hydra:member"]) })
+    }
+
+    const getProperties = (category) => {
+        fetch(API_URL + '/proprieties?category.id=' + category)
+            .then(res => res.json())
+            .then((result) => { setProperties(result["hydra:member"]) })
+    }
 
     useEffect(() => {
         verifyValidity();
-    }, [images]);
+    }, [images, data, current]);
+
+    // useEffect(() => {
+    //     map.flyTo([coordinates.lat, coordinates.long])
+    // }, [coordinates]);
 
     const onInputChange = e => {
         const { name, value } = e.currentTarget
@@ -58,15 +91,18 @@ const NewHouse = () => {
                 ...prev, [name]: isv ? true : false
             }
         })
-
         setData({ ...data, [name]: value })
+        if (name == "category") {
+            getProperties(value);
+        }
         verifyValidity();
     }
 
 
     const verifyValidity = () => {
+        console.log(current)
         if (current == 0) {
-            setDisabled(isValid.title && isValid.description && isValid.price ? false : true)
+            setDisabled(isValid.category && isValid.title && isValid.description && isValid.price ? false : true)
         }
         if (current == 1) {
             setDisabled(isValid.address && isValid.city && isValid.zipcode ? false : true)
@@ -90,11 +126,19 @@ const NewHouse = () => {
     const eventHandlers = useMemo(
         () => ({
             dragend(e) {
-                console.log(e.target._latlng.lat)
+                setCoordinates({ lat: e.target._latlng.lat, long: e.target._latlng.lng })
             },
         }),
         [],
     )
+
+    function MapFlyTo() {
+        const map = useMap()
+        map.flyTo([coordinates.lat, coordinates.long])
+        return null
+    }
+
+
 
     const fileUploadHandle = (e) => {
         Array.from(e.target.files).forEach(i => setImages(images => [...images, URL.createObjectURL(i)]))
@@ -122,10 +166,11 @@ const NewHouse = () => {
     const Step1 =
         <>
             <FloatingLabel controlId="floatingSelect" label="Catégorie">
-                <Form.Select aria-label="Catégorie">
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                <Form.Select aria-label="Catégorie" name="category" value={data.category} onChange={onInputChange} onKeyUp={onInputChange} required>
+                    <option disabled selected>Catégorie de votre annonce</option>
+                    {
+                        categories.map((c) => { return <option value={c.id}>{c.name}</option> })
+                    }
                 </Form.Select>
             </FloatingLabel>
             <Row className='my-4'>
@@ -223,18 +268,44 @@ const NewHouse = () => {
                     </FloatingLabel>
                 </Col>
             </Row>
-
-            <MapContainer center={[coordinates.lat, coordinates.long]} zoom={13} scrollWheelZoom={false} style={{ height: 300 }}>
+            <Divider className='py-3'>
+                <FontAwesomeIcon icon={Icons.faArrowDown} color='#9ca3af' />
+                <small className='px-3'>Merci de préciser l'adresse dans la carte si ce n'est pas déjà fait automatiquement</small>
+                <FontAwesomeIcon icon={Icons.faArrowDown} color='#9ca3af' />
+            </Divider>
+            <MapContainer center={[coordinates.lat, coordinates.long]} zoom={13} style={{ height: 300 }}>
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url='https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png'
                 />
-                <Marker position={[coordinates.lat, coordinates.long]} draggable eventHandlers={eventHandlers} >
-                    <Popup>
-                        A pretty CSS3 popup. <br /> Easily customizable.
-                    </Popup>
+                <Marker position={[coordinates.lat, coordinates.long]} draggable eventHandlers={eventHandlers} icon={
+                    require('leaflet').icon({
+                        iconUrl: require('../assets/img/marker.png'),
+                        iconSize: [32, 32],
+                        iconAnchor: [16, 32],
+                        popupAnchor: null,
+                        shadowUrl: null,
+                        shadowSize: null,
+                        shadowAnchor: null
+                    })
+                } >
                 </Marker>
+                <MapFlyTo />
             </MapContainer>
+            <div className='d-flex justify-content-around'>
+                <FloatingLabel label="Latitude" className='my-4'>
+                    <Form.Control
+                        value={coordinates.lat}
+                        disabled
+                        readOnly />
+                </FloatingLabel>
+                <FloatingLabel label="Latitude" className='my-4'>
+                    <Form.Control
+                        value={coordinates.long}
+                        disabled
+                        readOnly />
+                </FloatingLabel>
+            </div>
         </>
 
 
@@ -288,18 +359,33 @@ const NewHouse = () => {
                     onKeyUp={onInputChange}
                     required />
             </FloatingLabel>
+            {
+                properties.map((p) => {
+                    return <FloatingLabel label={p.name} className='my-4'>
+                        <Form.Control
+                            type={p.type}
+                            placeholder={p.name}
+                            // name="beds"
+                            // isInvalid={isInvalid.beds}
+                            // value={data.beds || ''}
+                            // onChange={onInputChange}
+                            // onKeyUp={onInputChange}
+                            required={p.isRequired ? true : false} />
+                    </FloatingLabel>
+                })
+            }
         </>
 
     const Step4 =
         <>
             <Row style={{ fontSize: '1.2rem' }}>
-                <Col lg={4} >
-                    <Form.Check
-                        name="equipmenet.wifi"
+                {equipments.map((e) => {
+                    return <Col lg={4} ><Form.Check
+                        //name={"equipmenet" + e.id}
                         type="checkbox"
-                        label="Wi-Fi"
-                    />
-                </Col>
+                        label={e.name}
+                    /></Col>
+                })}
             </Row>
         </>
 
@@ -344,7 +430,7 @@ const NewHouse = () => {
             <div class="d-flex flex-row flex-nowrap " style={{ overflowX: 'scroll' }}>
                 {
                     images.map((i) => {
-                        return <div className='bg-white shadow-sm m-2 border p-1 addHouseImage' onClick={() => { setImages(images.filter(item => item !== i)); verifyValidity(); }}>
+                        return <div className='bg-white shadow-sm m-2 border p-1 addHouseImage' onClick={() => { setImages(images.filter(item => item !== i)); }}>
                             <div style={{
                                 height: 200, width: 300, backgroundImage: `url(${i})`, backgroundPosition: 'center',
                                 backgroundSize: 'contain',
@@ -390,8 +476,9 @@ const NewHouse = () => {
         {
             title: 'Votre annonce est prête à être publiée',
             content: <div className='d-flex justify-content-center'>
-                <Col lg={6}>
+                <Col lg={7}>
                     <CardHouse
+                        image={images[0]}
                         title={data.title}
                         destination={data.city + ', ' + data.country}
                         price={data.price}
@@ -407,11 +494,9 @@ const NewHouse = () => {
         if (current == 2 || current == 3) {
             setDisabled(false)
         }
-        verifyValidity()
     };
 
     const prev = () => {
-        verifyValidity()
         setCurrent(current - 1);
         setDisabled(false);
     };
@@ -420,7 +505,6 @@ const NewHouse = () => {
         const form = event.currentTarget;
         event.preventDefault();
         event.stopPropagation();
-        console.log("submited")
     };
 
 
