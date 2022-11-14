@@ -13,6 +13,7 @@
     --blue-color-hovered: #07245f;
     --bs-nav-link-color: #0a2d74;
     --main-padding-value: 100px;
+    --steps: #83c177;
     /* redeclared */
 }
 
@@ -138,6 +139,176 @@
 
 .site-layout .site-layout-background {
     background: #fff;
+}
+
+.anticon svg {
+    margin-top: -5px !important;
+}
+
+.ant-steps-item-finish .ant-steps-item-icon {
+    border-color: var(--steps) !important;
+}
+
+.ant-steps-item-finish .ant-steps-item-icon>.ant-steps-icon {
+    color: var(--steps) !important;
+}
+
+.ant-steps-item-process>.ant-steps-item-container>.ant-steps-item-icon {
+    background: var(--steps) !important;
+}
+
+.ant-steps-item-process .ant-steps-item-icon {
+    border-color: var(--steps) !important;
+}
+
+.ant-steps-item-finish>.ant-steps-item-container>.ant-steps-item-content>.ant-steps-item-title::after {
+    background-color: var(--steps) !important;
+}
+
+.form-control:focus {
+    border-color: #c4ef92 !important;
+    box-shadow: 0 0 0 0.25rem rgb(139 195 74 / 27%) !important;
+}
+
+.form-select:focus {
+    border-color: #c4ef92 !important;
+    box-shadow: 0 0 0 0.25rem rgb(139 195 74 / 27%) !important;
+}
+
+.form-check-input:checked {
+    background-color: var(--main-color) !important;
+    border-color: #c4ef92 !important;
+}
+
+.form-check-input:focus {
+    border-color: #c4ef92 !important;
+    box-shadow: 0 0 0 0.25rem rgb(139 195 74 / 27%) !important;
+}
+
+.rmdp-day.rmdp-today span {
+    background-color: #fff !important;
+    color: #000 !important;
+}
+
+.rmdp-day.rmdp-selected span:not(.highlight) {
+    background-color: var(--main-color) !important;
+    box-shadow: 0 0 3px var(--main-color);
+    color: #fff !important;
+}
+
+.rmdp-day:not(.rmdp-disabled):not(.rmdp-day-hidden) span:hover {
+    background-color: var(--main-color) !important;
+    color: #fff !important;
+}
+
+.rmdp-arrow-container:hover {
+    background-color: #eaeaea !important;
+    box-shadow: 0 0 3px #eaeaea !important;
+}
+
+.rmdp-day,
+.rmdp-week-day {
+    height: 50px !important;
+    width: 50px !important;
+}
+
+.rmdp-week-day {
+    color: var(--main-color) !important;
+}
+
+
+.rmdp-arrow {
+    border: solid var(--main-color) !important;
+}
+
+.addHouseImage {
+    position: relative;
+    width: 50%;
+}
+
+.addHouseImageOverlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .8s ease;
+    background-color: #ba0000;
+}
+
+.addHouseImage:hover .addHouseImageOverlay {
+    opacity: 0.6;
+}
+
+.addHouseImageOverlay .text {
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.page {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-file-upload {
+    height: 16rem;
+    width: 28rem;
+    max-width: 100%;
+    text-align: center;
+    position: relative;
+}
+
+.input-file-upload {
+    display: none;
+}
+
+.label-file-upload {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-width: 2px;
+    border-radius: 1rem;
+    border-style: dashed;
+    border-color: #cbd5e1;
+    background-color: #f8fafc;
+}
+
+.label-file-upload.drag-active {
+    background-color: #ffffff;
+}
+
+.upload-button {
+    color: var(--main-color);
+    padding: 0 5px;
+}
+
+.upload-button:hover {
+    cursor: pointer;
+}
+
+.drag-file-element {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 1rem;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
 }
 
 /* .container {

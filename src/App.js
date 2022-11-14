@@ -13,6 +13,7 @@ import Categories from './pages/admin/Categories';
 import Equipment from './pages/admin/Equipment';
 import Contact from './pages/Contact';
 import Properties from './pages/admin/Properties';
+import NewHouse from './pages/NewHouse';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />}></Route>
         <Route path="/houses" element={< Houses />}></Route>
+        <Route path="/houses/add" element={< NewHouse />}></Route>
         <Route path="/houses/:id" element={<House />}></Route>
         <Route path="/contact" element={<Contact />}></Route>
         <Route path="/account/settings" element={<Account />}></Route>
