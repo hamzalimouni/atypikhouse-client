@@ -11,11 +11,8 @@ import AnnoncesAdmin from './pages/admin/Annonces';
 import Dashboard from './pages/admin/Dashboard';
 import Categories from './pages/admin/Categories';
 import Equipment from './pages/admin/Equipment';
-<<<<<<< HEAD
 import Contact from './pages/Contact';
-=======
 import Properties from './pages/admin/Properties';
->>>>>>> 1fccdd034d8b1f3133633bbb52b32bad72d86c32
 
 function App() {
   return (

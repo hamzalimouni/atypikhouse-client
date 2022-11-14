@@ -25,7 +25,7 @@ const Houses = () => {
         <div className="list-wrapper">
           <Container className='list-search'>
             <Row className='my-3'>
-              <Col sm={7}>
+              <Col sm={12} md={12} lg={6} xl={6}>
                 <Row className='py-3 square border border-light rounded'>
                   <Col>
                     <InputGroup className='atypik-input'>
@@ -73,7 +73,7 @@ const Houses = () => {
                   <SearchItem />
                 </Row>
               </Col>
-              <Col>Maps</Col>
+              <Col className='maps'>Maps</Col>
             </Row>
           </Container>
         </div>
