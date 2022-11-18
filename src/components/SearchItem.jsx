@@ -1,13 +1,13 @@
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
-import { Col, Row } from 'react-bootstrap'
+import { Card, Col, Row } from 'react-bootstrap'
 import '../assets/css/searchItem.css'
 
 const SearchItem = (props) => {
     const image = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2VzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60";
     return (
-        <div className='search-item-card my-2 rounded d-flex justify-content-center align-items-center p-0 gap-3'>
+        <Card className='search-item-card my-2 rounded d-flex flex-row justify-content-center align-items-center p-0 gap-3'>
             <div className="house-images">
                 <img className='rounded' src={image} alt="" />
             </div>
@@ -28,7 +28,7 @@ const SearchItem = (props) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </Card>
     )
 }
 
