@@ -5,9 +5,11 @@ import { useState } from 'react';
 import { API_URL } from '../Variables';
 import { Spin } from 'antd';
 import Cookies from 'js-cookie'
+import { useNavigate } from 'react-router-dom'
 
 
 const LoginModal = props => {
+    let navigate = useNavigate();
     const { show, onClose } = props;
     const [alertShow, setAlertShow] = useState(false);
     const [validated, setValidated] = useState(false);
@@ -39,7 +41,8 @@ const LoginModal = props => {
             Cookies.set('token', response['token'], { expires: 1 })
             Cookies.set('user', JSON.stringify(response['data']), { expires: 1 })
             //window.location.href = "/";
-            onClose(true);
+            navigate(0)
+            //onClose(true);
         } else {
             setAlertShow(true);
         }

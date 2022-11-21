@@ -4,8 +4,14 @@ import Sidebar from '../../components/admin/Sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons';
 import { Divider } from 'antd';
+import Cookies from 'js-cookie'
 
 const Dashboard = () => {
+    let curUser = Cookies.get('user');
+
+    if (!curUser) {
+        console.log("NOT LOGED")
+    }
     return (
         <div className='d-flex'>
             <Sidebar />

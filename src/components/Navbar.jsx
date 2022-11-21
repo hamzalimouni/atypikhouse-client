@@ -60,14 +60,13 @@ const AppNavbar = () => {
                                 :
                                 <div>
                                     <Nav.Link href=""><Button variant="atypik">Publier une annonce</Button></Nav.Link>
-                                    <Nav.Link onClick={showDrawer} className='pt-3 px-3'>
-                                        <Badge count={2}>
-                                            <FontAwesomeIcon icon={Icons.faBell} color="#8ed081" size="2x" />
-                                        </Badge>
-                                    </Nav.Link>
                                 </div>
                             }
-
+                            <Nav.Link onClick={showDrawer} className='pt-3 px-3'>
+                                <Badge dot={true}>
+                                    <FontAwesomeIcon icon={Icons.faBell} color="#8ed081" size="2x" />
+                                </Badge>
+                            </Nav.Link>
 
                             <Nav.Link>
                                 <NavDropdown title="Mon compte">
