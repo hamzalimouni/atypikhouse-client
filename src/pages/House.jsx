@@ -7,6 +7,7 @@ import AppNavbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import review from '../assets/icons/review.png'
 import CommentCard from '../components/CommentCard'
+import { useNavigate } from "react-router-dom";
 
 const House = () => {
 
@@ -30,6 +31,11 @@ const House = () => {
       src: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2VzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60"
     }
   ];
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate("/houses/paiment");
+  }
 
   return (
     <div>
@@ -58,22 +64,8 @@ const House = () => {
         </Container>
       </div>
       <Container className="houses-informations py-5">
-        <Row className='container'>
-          <Col>
-            <div className="house-details">
-              <div className="description">
-                <h2>Description</h2>
-                <p>En lisière de forêt, au calme, sur une propriété de 600 ha avec chemins de randonnée, vous êtes accueillis au Clos de la Loutre avec ses hébergements insolites En lisière de forêt, au calme, sur une propriété de 600 ha avec chemins de randonnée, vous êtes accueillis au Clos de la Loutre avec ses hébergements insolites.</p>
-              </div>
-              <div className="equipement">
-                <h2>Equipement</h2>
-              </div>
-              <div className="location">
-                <h2>Localisation</h2>
-              </div>
-            </div>
-          </Col>
-          <Col sm={12} md={6} lg={4} className='house-detail-price'>
+        <Row className='container d-flex flex-row-reverse'>
+          <Col sm={12} md={6} lg={4} className='house-detail-price h-100'>
             <div className='price-rate'>
               <span className='price'>166€ / nuit</span>
               <span className='rating'>
@@ -102,7 +94,7 @@ const House = () => {
                 </div>
               </div>
               <div className="reserver">
-                <Button variant="atypik" className='w-100'>Réserver</Button>
+                <Button onClick={handleClick} variant="atypik" className='w-100'>Réserver</Button>
               </div>
               <div className="price-details">
                 <div className="price-night">
@@ -120,80 +112,62 @@ const House = () => {
               </div>
             </div>
           </Col>
-        </Row>
-      </Container>
-
-      <div className="py-5 main-background-color">
-        <Container>
-          <div className='text-center mt-4 d-flex justify-content-center align-items-center py-2'>
-            <Image className='atypik-img-title' src={review} height='70px' />
-            <h2 className='atypik-cur-title m-0 px-2'> Ce que les gens disaient</h2>
-          </div>
-          <Row className='container mt-5'>
-            <Col sm={12} md={6} lg={4}>
-              <CommentCard
-                userImage="https://wac-cdn.atlassian.com/fr/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=619"
-                userName="Hamza Elyamouni"
-                comment="This is some text within a card body."
-              />
-            </Col>
-            <Col sm={12} md={6} lg={4}>
-              <CommentCard
-                userImage="https://wac-cdn.atlassian.com/fr/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=619"
-                userName="Hamza Elyamouni"
-                comment="This is some text within a card body."
-              />
-            </Col>
-            <Col sm={12} md={6} lg={4}>
-              <CommentCard
-                userImage="https://wac-cdn.atlassian.com/fr/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=619"
-                userName="Hamza Elyamouni"
-                comment="This is some text within a card body."
-              />
-            </Col>
-            <Col sm={12} md={6} lg={4}>
-              <CommentCard
-                userImage="https://wac-cdn.atlassian.com/fr/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=619"
-                userName="Hamza Elyamouni"
-                comment="This is some text within a card body."
-              />
-            </Col>
-            <Col sm={12} md={6} lg={4}>
-              <CommentCard
-                userImage="https://wac-cdn.atlassian.com/fr/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=619"
-                userName="Hamza Elyamouni"
-                comment="This is some text within a card body."
-              />
-            </Col>
-            <Col sm={12} md={6} lg={4}>
-              <CommentCard
-                userImage="https://wac-cdn.atlassian.com/fr/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=619"
-                userName="Hamza Elyamouni"
-                comment="This is some text within a card body."
-              />
-            </Col>
-          </Row>
-        </Container>
-      </div>
-      <Container className='py-5'>
-        <div className='text-center mt-4 d-flex justify-content-center align-items-center py-2'>
-          <Image className='atypik-img-title' src={review} height='70px' />
-          <h2 className='atypik-cur-title m-0 px-2'> je donne mon avis</h2>
-        </div>
-        <div className="comment-form mt-5">
-          <h4 className='py-1'>Et vous, que pensez-vous ?</h4>
-          <textarea className='form-control' name="" id="" rows="8"></textarea>
-          <div className="rating-submit d-flex justify-content-between align-items-center mt-3">
-            <div className="rate">
-              <FontAwesomeIcon fontSize={20} icon={faStar} color="gold" />
-              <FontAwesomeIcon fontSize={20} icon={faStar} color="gold" />
-              <FontAwesomeIcon fontSize={20} icon={faStar} color="gold" />
-              <FontAwesomeIcon fontSize={20} icon={faStar} color="gold" />
-              <FontAwesomeIcon fontSize={20} icon={faStar} color="gold" />
+          <Col className=''>
+            <div className="house-details">
+              <div className="description">
+                <h2>Description</h2>
+                <p>En lisière de forêt, au calme, sur une propriété de 600 ha avec chemins de randonnée, vous êtes accueillis au Clos de la Loutre avec ses hébergements insolites En lisière de forêt, au calme, sur une propriété de 600 ha avec chemins de randonnée, vous êtes accueillis au Clos de la Loutre avec ses hébergements insolites.</p>
+              </div>
+              <div className="equipement">
+                <h2>Equipement</h2>
+              </div>
+              <div className="location">
+                <h2>Localisation</h2>
+              </div>
             </div>
-            <Button variant="atypik" className='w-25'>Envoyer</Button>
-          </div>
-        </div>
+
+            <div className="py-5">
+              <div className='text-center mt-4 d-flex justify-content-center align-items-center py-2'>
+                <Image className='atypik-img-title' src={review} height='70px' />
+                <h2 className='atypik-cur-title m-0 px-2'> Ce que les gens disaient</h2>
+              </div>
+              <Row className='container mt-5'>
+                <Col lg={12}>
+                  <CommentCard
+                    userImage="https://wac-cdn.atlassian.com/fr/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=619"
+                    userName="Hamza Elyamouni"
+                    comment="This is some text within a card body."
+                  />
+                </Col>
+                <Col lg={12}>
+                  <CommentCard
+                    userImage="https://wac-cdn.atlassian.com/fr/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=619"
+                    userName="Hamza Elyamouni"
+                    comment="This is some text within a card body."
+                  />
+                </Col>
+              </Row>
+            </div>
+            <div className='text-center mt-4 d-flex justify-content-center align-items-center py-2'>
+              <Image className='atypik-img-title' src={review} height='70px' />
+              <h2 className='atypik-cur-title m-0 px-2'> je donne mon avis</h2>
+            </div>
+            <div className="comment-form mt-5">
+              <h4 className='py-1'>Et vous, que pensez-vous ?</h4>
+              <textarea className='form-control' name="" id="" rows="8"></textarea>
+              <div className="rating-submit d-flex justify-content-between align-items-center mt-3">
+                <div className="rate">
+                  <FontAwesomeIcon fontSize={20} icon={faStar} color="gold" />
+                  <FontAwesomeIcon fontSize={20} icon={faStar} color="gold" />
+                  <FontAwesomeIcon fontSize={20} icon={faStar} color="gold" />
+                  <FontAwesomeIcon fontSize={20} icon={faStar} color="gold" />
+                  <FontAwesomeIcon fontSize={20} icon={faStar} color="gold" />
+                </div>
+                <Button variant="atypik" className='w-25'>Envoyer</Button>
+              </div>
+            </div>
+          </Col>
+        </Row>
       </Container>
       <Footer />
     </div>

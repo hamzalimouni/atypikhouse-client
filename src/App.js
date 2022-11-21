@@ -14,8 +14,12 @@ import Equipment from './pages/admin/Equipment';
 import Contact from './pages/Contact';
 import Properties from './pages/admin/Properties';
 import NewHouse from './pages/NewHouse';
+<<<<<<< HEAD
 import Cookies from 'js-cookie'
 import { useEffect } from 'react';
+=======
+import Paiment from './pages/Paiment';
+>>>>>>> 9085c9913daee27ddb0a57d4e70b502dd61cb0da
 
 function App() {
 
@@ -36,6 +40,7 @@ function App() {
         <Route path="/houses" element={< Houses />}></Route>
         <Route path="/houses/add" element={< NewHouse />}></Route>
         <Route path="/houses/:id" element={<House />}></Route>
+        <Route path="/houses/paiment" element={<Paiment />}></Route>
         <Route path="/contact" element={<Contact />}></Route>
         <Route path="/account/settings" element={requireAuth(<Account />)}></Route>
         <Route path="/account/annonces" element={requireAuth(<Annonces />)}></Route>
