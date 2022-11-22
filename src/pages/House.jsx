@@ -7,29 +7,29 @@ import AppNavbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import review from '../assets/icons/review.png'
 import CommentCard from '../components/CommentCard'
+import HouseImages from '../components/HouseImages'
 import { useNavigate } from "react-router-dom";
 
 const House = () => {
 
-  const photo = [
+  const images = [
+
     {
-      src: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2VzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60"
+      image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2VzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60"
     },
     {
-      src: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2VzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60"
+      image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2VzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60"
     },
     {
-      src: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2VzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60"
+      image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2VzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60"
     },
     {
-      src: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2VzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60"
+      image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2VzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60"
     },
     {
-      src: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2VzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2VzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60"
+      image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2VzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60"
     }
+
   ];
   const navigate = useNavigate();
 
@@ -53,66 +53,16 @@ const House = () => {
               <span> 4.9/5 </span>
               <span>(10 Avis)</span>
             </div>
-            <div className="house-images">
-              {photo.map(photo => (
-                <div className="house-img-wrapper">
-                  <img src={photo.src} className="house-img rounded" alt="" />
-                </div>
-              ))}
+            <div>
+              <HouseImages images={images} />
             </div>
           </div>
-        </Container>
-      </div>
+        </Container >
+      </div >
       <Container className="houses-informations py-5">
-        <Row className='container d-flex flex-row-reverse'>
-          <Col sm={12} md={6} lg={4} className='house-detail-price h-100'>
-            <div className='price-rate'>
-              <span className='price'>166€ / nuit</span>
-              <span className='rating'>
-                <FontAwesomeIcon icon={faStar} color="gold" /> 4.9 / 5
-              </span>
-            </div>
-            <div className="travel-detail">
-              <div className="travel-client-detail">
-                <div className="date-detail">
-                  <h4>Date :</h4>
-                </div>
-                <div className="voyageur-detail">
-                  <h4>Voyageurs :</h4>
-                </div>
-              </div>
-              <div className="reservation-detail my-3">
-                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2VzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60" alt="" />
-                <div className="house-detail mt-1">
-                  <h5>Le Clos de la Loutre</h5>
-                  <div className="icons d-flex justify-content-around">
-                    <span><FontAwesomeIcon fontSize={13} icon={faUser} /> 2</span>
-                    <span><FontAwesomeIcon fontSize={13} icon={faDoorOpen} /> 2</span>
-                    <span><FontAwesomeIcon fontSize={13} icon={faBed} /> 1</span>
-                    <span><FontAwesomeIcon fontSize={13} icon={faShower} /> 1</span>
-                  </div>
-                </div>
-              </div>
-              <div className="reserver">
-                <Button onClick={handleClick} variant="atypik" className='w-100'>Réserver</Button>
-              </div>
-              <div className="price-details">
-                <div className="price-night">
-                  <span>165 € x 1 nuit :</span>
-                  <span>165 €</span>
-                </div>
-                <div className="price-taxe">
-                  <span>Taxe de séjour :</span>
-                  <span>1 €</span>
-                </div>
-                <div className="price-total">
-                  <span>Total :</span>
-                  <span>166 €</span>
-                </div>
-              </div>
-            </div>
-          </Col>
-          <Col className=''>
+        <Row className='container d-flex'>
+
+          <Col lg={8}>
             <div className="house-details">
               <div className="description">
                 <h2>Description</h2>
@@ -167,10 +117,57 @@ const House = () => {
               </div>
             </div>
           </Col>
+          <Col sm={12} md={6} lg={4} className='shadow rounded sticky-top h-100 '>
+            <div className='price-rate'>
+              <span className='price'>166€ / nuit</span>
+              <span className='rating'>
+                <FontAwesomeIcon icon={faStar} color="gold" /> 4.9 / 5
+              </span>
+            </div>
+            <div className="travel-detail">
+              <div className="travel-client-detail">
+                <div className="date-detail">
+                  <h4>Date :</h4>
+                </div>
+                <div className="voyageur-detail">
+                  <h4>Voyageurs :</h4>
+                </div>
+              </div>
+              <div className="reservation-detail my-3">
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2VzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60" alt="" />
+                <div className="house-detail mt-1">
+                  <h5>Le Clos de la Loutre</h5>
+                  <div className="icons d-flex justify-content-around">
+                    <span><FontAwesomeIcon fontSize={13} icon={faUser} /> 2</span>
+                    <span><FontAwesomeIcon fontSize={13} icon={faDoorOpen} /> 2</span>
+                    <span><FontAwesomeIcon fontSize={13} icon={faBed} /> 1</span>
+                    <span><FontAwesomeIcon fontSize={13} icon={faShower} /> 1</span>
+                  </div>
+                </div>
+              </div>
+              <div className="reserver">
+                <Button onClick={handleClick} variant="atypik" className='w-100'>Réserver</Button>
+              </div>
+              <div className="price-details">
+                <div className="price-night">
+                  <span>165 € x 1 nuit :</span>
+                  <span>165 €</span>
+                </div>
+                <div className="price-taxe">
+                  <span>Taxe de séjour :</span>
+                  <span>1 €</span>
+                </div>
+                <div className="price-total">
+                  <span>Total :</span>
+                  <span>166 €</span>
+                </div>
+              </div>
+            </div>
+          </Col>
         </Row>
       </Container>
       <Footer />
-    </div>
+    </div >
   )
 }
 

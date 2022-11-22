@@ -9,9 +9,9 @@ import RegisterModal from './RegisterModal';
 import { Drawer, Badge, Avatar } from 'antd';
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie'
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons';
+
 const AppNavbar = () => {
     let curUser = Cookies.get('user');
     let navigate = useNavigate();

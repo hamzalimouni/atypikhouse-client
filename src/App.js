@@ -14,12 +14,9 @@ import Equipment from './pages/admin/Equipment';
 import Contact from './pages/Contact';
 import Properties from './pages/admin/Properties';
 import NewHouse from './pages/NewHouse';
-<<<<<<< HEAD
 import Cookies from 'js-cookie'
 import { useEffect } from 'react';
-=======
 import Paiment from './pages/Paiment';
->>>>>>> 9085c9913daee27ddb0a57d4e70b502dd61cb0da
 
 function App() {
 
