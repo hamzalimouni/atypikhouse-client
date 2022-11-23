@@ -1,76 +1,17 @@
-.house-container .house-images {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 10px;
-    margin: 20px;
+.ant-picker-input {
+    border: 1px solid #f0f0f0;
+    border-radius: 16px;
+    padding: 17px;
 }
-
-.house-container .house-images .house-img-wrapper .house-img {
-    max-width: 100%;
+.ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner, .ant-picker-cell-in-view.ant-picker-cell-range-start .ant-picker-cell-inner, .ant-picker-cell-in-view.ant-picker-cell-range-end .ant-picker-cell-inner {
+    background: #8ed081 !important;
 }
-
-.house-detail-price {
-    box-shadow: 0 2px 15px rgb(0 0 0 / 10%);
-    border-radius: 10px;
+.ant-picker-cell-in-view.ant-picker-cell-range-start:not(.ant-picker-cell-range-start-single)::before, .ant-picker-cell-in-view.ant-picker-cell-range-end:not(.ant-picker-cell-range-end-single)::before {
+    background: #e3f3df !important;
 }
-
-.house-detail-price .price-rate {
-    display: flex;
-    justify-content: space-between;
-    margin: 10px;
+.ant-picker-cell-in-view.ant-picker-cell-in-range::before {
+    background: #e3f3df !important;
 }
-
-/* .houses-informations {
-    display: grid;
-    grid-template-columns: 2fr 350px;
-    gap: 40px;
-    margin: 80px 20px;
-} */
-
-/* .houses-informations .house-details {
-    grid-row-start: 1;
-    grid-column-start: 1;
-} */
-
-.travel-detail .travel-client-detail {
-    display: flex;
-    justify-content: space-around;
-}
-
-.travel-detail .reservation-detail {
-    box-shadow: 0 2px 15px rgb(0 0 0 / 10%);
-    border-radius: 10px;
-    display: flex;
-    justify-content: flex-start;
-    gap: 10px;
-}
-
-.travel-detail .reservation-detail img {
-    max-width: 100px;
-    border-radius: 10px;
-}
-
-.travel-detail .reserver {
-    text-align: center;
-}
-
-.travel-detail .price-details {
-    padding: 10px;
-}
-
-.price-night,
-.price-taxe,
-.price-total {
-    display: flex;
-    justify-content: space-between;
-}
-
-.comment-form h4 {
-    font-size: 17px;
-}
-
-@media (max-width:992px) {
-    .maps {
-        display: none;
-    }
+.ant-picker-range .ant-picker-active-bar {
+    background: #8ed081 !important;
 }

@@ -1,15 +1,30 @@
 import React from 'react'
-import { Card, Image } from 'react-bootstrap'
+import { Col, Row } from 'react-bootstrap'
+import { Avatar, Divider, Rate } from 'antd';
 
 const CommentCard = (props) => {
     return (
-        <Card className='my-2'>
-            <div className="user-info m-2 d-flex justify-content-start align-items-center">
-                <Image src={props.userImage} className="rounded-4 m-1" height="50px" width="50px" />
-                <Card.Text className='mx-3'>{props.userName}</Card.Text>
-            </div>
-            <Card.Body>{props.comment}</Card.Body>
-        </Card>
+        <Row>
+            <Col lg={1}>
+                <Avatar style={{ backgroundColor: '#F97316', verticalAlign: 'middle' }} size="large">
+                    {props.user.charAt(0) + '.' }
+                </Avatar>
+            </Col>
+            <Col>
+                <div className='d-flex justify-content-between mb-3'>
+                    <div>
+                        <span>{props.user}</span><br />
+                        <small>{props.date}</small>
+                    </div>
+                    <div>
+                        <Rate disabled value={props.rating} style={{ fontSize: '0.9em' }} />
+                    </div>
+                </div>
+                <span className="mt-3">{props.comment}</span>
+            </Col>
+            <Divider />
+        </Row>
+
     )
 }
 

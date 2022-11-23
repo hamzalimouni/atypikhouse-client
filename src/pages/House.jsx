@@ -1,17 +1,23 @@
-import { faBed, faDoorOpen, faLocationDot, faShower, faStar, faUser } from '@fortawesome/free-solid-svg-icons'
-import '../assets/css/house.css'
+import { faBed, faDoorOpen, faLocationDot, faPerson, faRuler, faShower, faSquare, faStar, faUser } from '@fortawesome/free-solid-svg-icons'
+import * as Icons from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React from 'react'
-import { Button, Col, Container, Image, Row } from 'react-bootstrap'
+import React, { useState } from 'react'
+import { Button, Col, Container, Image, Row, Form, FloatingLabel } from 'react-bootstrap'
 import AppNavbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import review from '../assets/icons/review.png'
 import CommentCard from '../components/CommentCard'
 import HouseImages from '../components/HouseImages'
 import { useNavigate } from "react-router-dom";
+import { Avatar, Divider, Rate } from 'antd';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { DatePicker, Badge } from 'antd';
+import Moment from 'moment';
 
 const House = () => {
-
+  const { RangePicker } = DatePicker;
+  const [travelers, setTravelers] = useState(1);
+  const [days, setDays] = useState(1);
+  const [price, setPrice] = useState(150);
   const images = [
 
     {
@@ -37,138 +43,205 @@ const House = () => {
     navigate("/houses/paiment");
   }
 
+  const dateHandle = (dates) => {
+    setDays(Moment(dates[1]).diff(dates[0], 'days'))
+  }
   return (
     <div>
       <AppNavbar />
-      <div className="main-background-color py-4">
-        <Container className="house-container">
-          <div className="house-wrapper">
-            <h1 className="house-title">Le Clos de la Loutre</h1>
-            <div className="house-adress">
-              <FontAwesomeIcon icon={faLocationDot} color="#8ED081" />
-              <span> Nyons, Drôme, Auvergne-Rhône-Alpes</span>
-            </div>
-            <div className="house-rating my-1">
-              <FontAwesomeIcon icon={faStar} color="gold" />
-              <span> 4.9/5 </span>
-              <span>(10 Avis)</span>
-            </div>
-            <div>
-              <HouseImages images={images} />
-            </div>
-          </div>
+      <div className="py-4">
+        <Container>
+          <HouseImages images={images} />
         </Container >
       </div >
       <Container className="houses-informations py-5">
         <Row className='container d-flex'>
-
-          <Col lg={8}>
-            <div className="house-details">
-              <div className="description">
-                <h2>Description</h2>
-                <p>En lisière de forêt, au calme, sur une propriété de 600 ha avec chemins de randonnée, vous êtes accueillis au Clos de la Loutre avec ses hébergements insolites En lisière de forêt, au calme, sur une propriété de 600 ha avec chemins de randonnée, vous êtes accueillis au Clos de la Loutre avec ses hébergements insolites.</p>
+          <Col lg={8} className="px-4">
+            <Row className='shadow-sm rounded p-4'>
+              <div className='d-flex justify-content-between align-items-center'>
+                <h1 className="house-title">Le Clos de la Loutre</h1>
+                <span className='rounded bg-atypik text-white float-right px-2' style={{ width: 'auto' }}>Cabanes</span>
               </div>
-              <div className="equipement">
-                <h2>Equipement</h2>
+              <div className='d-flex align-items-center'>
+                <FontAwesomeIcon icon={faStar} color="#F97316" className='pe-2' />
+                <span>4.9/5 (105)</span>
+                <span className='px-3'>·</span>
+                <FontAwesomeIcon icon={faLocationDot} color="#767A82" className='pe-2' />
+                <span>Paris, France</span>
               </div>
-              <div className="location">
-                <h2>Localisation</h2>
+              <div className='d-flex align-items-center mt-3'>
+                <Avatar style={{ backgroundColor: '#F97316', verticalAlign: 'middle' }} size="large">
+                  M
+                </Avatar>
+                <span className='ps-2'>Publiée par <strong className='text-weight-bold'>MOUDOU M.</strong></span>
+                <Button size={'sm'} className='ms-3' variant="atypik">Envoyer un message</Button>
               </div>
-            </div>
-
-            <div className="py-5">
-              <div className='text-center mt-4 d-flex justify-content-center align-items-center py-2'>
-                <Image className='atypik-img-title' src={review} height='70px' />
-                <h2 className='atypik-cur-title m-0 px-2'> Ce que les gens disaient</h2>
+              <Divider />
+              <div className='d-flex justify-content-around'>
+                <div><FontAwesomeIcon icon={Icons.faSquare} color="#767A82" className='pe-2' />  20m²</div>
+                <div><FontAwesomeIcon icon={faUser} color="#767A82" className='pe-2' /> 6 personnes</div>
+                <div><FontAwesomeIcon icon={faBed} color="#767A82" className='pe-2' /> 2 lits</div>
+                <div><FontAwesomeIcon icon={faDoorOpen} color="#767A82" className='pe-2' /> 3 pièces</div>
               </div>
-              <Row className='container mt-5'>
-                <Col lg={12}>
-                  <CommentCard
-                    userImage="https://wac-cdn.atlassian.com/fr/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=619"
-                    userName="Hamza Elyamouni"
-                    comment="This is some text within a card body."
-                  />
-                </Col>
-                <Col lg={12}>
-                  <CommentCard
-                    userImage="https://wac-cdn.atlassian.com/fr/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=619"
-                    userName="Hamza Elyamouni"
-                    comment="This is some text within a card body."
-                  />
-                </Col>
+            </Row>
+            <Row className='shadow-sm rounded p-4 mt-4'>
+              <h4>Descritpion</h4>
+              <Divider className='mt-0' />
+              <span >
+                En lisière de forêt, au calme, sur une propriété de 600 ha avec chemins de randonnée, <br /><br />
+                vous êtes accueillis au Clos de la Loutre avec ses hébergements insolites En lisière de forêt, au calme, <br /><br />
+                sur une propriété de 600 ha avec chemins de randonnée<br /><br />
+                vous êtes accueillis au Clos de la Loutre avec ses hébergements insolites.
+              </span>
+            </Row>
+            <Row className='shadow-sm rounded p-4 mt-4'>
+              <h4>Les équipements</h4>
+              <Divider className='mt-0' />
+              <Row>
+                <Col lg={4}>A</Col>
+                <Col lg={4}>B</Col>
+                <Col lg={4}>C</Col>
+                <Col lg={4}>D</Col>
+                <Col lg={4}>E</Col>
               </Row>
-            </div>
-            <div className='text-center mt-4 d-flex justify-content-center align-items-center py-2'>
-              <Image className='atypik-img-title' src={review} height='70px' />
-              <h2 className='atypik-cur-title m-0 px-2'> je donne mon avis</h2>
-            </div>
-            <div className="comment-form mt-5">
-              <h4 className='py-1'>Et vous, que pensez-vous ?</h4>
-              <textarea className='form-control' name="" id="" rows="8"></textarea>
-              <div className="rating-submit d-flex justify-content-between align-items-center mt-3">
-                <div className="rate">
-                  <FontAwesomeIcon fontSize={20} icon={faStar} color="gold" />
-                  <FontAwesomeIcon fontSize={20} icon={faStar} color="gold" />
-                  <FontAwesomeIcon fontSize={20} icon={faStar} color="gold" />
-                  <FontAwesomeIcon fontSize={20} icon={faStar} color="gold" />
-                  <FontAwesomeIcon fontSize={20} icon={faStar} color="gold" />
-                </div>
-                <Button variant="atypik" className='w-25'>Envoyer</Button>
+            </Row>
+            <Row className='shadow-sm rounded p-4 mt-4'>
+              <h4>Plus d'informations sur le bien</h4>
+              <Divider className='mt-0' />
+              <Row>
+                <Col lg={4}>Hauteur : 10m</Col>
+                <Col lg={4}>Lorem : Non</Col>
+                <Col lg={4}>Ipsum : Oui</Col>
+              </Row>
+            </Row>
+            <Row className='shadow-sm rounded p-4 mt-4'>
+              <h4>Localisation</h4>
+              <Divider className='mt-0' />
+              <span className='mb-3'>
+                11 Avenue Auguste Rodin<br />
+                94350 Villiers-sur-marne<br />
+                France
+              </span>
+              <MapContainer center={[48.833859, 2.549111]} zoom={13} style={{ height: 300 }}>
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url='https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png'
+                />
+                <Marker position={[48.833859, 2.549111]} icon={
+                  require('leaflet').icon({
+                    iconUrl: require('../assets/img/marker.png'),
+                    iconSize: [32, 32],
+                    iconAnchor: [16, 32],
+                    popupAnchor: null,
+                    shadowUrl: null,
+                    shadowSize: null,
+                    shadowAnchor: null
+                  })
+                } >
+                </Marker>
+              </MapContainer>
+            </Row>
+
+            <Row className='shadow-sm rounded p-4 mt-4'>
+              <h4>Les avis (23 avis)</h4>
+              <Divider className='mt-0' />
+
+              <Row>
+                <Form className="d-flex">
+                  <FloatingLabel label="Je donne mon avis" className='w-100 pe-2'>
+                    <Form.Control
+                      type="text"
+                      placeholder="avis"
+                      required />
+                  </FloatingLabel>
+                  <Button variant='atypik' style={{ borderRadius: 30 }}><FontAwesomeIcon icon={Icons.faArrowRight} color="#fff" className='px-2' /></Button>
+                </Form>
+              </Row>
+              <Rate className='ms-3' />
+              <div className='container mt-5'>
+                <CommentCard
+                  user="Hamza Elyamouni"
+                  comment="This is some text within a card body."
+                  date="23/10/2022"
+                  rating={3}
+                />
+                <CommentCard
+                  user="Moudou Mohammed"
+                  comment="This is some text within a card body."
+                  date="23/10/2022"
+                  rating={3}
+                />
               </div>
-            </div>
+            </Row>
+
           </Col>
-          <Col sm={12} md={6} lg={4} className='shadow rounded sticky-top h-100 '>
-            <div className='price-rate'>
-              <span className='price'>166€ / nuit</span>
-              <span className='rating'>
-                <FontAwesomeIcon icon={faStar} color="gold" /> 4.9 / 5
+          <Col sm={12} md={6} lg={4} className='shadow-sm rounded sticky-top h-100 p-4'>
+            <div className='d-flex justify-content-between align-items-center'>
+              <span><strong style={{ fontSize: '1.6em' }}>166€ </strong>/ nuit</span>
+              <span>
+                <FontAwesomeIcon icon={faStar} color="#F97316" className='pe-2' />
+                4.9/5 (105)
               </span>
             </div>
-            <div className="travel-detail">
-              <div className="travel-client-detail">
-                <div className="date-detail">
-                  <h4>Date :</h4>
-                </div>
-                <div className="voyageur-detail">
-                  <h4>Voyageurs :</h4>
-                </div>
-              </div>
-              <div className="reservation-detail my-3">
-                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2VzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60" alt="" />
-                <div className="house-detail mt-1">
-                  <h5>Le Clos de la Loutre</h5>
-                  <div className="icons d-flex justify-content-around">
-                    <span><FontAwesomeIcon fontSize={13} icon={faUser} /> 2</span>
-                    <span><FontAwesomeIcon fontSize={13} icon={faDoorOpen} /> 2</span>
-                    <span><FontAwesomeIcon fontSize={13} icon={faBed} /> 1</span>
-                    <span><FontAwesomeIcon fontSize={13} icon={faShower} /> 1</span>
+
+            <Row className='my-5'>
+              <RangePicker
+                defaultValue={[Moment(), Moment().add(1, 'days')]}
+                style={{ border: '1px solid #f0f0f0', padding: 19, borderRadius: 10 }}
+                placeholder={["Date d'arrivé", "Date de départ"]}
+                suffixIcon=""
+                onChange={dateHandle}
+                separator={<FontAwesomeIcon icon={Icons.faArrowRight} color="#cecece" />} />
+              <div className="mt-2" style={{ border: '1px solid #f0f0f0', padding: 19, borderRadius: 10 }}>
+                <div className="d-flex justify-content-around align-items-center">
+                  <span>
+                    Voyageurs
+                  </span>
+                  <div className="d-flex justify-content-center align-items-center">
+                    <Button variant="atypik" size="sm" style={{ width: "35px" }}
+                      onClick={() => {
+                        setTravelers(travelers - 1)
+                      }}
+                      disabled={travelers <= 1}>-</Button>
+                    <Badge bg="light" text="dark" className='mx-2'>
+                      {travelers}
+                    </Badge>
+                    <Button variant="atypik" size="sm" style={{ width: "35px" }}
+                      onClick={() => {
+                        setTravelers(travelers + 1)
+                      }}
+                      disabled={travelers > 5}>+</Button>
                   </div>
                 </div>
               </div>
-              <div className="reserver">
-                <Button onClick={handleClick} variant="atypik" className='w-100'>Réserver</Button>
-              </div>
-              <div className="price-details">
-                <div className="price-night">
-                  <span>165 € x 1 nuit :</span>
-                  <span>165 €</span>
-                </div>
-                <div className="price-taxe">
-                  <span>Taxe de séjour :</span>
-                  <span>1 €</span>
-                </div>
-                <div className="price-total">
-                  <span>Total :</span>
-                  <span>166 €</span>
-                </div>
-              </div>
+            </Row>
+
+            <div className='d-flex justify-content-between'>
+              <span>{price} € x {days} nuit :</span>
+              <span>{price * days} €</span>
             </div>
+            <div className='d-flex justify-content-between'>
+              <span>Les frais de service:</span>
+              <span>15 €</span>
+            </div>
+            <Divider />
+
+            <div className='d-flex justify-content-between'>
+              <strong>Total:</strong>
+              <strong>{price * days + 15} €</strong>
+            </div>
+
+            <Button onClick={handleClick} variant="atypik" className='w-100 mt-5'>Réserver</Button>
           </Col>
         </Row>
       </Container>
       <Footer />
     </div >
   )
+}
+
+const RangePicker = {
+
 }
 
 export default House
