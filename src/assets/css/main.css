@@ -404,4 +404,8 @@
     font-size: 3.5em;
 }
 
-/* End Global Rules */
+@media (max-width: 990px) {
+    .sticky-top {
+        position: inherit !important;
+    }
+}

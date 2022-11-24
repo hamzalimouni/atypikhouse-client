@@ -147,8 +147,8 @@ const House = () => {
                 <HouseImages images={images} loading={loading} />}
             </Container >
           </div >
-          <Container className="houses-informations py-5">
-            <Row className='container d-flex'>
+          <Container className="py-5">
+            <Row className='mx-auto d-flex'>
               <Col lg={8} className="px-4">
                 <Skeleton loading={loading} paragraph={{ rows: 15 }} active >
                   <Row className='shadow-sm rounded p-4'>
@@ -262,6 +262,8 @@ const House = () => {
                       {
                         houseData.reviews?.sort((a, b) => (b.id - a.id)).map((r) => {
                           return <CommentCard
+                            id={Cookies.get("user") && JSON.parse(Cookies.get("user")).id === r.user.id ? r.id : null}
+                            reload={getHouse}
                             user={r.user.firstname + ' ' + r.user.lastname}
                             comment={r.comment}
                             date={Moment(r.createdAt).format("DD/MM/YYYY")}
@@ -274,7 +276,7 @@ const House = () => {
                 </Skeleton>
 
               </Col>
-              <Col sm={12} md={6} lg={4} className='shadow-sm rounded sticky-top h-100 p-4'>
+              <Col sm={12} md={12} xs={{ order: 'first' }} lg={{ span: 4, order: 'last' }} className='shadow-sm sticky-top rounded h-100 p-4 mb-5'>
                 <Skeleton loading={loading} paragraph={{ rows: 10 }} active >
                   <div className='d-flex justify-content-between align-items-center'>
                     <span><strong style={{ fontSize: '1.6em' }}>{houseData.price}€ </strong>/ nuit</span>
