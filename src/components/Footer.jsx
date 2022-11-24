@@ -10,7 +10,7 @@ import { Row, Col, ListGroup, NavDropdown, Button, Image, Form, Container } from
 const Footer = () => {
     return (
         <div className='mt-5'>
-            <footer class="bg-atypik text-white container-fluid">
+            <footer className="bg-atypik text-white container-fluid">
                 <Row>
                     <Col className='p-5'>
                         <h5 className='text-white'>MODES DE PAIEMENT:</h5>

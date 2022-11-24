@@ -6,6 +6,7 @@ import StarRatings from 'react-star-ratings';
 import { Carousel } from 'react-carousel-minimal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons';
+import { Skeleton } from 'antd'
 
 const HouseImage = (props) => {
     const [show, setShow] = useState(false);
@@ -21,7 +22,7 @@ const HouseImage = (props) => {
                     <Image src={images[0].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
                 </Col > :
                 <>
-                    {length < 5 ?
+                    {length < 3 ?
                         <>
                             <Col className='p-1' style={{ maxHeight: 500 }}>
                                 <Image src={images[0].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
@@ -30,27 +31,30 @@ const HouseImage = (props) => {
                                 <Image src={images[1].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
                             </Col >
                         </>
-                        :
-                        <>
-                            <Col className='p-1'>
-                                <Image src={images[0].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
-                            </Col >
-                            <Col>
-                                <Row>
-                                    <Col className='p-1'>
-                                        <Image src={images[1].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', borderRadius: 10 }} onClick={() => handleShow()} />
-                                    </Col>
-                                    <Col className='p-1'>
-                                        <Image src={images[2].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', borderRadius: 10 }} onClick={() => handleShow()} />
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col className='p-1'>
-                                        <Image src={images[3].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', borderRadius: 10 }} onClick={() => handleShow()} />
-                                    </Col>
-                                    <Col className='p-1 position-relative'>
-                                        <Image src={images[4].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', borderRadius: 10 }} onClick={() => handleShow()} />
-                                        {length > 5 ? <div style={{
+                        : length < 4 ?
+                            <>
+                                <Col className='p-1' style={{ maxHeight: 500 }}>
+                                    <Image src={images[0].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
+                                </Col >
+                                <Col className='p-1' style={{ maxHeight: 500 }}>
+                                    <Image src={images[1].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
+                                </Col >
+                                <Col className='p-1' style={{ maxHeight: 500 }}>
+                                    <Image src={images[2].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
+                                </Col >
+                            </>
+                            :
+                            length < 5 ?
+                                <>
+                                    <Col className='p-1' style={{ maxHeight: 500 }}>
+                                        <Image src={images[0].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
+                                    </Col >
+                                    <Col className='p-1' style={{ maxHeight: 500 }}>
+                                        <Image src={images[1].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
+                                    </Col >
+                                    <Col className='p-1 position-relative' style={{ maxHeight: 500 }}>
+                                        <Image src={images[2].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
+                                        {length > 3 ? <div style={{
                                             "position": "absolute",
                                             "top": "50%",
                                             "left": "50%",
@@ -65,11 +69,52 @@ const HouseImage = (props) => {
                                             "display": "flex",
                                             "justifyContent": "center",
                                             "flexDirection": "column"
-                                        }}>+{length - 5}</div> : null}
+                                        }}
+                                            onClick={() => handleShow()}
+                                        >+1</div> : null}
+                                    </Col >
+                                </> :
+                                <>
+                                    <Col className='p-1'>
+                                        <Image src={images[0].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
+                                    </Col >
+                                    <Col>
+                                        <Row>
+                                            <Col className='p-1'>
+                                                <Image src={images[1].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', borderRadius: 10 }} onClick={() => handleShow()} />
+                                            </Col>
+                                            <Col className='p-1'>
+                                                <Image src={images[2].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', borderRadius: 10 }} onClick={() => handleShow()} />
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col className='p-1'>
+                                                <Image src={images[3].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', borderRadius: 10 }} onClick={() => handleShow()} />
+                                            </Col>
+                                            <Col className='p-1 position-relative'>
+                                                <Image src={images[4].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', borderRadius: 10 }} onClick={() => handleShow()} />
+                                                {length > 5 ? <div style={{
+                                                    "position": "absolute",
+                                                    "top": "50%",
+                                                    "left": "50%",
+                                                    "fontSize": "2em",
+                                                    "color": "white",
+                                                    "background": "#00000082",
+                                                    "transform": "translate(-50%, -50%)",
+                                                    "width": "97%",
+                                                    "height": "97%",
+                                                    "borderRadius": "10px",
+                                                    "textAlign": "center",
+                                                    "display": "flex",
+                                                    "justifyContent": "center",
+                                                    "flexDirection": "column"
+                                                }}
+                                                    onClick={() => handleShow()}>+{length - 5}</div> : null}
+                                            </Col>
+                                        </Row>
                                     </Col>
-                                </Row>
-                            </Col>
-                        </>}
+                                </>
+                    }
                 </>
             }
             <Modal show={show} fullscreen={true} onHide={() => setShow(false)} style={{ opacity: 1 }}>

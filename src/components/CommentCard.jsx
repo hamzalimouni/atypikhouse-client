@@ -7,7 +7,7 @@ const CommentCard = (props) => {
         <Row>
             <Col lg={1}>
                 <Avatar style={{ backgroundColor: '#F97316', verticalAlign: 'middle' }} size="large">
-                    {props.user.charAt(0) + '.' }
+                    {(props.user.charAt(0) + '.').toUpperCase()}
                 </Avatar>
             </Col>
             <Col>
