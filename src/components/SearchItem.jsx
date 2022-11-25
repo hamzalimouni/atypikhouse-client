@@ -22,7 +22,7 @@ const SearchItem = (props) => {
                     <div><FontAwesomeIcon icon={Icons.faDoorOpen} color="#767A82" className='pe-1' /> 2 pièces</div>
                 </div>
                 <div className="d-flex justify-content-between align-items-end px-3 py-3">
-                    <div className="search-detail">
+                    <div>
                         <FontAwesomeIcon icon={Icons.faStar} color="#F97316" className='pe-2' />
                         <span>5/5 (20)</span>
                     </div>

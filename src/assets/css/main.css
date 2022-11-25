@@ -431,3 +431,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.leaflet-popup-content {
+    width: 200px !important;
+}
