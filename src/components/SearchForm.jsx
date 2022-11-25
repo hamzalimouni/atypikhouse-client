@@ -11,12 +11,13 @@ import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import moment from 'moment';
 import { DatePicker, Popover } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { createSearchParams, useNavigate } from "react-router-dom";
 
 
 const { RangePicker } = DatePicker;
 
 const SearchForm = () => {
+    const navigate = useNavigate();
     const disabledDate = (current) => {
         return current && current < moment().endOf('day');
     };
@@ -25,13 +26,10 @@ const SearchForm = () => {
         rooms: 1
     });
     const [destination, setDestination] = useState("");
-    const [date, setDate] = useState([
-        {
-            startDate: new Date(),
-            endDate: new Date(),
-            Key: "selection"
-        }
-    ]);
+    const [dates, setDates] = useState({
+        from: new Date(),
+        to: moment(new Date()).add(1, 'days')
+    });
 
     const handleOptions = (name, operation) => {
         setOptions(prev => {
@@ -40,9 +38,17 @@ const SearchForm = () => {
             }
         })
     };
-    const navigate = useNavigate();
     const handleSearch = () => {
-        navigate("/houses", { state: { destination, date, options } })
+        navigate({
+            pathname: "/houses",
+            search: `?${createSearchParams({
+                destination: destination,
+                from: moment(dates.from).format('MM/DD/YYYY'),
+                to: moment(dates.to).format('MM/DD/YYYY'),
+                travelers: options.travelers,
+                rooms: options.rooms
+            })}`
+        })
     };
     return (
         <Container fluid className='p-0 d-flex align-items-center justify-content-center' style={{
@@ -70,6 +76,7 @@ const SearchForm = () => {
                                 <div className="icon"><FontAwesomeIcon icon={faCalendarDays} /></div>
                                 <RangePicker
                                     disabledDate={disabledDate}
+                                    onChange={(d) => setDates({ from: d[0].toDate(), to: d[1].toDate() })}
                                     style={{ border: "none" }}
                                     placeholder={["Date d'arrivé", "Date de départ"]}
                                     suffixIcon=""
@@ -131,7 +138,7 @@ const SearchForm = () => {
                         </div>
                     </Col>
                     <Col lg className='py-2'>
-                        <Button variant="atypik" className="w-100" onClick={handleSearch}>Rercherche</Button>
+                        <Button variant="atypik" className="w-100" onClick={handleSearch}>Rerchercher</Button>
                     </Col>
 
                 </Row>

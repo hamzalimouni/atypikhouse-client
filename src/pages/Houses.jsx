@@ -1,31 +1,37 @@
-import { faCalendarDays, faLocationPin, faPeopleGroup, faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Badge, Button, Col, Container, Form, InputGroup, Row } from 'react-bootstrap'
 import AppNavbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import { DateRange } from 'react-date-range'
-import { setDate } from 'date-fns'
 import { DatePicker, Popover } from 'antd';
 import SearchItem from '../components/SearchItem'
 import * as Icons from '@fortawesome/free-solid-svg-icons'
-import { MapContainer, TileLayer, Marker, Popup, Polygon, SVGOverlay } from "react-leaflet";
-import CardHouse from '../components/CardHouse'
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from 'leaflet';
 import MapCardHouse from '../components/MapCardHouse'
+import { useLocation } from "react-router-dom";
+import Moment from 'moment';
+import { createSearchParams, useNavigate } from "react-router-dom";
+import { API_URL } from '../Variables';
 
 const { RangePicker } = DatePicker;
 
 const Houses = () => {
-  // const location = useLocation();
-  // const [destination, setDestination] = useState(location.state.destintaion);
-  // const [date, setDate] = useState(location.state.date);
-  // const [optionss, setOptionss] = useState(location.state.options);
-  // console.log(location);
+  const navigate = useNavigate();
+
+  const location = useLocation()
+  const params = new URLSearchParams(location.search)
   const [options, setOptions] = useState({
-    travelers: 2,
-    rooms: 1
+    travelers: parseInt(params.get("travelers")),
+    rooms: parseInt(params.get("rooms"))
   });
+  const [destination, setDestination] = useState(params.get("destination"));
+  const [dates, setDates] = useState({
+    from: params.get("from"),
+    to: params.get("to")
+  });
+  const [houses, setHouses] = useState([])
+
   const handleOptions = (name, operation) => {
     setOptions(prev => {
       return {
@@ -34,10 +40,38 @@ const Houses = () => {
     })
   };
 
+  useEffect(() => {
+    getHouses()
+  }, []);
 
-  const text = L.divIcon({ html: 'Your HTML text here' });
+  const getHouses = async () => {
+    await fetch(API_URL + '/houses')
+      .then(response => {
+        if (response.ok) {
+          return response.json()
+        } else if (response.status === 404) {
+          return Promise.reject(404)
+        }
+      })
+      .then(data => {
+        setHouses(data['hydra:member'])
+        console.log(data)
+      })
+      .catch(error => { console.log(error); setHouses(null) });
+  }
 
-
+  const handleSearch = () => {
+    navigate({
+      pathname: "/houses",
+      search: `?${createSearchParams({
+        destination: destination,
+        from: Moment(dates.from).format('MM/DD/YYYY'),
+        to: Moment(dates.to).format('MM/DD/YYYY'),
+        travelers: options.travelers,
+        rooms: options.rooms
+      })}`
+    })
+  };
   return (
     <div>
       <AppNavbar />
@@ -49,17 +83,21 @@ const Houses = () => {
                 <Row className='py-3 square border border-light rounded'>
                   <Col className="py-1">
                     <InputGroup className='atypik-input'>
-                      <InputGroup.Text className='icon'><FontAwesomeIcon icon={faLocationPin} /></InputGroup.Text>
+                      <InputGroup.Text className='icon'><FontAwesomeIcon icon={Icons.faLocationPin} /></InputGroup.Text>
                       <Form.Control className='input'
                         placeholder="Destination"
+                        value={destination}
+                        onChange={(d) => setDestination(d.target.value)}
                       />
                     </InputGroup>
                   </Col>
                   <Col lg={5} className="py-1">
                     <div className='atypik-input form-control py-0'>
                       <div className='w-100 d-flex align-items-center' style={{ height: "36px" }}>
-                        <div className="icon"><FontAwesomeIcon icon={faCalendarDays} /></div>
+                        <div className="icon"><FontAwesomeIcon icon={Icons.faCalendarDays} /></div>
                         <RangePicker
+                          defaultValue={[Moment(dates.from), Moment(dates.to)]}
+                          onChange={(d) => setDates({ from: d[0].toDate(), to: d[1].toDate() })}
                           style={{ border: "none" }}
                           placeholder={["Date d'arrivé", "Date de départ"]}
                           suffixIcon=""
@@ -126,7 +164,7 @@ const Houses = () => {
                     </div>
                   </Col>
                   <Col lg={1} className="py-1">
-                    <Button variant="atypik"><FontAwesomeIcon icon={Icons.faSearch} /></Button>
+                    <Button variant="atypik" onClick={handleSearch}><FontAwesomeIcon icon={Icons.faSearch} /></Button>
                   </Col>
                 </Row>
                 <Row className='my-3 pb-3 square border-bottom'>
@@ -141,38 +179,53 @@ const Houses = () => {
                   </div>
                 </Row>
                 <div>
-                  <SearchItem />
-                  <SearchItem />
-                  <SearchItem />
-                  <SearchItem />
+                  {
+                    houses.map((h) => {
+                      return <SearchItem
+                        title={h.title}
+                        description={h.description}
+                        category={h.category.name}
+                        location={h.address.city + ', ' + h.address.country}
+                        travelers={h.nbPerson}
+                        rooms={h.rooms}
+                        price={h.price}
+                        beds={h.beds}
+                        reviews="2.4 (20)" />
+                    })
+                  }
                 </div>
               </Col>
               <Col className="sticky-top h-100 ">
-                <MapContainer center={[51.505, -0.09]} zoom={13} className="mt-3" style={{ height: '90vh' }}>
+                <MapContainer center={[48.8566, 2.3522]} zoom={5} className="mt-3" style={{ height: '90vh' }}>
                   <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url='https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png'
                   />
-                  <Marker
-                    position={[51.505, -0.14]}
-                    icon={
-                      L.divIcon({
-                        html: '<div class="text-white mt-1">200 €</div>',
-                        iconSize: [50, 25],
-                        className: 'bg-atypik text-center shadow rounded',
-                        shadowUrl: null,
-                        shadowSize: null,
-                        shadowAnchor: null
-                      })
-                    } >
-                    <Popup className="p-0" style={{ width: '350px !important' }}>
-                      <MapCardHouse
-                        title="Hello"
-                        destination="Location"
-                        price="350"
-                        reviews="4.8" />
-                    </Popup>
-                  </Marker>
+                  {
+                    houses.map((h) => {
+                      return <Marker
+                        position={[h.address?.latitude, h.address?.longitude]}
+                        icon={
+                          L.divIcon({
+                            html: '<div class="text-white mt-1">' + h.price + ' €</div>',
+                            iconSize: [50, 25],
+                            className: 'bg-atypik text-center shadow rounded',
+                            shadowUrl: null,
+                            shadowSize: null,
+                            shadowAnchor: null
+                          })
+                        } >
+                        <Popup className="p-0" style={{ width: '350px !important' }}>
+                          <MapCardHouse
+                            title={h.title}
+                            location={h.address.city + ', ' + h.address.country}
+                            price={h.price}
+                            reviews="4.8" />
+                        </Popup>
+                      </Marker>
+                    })
+                  }
+
                   {/* <Polygon color="blue" positions={[51.505, -0.09]}>
                     <Marker position={[51.505, -0.09]} icon={
                       L.divIcon({ html: '200' })

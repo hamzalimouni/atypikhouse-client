@@ -13,20 +13,23 @@ const SearchItem = (props) => {
                 <img className='img-fluid' width='100%' style={{ height: '100%' }} src={image} alt="" />
             </Col>
             <Col lg={7}>
-                <h2 className='m-0 mt-3 searchItemTitle'>Hôtel Opéra Liège{props.title}</h2>
-                <small> <FontAwesomeIcon className='icon' icon={faLocationDot} color="#8ED081" /> Puisseguin, Gironde, Nouvelle-Aquitaine{props.location}</small>
-                <p className='my-2 mr-3 searchItemDescription'>Lorem ipsum dolor sit amet adipisicing elit, consectetur adipisicing elit.{props.description}</p>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <h2 className='m-0  searchItemTitle'>{props.title}</h2>
+                    <span className="rounded bg-atypik text-white float-right px-2" style={{ width: 'auto' }}>{props.category}</span>
+                </div>
+                <small> <FontAwesomeIcon className='icon' icon={faLocationDot} color="#8ED081" /> {props.location}</small>
+                <p className='my-2 mr-3 searchItemDescription'>{props.description}</p>
                 <div className='d-flex justify-content-around border-top border-bottom py-2'>
-                    <div><FontAwesomeIcon icon={Icons.faUser} color="#767A82" className='pe-1' /> 5 personnes</div>
-                    <div><FontAwesomeIcon icon={Icons.faBed} color="#767A82" className='pe-1' /> 2 lits</div>
-                    <div><FontAwesomeIcon icon={Icons.faDoorOpen} color="#767A82" className='pe-1' /> 2 pièces</div>
+                    <div><FontAwesomeIcon icon={Icons.faUser} color="#767A82" className='pe-1' /> {props.travelers} personnes</div>
+                    <div><FontAwesomeIcon icon={Icons.faBed} color="#767A82" className='pe-1' /> {props.beds} lits</div>
+                    <div><FontAwesomeIcon icon={Icons.faDoorOpen} color="#767A82" className='pe-1' /> {props.rooms} pièces</div>
                 </div>
                 <div className="d-flex justify-content-between align-items-end px-3 py-3">
                     <div>
                         <FontAwesomeIcon icon={Icons.faStar} color="#F97316" className='pe-2' />
-                        <span>5/5 (20)</span>
+                        <span>{props.reviews}</span>
                     </div>
-                    <span><strong className='text-bold text-atypik'>235€</strong> /nuit</span>
+                    <span><strong className='text-bold text-atypik'>{props.price}€</strong> /nuit</span>
                 </div>
             </Col>
         </div >
