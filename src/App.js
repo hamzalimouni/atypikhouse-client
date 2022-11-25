@@ -35,7 +35,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} ></Route>
         <Route path="/houses" element={< Houses />}></Route>
-        <Route path="/houses/add" element={< NewHouse />}></Route>
+        <Route path="/houses/add" element={requireAuth(< NewHouse />)}></Route>
         <Route path="/houses/:id" element={<House />}></Route>
         <Route path="/houses/paiment" element={<Paiment />}></Route>
         <Route path="/contact" element={<Contact />}></Route>

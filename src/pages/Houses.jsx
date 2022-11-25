@@ -21,11 +21,11 @@ const Houses = () => {
   return (
     <div>
       <AppNavbar />
-      <div className="list-container">
+      <Container>
         <div className="list-wrapper">
           <Container className='list-search'>
             <Row className='my-3'>
-              <Col sm={12} md={12} lg={6} xl={6}>
+              <Col sm={12} md={12} lg={7} xl={7}>
                 <Row className='py-3 square border border-light rounded'>
                   <Col>
                     <InputGroup className='atypik-input'>
@@ -66,18 +66,18 @@ const Houses = () => {
                     </div>
                   </div>
                 </Row>
-                <Row className="list-result">
+                <div>
                   <SearchItem />
                   <SearchItem />
                   <SearchItem />
                   <SearchItem />
-                </Row>
+                </div>
               </Col>
               <Col className='maps'>Maps</Col>
             </Row>
           </Container>
         </div>
-      </div>
+      </Container>
       <Footer />
     </div>
   )

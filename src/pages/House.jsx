@@ -173,9 +173,9 @@ const House = () => {
                     <Divider />
                     <div className='d-flex justify-content-around'>
                       <div><FontAwesomeIcon icon={Icons.faSquare} color="#767A82" className='pe-2' />  {houseData.surface}m²</div>
-                      <div><FontAwesomeIcon icon={faUser} color="#767A82" className='pe-2' /> {houseData.nbPerson} personnes</div>
-                      <div><FontAwesomeIcon icon={faBed} color="#767A82" className='pe-2' /> {houseData.beds} lits</div>
-                      <div><FontAwesomeIcon icon={faDoorOpen} color="#767A82" className='pe-2' /> {houseData.rooms} pièces</div>
+                      <div><FontAwesomeIcon icon={Icons.faUser} color="#767A82" className='pe-2' /> {houseData.nbPerson} personnes</div>
+                      <div><FontAwesomeIcon icon={Icons.faBed} color="#767A82" className='pe-2' /> {houseData.beds} lits</div>
+                      <div><FontAwesomeIcon icon={Icons.faDoorOpen} color="#767A82" className='pe-2' /> {houseData.rooms} pièces</div>
                     </div>
                   </Row>
                   <Row className='shadow-sm rounded p-4 mt-4'>
