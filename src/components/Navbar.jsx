@@ -55,7 +55,7 @@ const AppNavbar = () => {
                             </Nav.Link>
                         </Nav> :
                         <Nav>
-                            {JSON.parse(curUser)['roles'].indexOf('ROLE_ADMIN') > -1 ?
+                            {JSON.parse(curUser)?.roles.indexOf('ROLE_ADMIN') > -1 ?
                                 <Nav.Link href=""><Button variant="blue" onClick={() => { navigate("/admin/dashboard") }}>Admin panel</Button></Nav.Link>
                                 :
                                 <div>

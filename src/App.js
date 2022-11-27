@@ -17,6 +17,7 @@ import NewHouse from './pages/NewHouse';
 import Cookies from 'js-cookie'
 import { useEffect } from 'react';
 import Paiment from './pages/Paiment';
+import ConditionGeneral from './pages/ConditionGeneral';
 
 function App() {
 
@@ -39,6 +40,7 @@ function App() {
         <Route path="/houses/:id" element={<House />}></Route>
         <Route path="/houses/paiment" element={<Paiment />}></Route>
         <Route path="/contact" element={<Contact />}></Route>
+        <Route path="/conditions" element={<ConditionGeneral />}></Route>
         <Route path="/account/settings" element={requireAuth(<Account />)}></Route>
         <Route path="/account/annonces" element={requireAuth(<Annonces />)}></Route>
         <Route path="/users/:id" element={<Profile />}></Route>
