@@ -13,11 +13,15 @@ const ConditionGeneral = () => {
                 </Row>
                 <Row className='py-4'>
                     <Col sm={12} md={12} lg={12}>
-                        <h4 className='text-atypik'>Conditions générales d’utilisation et de vente</h4>
-                        <p className='fs-6'>Les informations publiées sur le site sont sous la seule responsabilité des propriétaires et ne
-                            sont pas garanties par AtypikHouse, qui ne peut être tenu pour responsable de la précision ou
-                            de la véracité des annonces.</p>
                         <div className="list-group my-5">
+                            <a className="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 className="mb-2 text-atypik">Conditions générales d’utilisation et de vente</h5>
+                                </div>
+                                <p>Les informations publiées sur le site sont sous la seule responsabilité des propriétaires et ne
+                                    sont pas garanties par AtypikHouse, qui ne peut être tenu pour responsable de la précision ou
+                                    de la véracité des annonces.</p>
+                            </a>
                             <a className="list-group-item list-group-item-action">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 className="mb-2 text-atypik">Propriétaires et locataires</h5>
