@@ -4,11 +4,14 @@ import React from 'react'
 import { Card, Col, Row } from 'react-bootstrap'
 import * as Icons from '@fortawesome/free-solid-svg-icons'
 import { Divider } from 'antd'
+import { useNavigate } from "react-router-dom";
+
 
 const SearchItem = (props) => {
+    let navigate = useNavigate();
     const image = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2VzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60";
     return (
-        <div className='border searchItem shadow-sm row mb-3 p-0 rounded'>
+        <div className='border searchItem shadow-sm row mb-3 p-0 rounded' onClick={() => navigate("/houses/" + props.id)}>
             <Col lg={5} className="p-0">
                 <img className='img-fluid' width='100%' style={{ height: '100%' }} src={image} alt="" />
             </Col>

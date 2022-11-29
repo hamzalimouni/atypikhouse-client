@@ -2,7 +2,7 @@ import { faBed, faDoorOpen, faLocationDot, faPerson, faRuler, faShower, faSquare
 import * as Icons from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useState, useEffect } from 'react'
-import { Button, Col, Container, Image, Row, Form, FloatingLabel } from 'react-bootstrap'
+import { Button, Col, Container, Image, Row, Form, FloatingLabel, ButtonGroup } from 'react-bootstrap'
 import AppNavbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import CommentCard from '../components/CommentCard'
@@ -10,7 +10,7 @@ import HouseImages from '../components/HouseImages'
 import { useNavigate } from "react-router-dom";
 import { Avatar, Divider, Rate } from 'antd';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import { DatePicker, Badge, Skeleton, message } from 'antd';
+import { DatePicker, Badge, Skeleton, message, Popconfirm } from 'antd';
 import Moment from 'moment';
 import { useParams } from "react-router-dom";
 import { API_URL } from '../Variables';
@@ -18,6 +18,7 @@ import notFoundImage from '../assets/img/notfound.svg'
 import Cookies from 'js-cookie';
 
 const House = () => {
+  let curUser = JSON.parse(Cookies.get('user') || null);
   const { RangePicker } = DatePicker;
   const { id } = useParams()
   const [travelers, setTravelers] = useState(1);
@@ -38,6 +39,7 @@ const House = () => {
   }, []);
 
   const getHouse = async () => {
+    setLoading(true)
     await fetch(API_URL + '/houses/' + id)
       .then(response => {
         if (response.ok) {
@@ -47,7 +49,7 @@ const House = () => {
         }
       })
       .then(data => {
-        if (data.status == "APPROVED") {
+        if (data.status == "APPROVED" || curUser?.roles.indexOf('ROLE_ADMIN') > -1) {
           const ig = []
           data.images.map((i) => {
             ig.push({ image: i.filePath + '\\' + i.fileName })
@@ -92,6 +94,19 @@ const House = () => {
   const disabledDate = (current) => {
     let index = indisponible.findIndex(date => date === Moment(current).format('YYYY-MM-DD'))
     return index > -1 && true
+  }
+
+  async function changeStatus(status) {
+    return fetch(API_URL + '/houses/' + id, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': 'bearer ' + Cookies.get("token"),
+        'Content-Type': 'application/merge-patch+json'
+      },
+      body: JSON.stringify({ status: status })
+    })
+      .then(data => data.json())
+      .then((response) => getHouse())
   }
 
   const onReviewSubmit = (e) => {
@@ -139,6 +154,42 @@ const House = () => {
         </Container>
         :
         <>
+          {curUser?.roles.indexOf('ROLE_ADMIN') > -1 ?
+            <Container className='border shadow-sm my-5 p-5 text-center'>
+              <Skeleton loading={loading} paragraph={{ rows: 2 }} active >
+                <p>
+                  <>
+                    Vous êtes connecté en tant que admin, l'annonce suivante est
+                    {houseData.status == 'UNDER_REVIEW' ?
+                      <strong className='text-primary'> en cours de révision </strong> :
+                      houseData.status == 'APPROVED' ?
+                        <strong className='text-success'> acceptée </strong> :
+                        <strong className='text-danger'> réfusée </strong>
+                    }
+                    vous pouvez toujours changer le status de l'annonce
+                  </>
+                </p>
+
+                <ButtonGroup className='my-2'>
+                  {houseData.status == 'UNDER_REVIEW' || houseData.status == 'REJECTED' ?
+                    <Popconfirm title="Voulez-vous vraiment valider cette annonce?" onConfirm={() =>
+                      changeStatus('APPROVED')
+                    }>
+                      <Button size='sm' variant='atypik' className='mx-1'>Valider l'annonce</Button>
+                    </Popconfirm>
+                    : null}
+                  {houseData.status == 'UNDER_REVIEW' || houseData.status == 'APPROVED' ?
+                    <Popconfirm title="Voulez-vous vraiment réfuser cette annonce?" onConfirm={() =>
+                      changeStatus('REJECTED')
+                    }>
+                      <Button size='sm' variant='danger' className='mx-1'>Réfuser l'annonce</Button>
+                    </Popconfirm>
+                    : null}
+                </ButtonGroup>
+              </Skeleton>
+            </Container> : null
+          }
+
           <div className="py-4">
             <Container className='text-center'>
               {loading ?

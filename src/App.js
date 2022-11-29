@@ -20,14 +20,12 @@ import Paiment from './pages/Paiment';
 
 function App() {
 
-  console.log("HELLO");
-
   function requireAuth(redirectTo) {
     return Cookies.get('user') ? redirectTo : <Navigate to={'/'} />
   }
 
   function requireAdmin(redirectTo) {
-    return Cookies.get('user') && JSON.parse(Cookies.get('user'))['roles'].indexOf('ROLE_ADMIN') > -1 ? redirectTo : <Navigate to={'/'} />
+    return JSON.parse(Cookies.get('user') ? Cookies.get('user') : null)?.roles.indexOf('ROLE_ADMIN') > -1 ? redirectTo : <Navigate to={'/'} />
   }
 
   return (

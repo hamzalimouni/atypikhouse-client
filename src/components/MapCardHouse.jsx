@@ -5,9 +5,13 @@ import { Card, Row } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import * as Icons from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from "react-router-dom";
+
 const MapCardHouse = (props) => {
+    let navigate = useNavigate();
+
     return (
-        <div>
+        <div onClick={() => navigate("/houses/" + props.id)}>
             <div style={{
                 height: 150, width: '100%', backgroundImage: `url(${props.image || bg})`, backgroundPosition: 'center',
                 backgroundSize: 'cover',

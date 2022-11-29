@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { Badge, Button, Col, Container, Form, InputGroup, Row } from 'react-bootstrap'
 import AppNavbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import { DatePicker, Popover } from 'antd';
+import { DatePicker, Popover, Skeleton } from 'antd';
 import SearchItem from '../components/SearchItem'
 import * as Icons from '@fortawesome/free-solid-svg-icons'
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
@@ -31,6 +31,8 @@ const Houses = () => {
     to: params.get("to")
   });
   const [houses, setHouses] = useState([])
+  const [nbHouses, setNbHouses] = useState(0)
+  const [loading, setLoading] = useState(true);
 
   const handleOptions = (name, operation) => {
     setOptions(prev => {
@@ -45,7 +47,10 @@ const Houses = () => {
   }, []);
 
   const getHouses = async () => {
-    await fetch(API_URL + '/houses')
+    await fetch(API_URL + "/houses?rooms[gte]=" + options.rooms +
+      "&nbPerson[gte]=" + options.travelers +
+      "&status=APPROVED" +
+      "&order[createdAt]=DESC")
       .then(response => {
         if (response.ok) {
           return response.json()
@@ -55,7 +60,8 @@ const Houses = () => {
       })
       .then(data => {
         setHouses(data['hydra:member'])
-        console.log(data)
+        setNbHouses(data['hydra:totalItems'])
+        setLoading(false)
       })
       .catch(error => { console.log(error); setHouses(null) });
   }
@@ -71,6 +77,8 @@ const Houses = () => {
         rooms: options.rooms
       })}`
     })
+    getHouses()
+    setLoading(true)
   };
   return (
     <div>
@@ -171,17 +179,20 @@ const Houses = () => {
                   <h1>Destination</h1>
                   <div className="result-list-total-filter d-flex justify-content-between align-items-center">
                     <div className="result-total">
-                      <span>320 logments trouvé</span>
+                      <span>{nbHouses} logments trouvé</span>
                     </div>
                     <div className="filter">
                       <Button variant="atypik">Filter</Button>
                     </div>
                   </div>
                 </Row>
-                <div>
+                <Skeleton loading={loading} paragraph={{ rows: 15 }} active >
                   {
                     houses.map((h) => {
+                      let ravg = 0;
+                      h.reviews.map((r) => ravg += r.grade / h.reviews.length)
                       return <SearchItem
+                        id={h.id}
                         title={h.title}
                         description={h.description}
                         category={h.category.name}
@@ -190,10 +201,10 @@ const Houses = () => {
                         rooms={h.rooms}
                         price={h.price}
                         beds={h.beds}
-                        reviews="2.4 (20)" />
+                        reviews={ravg == 0 ? '-' : ravg.toFixed(1) + ' (' + h.reviews.length + ')'} />
                     })
                   }
-                </div>
+                </Skeleton>
               </Col>
               <Col className="sticky-top h-100 ">
                 <MapContainer center={[48.8566, 2.3522]} zoom={5} className="mt-3" style={{ height: '90vh' }}>
@@ -203,6 +214,8 @@ const Houses = () => {
                   />
                   {
                     houses.map((h) => {
+                      let ravg = 0;
+                      h.reviews.map((r) => ravg += r.grade / h.reviews.length)
                       return <Marker
                         position={[h.address?.latitude, h.address?.longitude]}
                         icon={
@@ -217,10 +230,11 @@ const Houses = () => {
                         } >
                         <Popup className="p-0" style={{ width: '350px !important' }}>
                           <MapCardHouse
+                            id={h.id}
                             title={h.title}
                             location={h.address.city + ', ' + h.address.country}
                             price={h.price}
-                            reviews="4.8" />
+                            reviews={ravg == 0 ? '-' : ravg.toFixed(1) + ' (' + h.reviews.length + ')'} />
                         </Popup>
                       </Marker>
                     })
@@ -236,9 +250,9 @@ const Houses = () => {
             </Row>
           </Container>
         </div>
-      </Container>
+      </Container >
       <Footer />
-    </div>
+    </div >
   )
 }
 

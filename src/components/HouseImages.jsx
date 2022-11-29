@@ -19,41 +19,41 @@ const HouseImage = (props) => {
         <Row>
             {length == 1 ?
                 <Col className='p-1' style={{ maxHeight: 500 }}>
-                    <Image src={images[0].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
+                    <Image src={images[0]?.image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
                 </Col > :
                 <>
                     {length < 3 ?
                         <>
                             <Col className='p-1' style={{ maxHeight: 500 }}>
-                                <Image src={images[0].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
+                                <Image src={images[0]?.image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
                             </Col >
                             <Col className='p-1' style={{ maxHeight: 500 }}>
-                                <Image src={images[1].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
+                                <Image src={images[1]?.image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
                             </Col >
                         </>
                         : length < 4 ?
                             <>
                                 <Col className='p-1' style={{ maxHeight: 500 }}>
-                                    <Image src={images[0].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
+                                    <Image src={images[0]?.image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
                                 </Col >
                                 <Col className='p-1' style={{ maxHeight: 500 }}>
-                                    <Image src={images[1].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
+                                    <Image src={images[1]?.image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
                                 </Col >
                                 <Col className='p-1' style={{ maxHeight: 500 }}>
-                                    <Image src={images[2].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
+                                    <Image src={images[2]?.image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
                                 </Col >
                             </>
                             :
                             length < 5 ?
                                 <>
                                     <Col className='p-1' style={{ maxHeight: 500 }}>
-                                        <Image src={images[0].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
+                                        <Image src={images[0]?.image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
                                     </Col >
                                     <Col className='p-1' style={{ maxHeight: 500 }}>
-                                        <Image src={images[1].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
+                                        <Image src={images[1]?.image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
                                     </Col >
                                     <Col className='p-1 position-relative' style={{ maxHeight: 500 }}>
-                                        <Image src={images[2].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
+                                        <Image src={images[2]?.image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
                                         {length > 3 ? <div style={{
                                             "position": "absolute",
                                             "top": "50%",
@@ -76,23 +76,23 @@ const HouseImage = (props) => {
                                 </> :
                                 <>
                                     <Col className='p-1'>
-                                        <Image src={images[0].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
+                                        <Image src={images[0]?.image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', height: '100%', borderRadius: 10 }} onClick={() => handleShow()} />
                                     </Col >
                                     <Col>
                                         <Row>
                                             <Col className='p-1'>
-                                                <Image src={images[1].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', borderRadius: 10 }} onClick={() => handleShow()} />
+                                                <Image src={images[1]?.image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', borderRadius: 10 }} onClick={() => handleShow()} />
                                             </Col>
                                             <Col className='p-1'>
-                                                <Image src={images[2].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', borderRadius: 10 }} onClick={() => handleShow()} />
+                                                <Image src={images[2]?.image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', borderRadius: 10 }} onClick={() => handleShow()} />
                                             </Col>
                                         </Row>
                                         <Row>
                                             <Col className='p-1'>
-                                                <Image src={images[3].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', borderRadius: 10 }} onClick={() => handleShow()} />
+                                                <Image src={images[3]?.image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', borderRadius: 10 }} onClick={() => handleShow()} />
                                             </Col>
                                             <Col className='p-1 position-relative'>
-                                                <Image src={images[4].image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', borderRadius: 10 }} onClick={() => handleShow()} />
+                                                <Image src={images[4]?.image} className='img-fluid' width={'100%'} height={'100%'} style={{ objectFit: 'cover', borderRadius: 10 }} onClick={() => handleShow()} />
                                                 {length > 5 ? <div style={{
                                                     "position": "absolute",
                                                     "top": "50%",
