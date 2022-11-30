@@ -3,18 +3,14 @@ import { Col, Container, Row, Dropdown, Badge, Button, ButtonGroup } from 'react
 import Sidebar from '../../components/admin/Sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons';
-import { Spin } from 'antd';
+import { Spin, Popconfirm, message } from 'antd';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import Cookies from 'js-cookie'
 import { API_URL } from '../../Variables';
-import { useNavigate } from "react-router-dom";
 
 const Annonces = () => {
-    let navigate = useNavigate();
-    let curUser = Cookies.get('user');
     const [items, setItems] = useState([]);
-    const [show, setShow] = useState(false);
     const [loading, setLoading] = useState(true);
     const myButton = () => {
         return (
@@ -53,15 +49,35 @@ const Annonces = () => {
         getAnnonces();
     }, []);
 
-    function actionFormat(cell) {
+    function actionFormat(id) {
         return <div className='d-flex'>
-            <Button variant='flat' className='text-danger' size='sm'>
-                <FontAwesomeIcon icon={Icons.faTrash} />
-            </Button>
+            <Popconfirm title="Voulez-vous vraiment supprimer cette annonce?" onConfirm={() =>
+                fetch(API_URL + '/houses/' + id, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': 'bearer ' + Cookies.get("token"),
+                        'Content-Type': 'application/merge-patch+json'
+                    }
+                })
+                    .then(
+                        (result) => {
+                            if (result.status == 204) {
+                                message.success('Annonce supprimée avec succès');
+                            } else {
+                                message.error('Impossible de supprimer l\'annonce');
+                            }
+                            getAnnonces();
+                        }
+                    )
+            }>
+                <Button variant='flat' className='text-danger' size='sm'>
+                    <FontAwesomeIcon icon={Icons.faTrash} />
+                </Button>
+            </Popconfirm>
             <Button variant='flat' className='text-primary' size='sm'>
                 <FontAwesomeIcon icon={Icons.faEdit} />
             </Button>
-            <Button variant='flat' className='text-primary' size='sm' onClick={() => navigate('../houses/' + cell)}>
+            <Button variant='flat' className='text-primary' size='sm' onClick={() => window.open('../houses/' + id, '_blank')}>
                 <FontAwesomeIcon icon={Icons.faEye} />
             </Button>
         </div>;

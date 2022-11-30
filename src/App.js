@@ -16,7 +16,7 @@ import Properties from './pages/admin/Properties';
 import NewHouse from './pages/NewHouse';
 import Cookies from 'js-cookie'
 import { useEffect } from 'react';
-import Paiment from './pages/Paiment';
+import Booking from './pages/Booking';
 import ConditionGeneral from './pages/ConditionGeneral';
 import Faq from './pages/Faq';
 
@@ -37,7 +37,7 @@ function App() {
         <Route path="/houses" element={< Houses />}></Route>
         <Route path="/houses/add" element={requireAuth(< NewHouse />)}></Route>
         <Route path="/houses/:id" element={<House />}></Route>
-        <Route path="/houses/paiment" element={<Paiment />}></Route>
+        <Route path="/houses/:id/booking" element={<Booking />}></Route>
         <Route path="/contact" element={<Contact />}></Route>
         <Route path="/cgu" element={<ConditionGeneral />}></Route>
         <Route path="/faq" element={<Faq />}></Route>

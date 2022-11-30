@@ -35,7 +35,7 @@ const Annonces = () => {
                 </div> */}
                 <Container>
                     {houses.map((h) => {
-                        return <Row className='mt-5 shadow-sm p-sm-3 mx-0'>
+                        return <Row className='mt-5 border shadow-sm p-sm-3 mx-0'>
                             <Row className='mx-auto text-center'>
                                 {h.status == "NEW_LISTING" ? <Badge status="processing" text={<small><strong>En cours de révision</strong></small>} color={'#aeaeae'} />
                                     : h.status == "APPROVED" ? <Badge status="processing" text={<small><strong>Annonce approvée</strong></small>
@@ -63,8 +63,8 @@ const Annonces = () => {
                                 </div>
                             </Col>
                             <Col sm={2}>
-                                <Button variant='flat' className='text-warning btn-sm w-100'><FontAwesomeIcon icon={Icons.faEye} /> Voir</Button>
-                                <Button variant='flat' className='text-black btn-sm w-100'><FontAwesomeIcon icon={Icons.faEdit} /> Modifier</Button>
+                                <Button variant='flat' className='text-atypik btn-sm w-100' onClick={() => window.open('../houses/' + h.id, '_blank')}><FontAwesomeIcon icon={Icons.faEye} /> Visualiser</Button>
+                                <Button variant='flat' className='text-primary btn-sm w-100'><FontAwesomeIcon icon={Icons.faEdit} /> Modifier</Button>
                                 <Popconfirm title="Voulez-vous vraiment supprimer cette annonce?" onConfirm={() =>
                                     fetch(API_URL + '/houses/' + h.id, {
                                         method: 'DELETE',

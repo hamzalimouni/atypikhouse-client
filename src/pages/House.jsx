@@ -313,7 +313,7 @@ const House = () => {
                       {
                         houseData.reviews?.sort((a, b) => (b.id - a.id)).map((r) => {
                           return <CommentCard
-                            id={Cookies.get("user") && JSON.parse(Cookies.get("user")).id === r.user.id ? r.id : null}
+                            id={(curUser?.id === r.user.id) || curUser?.roles.indexOf('ROLE_ADMIN') > -1 ? r.id : null}
                             reload={getHouse}
                             user={r.user.firstname + ' ' + r.user.lastname}
                             comment={r.comment}

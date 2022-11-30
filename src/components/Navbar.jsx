@@ -59,7 +59,7 @@ const AppNavbar = () => {
                                 <Nav.Link href=""><Button variant="blue" onClick={() => { navigate("/admin/dashboard") }}>Admin panel</Button></Nav.Link>
                                 :
                                 <div>
-                                    <Nav.Link href=""><Button variant="atypik">Publier une annonce</Button></Nav.Link>
+                                    <Nav.Link href=""><Button variant="atypik" onClick={() => { navigate("/houses/add") }}>Publier une annonce</Button></Nav.Link>
                                 </div>
                             }
                             <Nav.Link onClick={showDrawer} className='pt-3 px-3'>
