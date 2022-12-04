@@ -11,6 +11,8 @@ import { useNavigate, useParams, useLocation, createSearchParams } from "react-r
 import InputMask from 'react-input-mask';
 import { API_URL } from '../Variables';
 import notFoundImage from '../assets/img/notfound.svg'
+import Cookies from 'js-cookie'
+import axios from "axios";
 
 const Paiment = () => {
     const location = useLocation()
@@ -19,8 +21,6 @@ const Paiment = () => {
     const image = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2VzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60";
     const { RangePicker } = DatePicker;
     const { id } = useParams()
-    const [travelers, setTravelers] = useState(1);
-    const [total, setTotal] = useState(0);
     const [found, setfound] = useState(true);
     const [houseData, setHouseData] = useState([])
     const [loading, setLoading] = useState(true);
@@ -29,9 +29,11 @@ const Paiment = () => {
     const [expiration, setExpiration] = useState(null)
     const [cvv, setCvv] = useState(null)
     const [options, setOptions] = useState({
+        house: parseInt(id),
         from: params.get("from") || new Moment(),
         to: params.get("to") || new Moment().add(1, 'days'),
-        travelers: parseInt(params.get("travelers")) || 1
+        travelers: parseInt(params.get("travelers")) || 1,
+        total: 0
     })
 
     useEffect(() => {
@@ -39,7 +41,7 @@ const Paiment = () => {
     }, []);
 
     useEffect(() => {
-        setTotal(houseData.price * Moment(options.to).diff(options.from, 'days') + 15)
+        setOptions({ ...options, total: houseData.price * Moment(options.to).diff(options.from, 'days') + 15 })
         navigate({
             pathname: "/houses/" + id + '/booking',
             search: `?${createSearchParams({
@@ -70,7 +72,7 @@ const Paiment = () => {
                     data.disponibilities.map((d) => setIndisponible((indisponible) => [...indisponible, Moment(d.date).format('YYYY-MM-DD')]))
                     setHouseData(data)
                     setLoading(false)
-                    setTotal(houseData.price * Moment(options.to).diff(options.from, 'days') + 15)
+                    setOptions({ ...options, total: houseData.price * Moment(options.to).diff(options.from, 'days') + 15 })
                 } else {
                     setfound(false)
                 }
@@ -78,6 +80,33 @@ const Paiment = () => {
             .catch(error => { console.log(error); setfound(false) });
     }
 
+
+    async function book() {
+        let formData = new FormData();
+
+        formData.append('house', options.house)
+        formData.append('total', options.total)
+        formData.append('from', options.from)
+        formData.append('to', options.to)
+        formData.append('travelers', options.travelers)
+
+        return axios({
+            url: API_URL + '/reservations',
+            method: "POST",
+            headers: {
+                authorization: 'bearer ' + Cookies.get("token"),
+            },
+            data: formData,
+        })
+            .then((res) => { res.data() })
+            .catch((err) => { });
+    }
+
+    const bookingButton = async () => {
+        console.log();
+        let bookResult = await book();
+        console.log(bookResult)
+    }
     return (
         <div>
             <AppNavbar />
@@ -224,7 +253,7 @@ const Paiment = () => {
                                 <div className="px-5 pb-5 ">
                                     {/* <Divider orientation='left'><h3>Confirmation</h3></Divider> */}
                                     <div className='text-center mt-5'>
-                                        <Button variant='atypik' className='w-50 mb-3'>Payer et réserver</Button><br />
+                                        <Button variant='atypik' onClick={() => bookingButton()} className='w-50 mb-3'>Payer et réserver</Button><br />
                                         <small>En cliquant sur le bouton ci-dessous, j’accepte les conditions générales de vente et
                                             d’utilisation de AtypikHouse et j’envoie ma demande pour de très belles vacances,
                                             équitables et responsables !
@@ -247,7 +276,7 @@ const Paiment = () => {
                                 <Divider />
                                 <div className='d-flex justify-content-between'>
                                     <strong>Total:</strong>
-                                    <strong>{total} €</strong>
+                                    <strong>{options.total} €</strong>
                                 </div>
                             </Col>
                         </Skeleton>

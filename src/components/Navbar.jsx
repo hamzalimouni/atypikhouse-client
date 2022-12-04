@@ -74,7 +74,7 @@ const AppNavbar = () => {
                                     <NavDropdown.Item onClick={() => { navigate("/account/settings") }}>Gérer mon compte</NavDropdown.Item>
                                     <NavDropdown.Item href="">Messages</NavDropdown.Item>
                                     <NavDropdown.Item onClick={() => { navigate("/account/annonces") }}>Mes annonces</NavDropdown.Item>
-                                    <NavDropdown.Item href="">Mes réservations</NavDropdown.Item>
+                                    <NavDropdown.Item onClick={() => { navigate("/account/reservations") }}>Mes réservations</NavDropdown.Item>
                                     <NavDropdown.Item href="">Commentaires</NavDropdown.Item>
                                     <NavDropdown.Divider></NavDropdown.Divider>
                                     <NavDropdown.Item onClick={() => {

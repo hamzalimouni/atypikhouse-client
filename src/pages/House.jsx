@@ -212,7 +212,8 @@ const House = () => {
               {loading ?
                 <Skeleton.Image className="mx-auto" active style={{ width: 1000, height: 450, maxWidth: '100%' }} />
                 :
-                <HouseImages images={images} loading={loading} />}
+                <HouseImages images={images} loading={loading} />
+              }
             </Container >
           </div >
           <Container className="py-5">
