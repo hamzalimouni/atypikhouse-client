@@ -9,9 +9,8 @@ import * as Icons from '@fortawesome/free-solid-svg-icons'
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from 'leaflet';
 import MapCardHouse from '../components/MapCardHouse'
-import { useLocation } from "react-router-dom";
 import Moment from 'moment';
-import { createSearchParams, useNavigate } from "react-router-dom";
+import { createSearchParams, useNavigate, useLocation } from "react-router-dom";
 import { API_URL } from '../Variables';
 
 const { RangePicker } = DatePicker;
@@ -192,6 +191,7 @@ const Houses = () => {
                       let ravg = 0;
                       h.reviews.map((r) => ravg += r.grade / h.reviews.length)
                       return <SearchItem
+                        searchOptions={{ from: dates.from, to: dates.to, travelers: options.travelers }}
                         id={h.id}
                         title={h.title}
                         description={h.description}

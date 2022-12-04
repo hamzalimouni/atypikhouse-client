@@ -55,16 +55,17 @@ const AppNavbar = () => {
                             </Nav.Link>
                         </Nav> :
                         <Nav>
-                            {JSON.parse(curUser)?.roles.indexOf('ROLE_ADMIN') > -1 ?
-                                <Nav.Link href=""><Button variant="blue" onClick={() => { navigate("/admin/dashboard") }}>Admin panel</Button></Nav.Link>
-                                :
-                                <div>
-                                    <Nav.Link href=""><Button variant="atypik" onClick={() => { navigate("/houses/add") }}>Publier une annonce</Button></Nav.Link>
-                                </div>
+                            {
+                                JSON.parse(curUser)?.roles.indexOf('ROLE_ADMIN') > -1 ?
+                                    <Nav.Link href=""><Button variant="blue" onClick={() => { navigate("/admin/dashboard") }}>Admin panel</Button></Nav.Link>
+                                    :
+                                    <div>
+                                        <Nav.Link href=""><Button variant="flat border" onClick={() => { navigate("/houses/add") }}>Publier une annonce</Button></Nav.Link>
+                                    </div>
                             }
                             <Nav.Link onClick={showDrawer} className='pt-3 px-3'>
                                 <Badge dot={true}>
-                                    <FontAwesomeIcon icon={Icons.faBell} color="#8ed081" size="2x" />
+                                    <FontAwesomeIcon icon={Icons.faBell} color="#8ed081" stroke='#8ed081' size="2x" />
                                 </Badge>
                             </Nav.Link>
 

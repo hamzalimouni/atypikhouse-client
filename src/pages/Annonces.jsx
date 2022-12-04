@@ -52,7 +52,7 @@ const Annonces = () => {
                                 <small>{h.description}</small>
                                 <div className='d-flex'>
                                     <div className='p-3'>
-                                        <FontAwesomeIcon icon={Icons.faEuroSign} color="#8ed081" /> <small>{h.price}</small>
+                                        <FontAwesomeIcon icon={Icons.faEuro} color="#8ed081" /> <small>{h.price}</small>
                                     </div>
                                     <div className='p-3'>
                                         <FontAwesomeIcon icon={Icons.faPeopleGroup} color="#8ed081" /> <small>{h.nbPerson}</small>

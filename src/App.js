@@ -17,8 +17,11 @@ import NewHouse from './pages/NewHouse';
 import Cookies from 'js-cookie'
 import { useEffect } from 'react';
 import Booking from './pages/Booking';
+import BookingConfirmation from './pages/BookingConfirmation';
 import ConditionGeneral from './pages/ConditionGeneral';
 import Faq from './pages/Faq';
+import Reservations from './pages/Reservations';
+import Reservation from './pages/Reservation';
 
 function App() {
 
@@ -38,11 +41,14 @@ function App() {
         <Route path="/houses/add" element={requireAuth(< NewHouse />)}></Route>
         <Route path="/houses/:id" element={<House />}></Route>
         <Route path="/houses/:id/booking" element={<Booking />}></Route>
+        <Route path="/houses/:id/booking/done" element={<BookingConfirmation />}></Route>
         <Route path="/contact" element={<Contact />}></Route>
         <Route path="/cgu" element={<ConditionGeneral />}></Route>
         <Route path="/faq" element={<Faq />}></Route>
         <Route path="/account/settings" element={requireAuth(<Account />)}></Route>
         <Route path="/account/annonces" element={requireAuth(<Annonces />)}></Route>
+        <Route path="/account/reservations" element={requireAuth(<Reservations />)}></Route>
+        <Route path="/account/reservation/:id" element={requireAuth(<Reservation />)}></Route>
         <Route path="/users/:id" element={<Profile />}></Route>
         <Route path="/admin/dashboard" element={requireAdmin(<Dashboard />)} ></Route>
         <Route path="/admin/annonces" element={requireAdmin(<AnnoncesAdmin />)}></Route>

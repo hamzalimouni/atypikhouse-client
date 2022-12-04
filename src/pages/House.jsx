@@ -7,7 +7,7 @@ import AppNavbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import CommentCard from '../components/CommentCard'
 import HouseImages from '../components/HouseImages'
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation, createSearchParams } from "react-router-dom";
 import { Avatar, Divider, Rate } from 'antd';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { DatePicker, Badge, Skeleton, message, Popconfirm } from 'antd';
@@ -18,6 +18,8 @@ import notFoundImage from '../assets/img/notfound.svg'
 import Cookies from 'js-cookie';
 
 const House = () => {
+  const location = useLocation()
+  const params = new URLSearchParams(location.search)
   let curUser = JSON.parse(Cookies.get('user') || null);
   const { RangePicker } = DatePicker;
   const { id } = useParams()
@@ -31,12 +33,29 @@ const House = () => {
   const [indisponible, setIndisponible] = useState([])
   const [rating, setRating] = useState(3)
   const [ratingAvg, setRatingAvg] = useState(3)
+  const [options, setOptions] = useState({
+    from: params.get("from") || new Moment(),
+    to: params.get("to") || new Moment().add(1, 'days'),
+    travelers: parseInt(params.get("travelers")) || 1
+  })
 
   const navigate = useNavigate();
   useEffect(() => {
     getHouse()
     getHouseParams()
+    console.log(options.from)
   }, []);
+
+  useEffect(() => {
+    navigate({
+      pathname: "/houses/" + id,
+      search: `?${createSearchParams({
+        from: Moment(options.from).format('MM/DD/YYYY'),
+        to: Moment(options.to).format('MM/DD/YYYY'),
+        travelers: options.travelers,
+      })}`
+    })
+  }, [options]);
 
   const getHouse = async () => {
     setLoading(true)
@@ -83,13 +102,10 @@ const House = () => {
       .catch(error => { console.log(error); setHouseParams(null) });
   }
 
-  const handleClick = () => {
-    navigate("/houses/paiment");
-  }
 
-  const dateHandle = (dates) => {
-    setDays(Moment(dates[1]).diff(dates[0], 'days'))
-  }
+  // const dateHandle = (dates) => {
+  //   setDays(Moment(dates[1]).diff(dates[0], 'days'))
+  // }
 
   const disabledDate = (current) => {
     let index = indisponible.findIndex(date => date === Moment(current).format('YYYY-MM-DD'))
@@ -143,6 +159,7 @@ const House = () => {
       .catch(error => { console.log(error); });
 
   }
+
   return (
     <div>
       <AppNavbar />
@@ -340,11 +357,11 @@ const House = () => {
                   <Row className='my-5'>
                     <RangePicker
                       disabledDate={disabledDate}
-                      defaultValue={[Moment(), Moment().add(1, 'days')]}
+                      defaultValue={[Moment(options.from), Moment(options.to)]}
+                      onChange={(d) => setOptions({ ...options, from: d[0].toDate(), to: d[1].toDate() })}
                       style={{ border: '1px solid #f0f0f0', padding: 19, borderRadius: 10 }}
                       placeholder={["Date d'arrivé", "Date de départ"]}
                       suffixIcon=""
-                      onChange={dateHandle}
                       separator={<FontAwesomeIcon icon={Icons.faArrowRight} color="#cecece" />} />
                     <div className="mt-2" style={{ border: '1px solid #f0f0f0', padding: 19, borderRadius: 10 }}>
                       <div className="d-flex justify-content-around align-items-center">
@@ -354,38 +371,44 @@ const House = () => {
                         <div className="d-flex justify-content-center align-items-center">
                           <Button variant="atypik" size="sm" style={{ width: "35px" }}
                             onClick={() => {
-                              setTravelers(travelers - 1)
+                              setOptions({ ...options, travelers: options.travelers - 1 })
                             }}
-                            disabled={travelers <= 1}>-</Button>
+                            disabled={options.travelers <= 1}>-</Button>
                           <Badge bg="light" text="dark" className='mx-2'>
-                            {travelers}
+                            {options.travelers}
                           </Badge>
                           <Button variant="atypik" size="sm" style={{ width: "35px" }}
                             onClick={() => {
-                              setTravelers(travelers + 1)
+                              setOptions({ ...options, travelers: options.travelers + 1 })
                             }}
-                            disabled={travelers > houseData.nbPerson - 1}>+</Button>
+                            disabled={options.travelers > houseData.nbPerson - 1}>+</Button>
                         </div>
                       </div>
                     </div>
                   </Row>
-
                   <div className='d-flex justify-content-between'>
-                    <span>{houseData.price} € x {days} nuit :</span>
-                    <span>{houseData.price * days} €</span>
+                    <span>{houseData.price} € x {Moment(options.to).diff(options.from, 'days')} nuit :</span>
+                    <span>{houseData.price * Moment(options.to).diff(options.from, 'days')} €</span>
                   </div>
                   <div className='d-flex justify-content-between'>
                     <span>Les frais de service:</span>
                     <span>15 €</span>
                   </div>
                   <Divider />
-
                   <div className='d-flex justify-content-between'>
                     <strong>Total:</strong>
-                    <strong>{houseData.price * days + 15} €</strong>
+                    <strong>{houseData.price * Moment(options.to).diff(options.from, 'days') + 15} €</strong>
                   </div>
-
-                  <Button onClick={handleClick} variant="atypik" className='w-100 mt-5'>Réserver</Button>
+                  <Button onClick={() =>
+                    navigate({
+                      pathname: "/houses/" + id + '/booking',
+                      search: `?${createSearchParams({
+                        from: Moment(options.from).format('MM/DD/YYYY'),
+                        to: Moment(options.to).format('MM/DD/YYYY'),
+                        travelers: options.travelers,
+                      })}`
+                    })
+                  } variant="atypik" className='w-100 mt-5'>Réserver</Button>
                 </Skeleton>
               </Col>
             </Row>
