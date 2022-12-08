@@ -85,7 +85,7 @@ const Reservation = () => {
                                                 <Tag color="error" className='mx-auto w-100 text-center p-2 fs-5 mb-3'>Votre réservation a été annulée par l'hôte</Tag>
                                                 : null
                                         }
-                                        <Row className='mx-lg-5 d-flex align-items-center'>
+                                        <Row className='mx-lg-5 d-flex align-items-center' onClick={() => window.open('/houses/' + data.house?.id, '_blank')}>
                                             <Col lg={4} className="p-0">
                                                 <img className='img-fluid rounded' width='100%' style={{ height: '100%' }} src={image} alt="" />
                                             </Col>

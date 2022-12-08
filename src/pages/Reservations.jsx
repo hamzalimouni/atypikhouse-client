@@ -17,6 +17,8 @@ const Reservations = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 
+ 
+
     useEffect(() => {
         getReservations()
     }, []);
@@ -38,7 +40,7 @@ const Reservations = () => {
             <Container className='mt-5'>
                 <Divider><h2 className='text-center text-blue'>Mes réservations</h2></Divider>
                 {/* <div className='row justify-content-md-center mt-5'>
-                    <Empty description="Aucune réservation passée" />
+                    <Empty description="Aucune réservation" />
                 </div> */}
                 <Container>
                     <Skeleton loading={loading} paragraph={{ rows: 10 }} active >
@@ -49,7 +51,7 @@ const Reservations = () => {
                                         <Avatar size={80} src="https://joeschmoe.io/api/v1/random" />
                                         <div className='ms-4'>
                                             <strong className=''>{r.house.title}</strong>
-                                            { r.status == "CANCELED" ? <span className="ms-3 rounded bg-danger text-white float-right px-2 py-1">Annulée</span> : null}
+                                            {r.status == "CANCELED" ? <span className="ms-3 rounded bg-danger text-white float-right px-2 py-1">Annulée</span> : null}
                                             <div className='d-flex align-items-center mt-2'>
                                                 <FontAwesomeIcon icon={Icons.faCalendar} color="#4caf50" className='px-2' />
                                                 <span>{moment(r.fromDate).format('DD MMM YYYY')}</span>
@@ -57,7 +59,7 @@ const Reservations = () => {
                                                 <span>{moment(r.toDate).format('DD MMM YYYY')} </span>
                                                 <span className='px-3'>·</span>
                                                 <FontAwesomeIcon icon={Icons.faPeopleGroup} color="#4caf50" className='px-2' />
-                                                <span>{r.nbPerson}</span>
+                                                <span>{r.nbPersons}</span>
                                                 <span className='px-3'>·</span>
                                                 <FontAwesomeIcon icon={Icons.faEuro} color="#4caf50" className='px-2' />
                                                 <span>{r.amount}</span>

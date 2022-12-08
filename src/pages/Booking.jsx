@@ -2,10 +2,10 @@ import * as Icons from '@fortawesome/free-solid-svg-icons'
 import * as Brands from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useState, useEffect } from 'react'
-import { Button, Col, Container, Image, Row, Form, FloatingLabel, ButtonGroup } from 'react-bootstrap'
+import { Button as Btn, Col, Container, Image, Row, Form, FloatingLabel, ButtonGroup } from 'react-bootstrap'
 import AppNavbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import { DatePicker, Badge, Avatar, message, Divider, Skeleton } from 'antd';
+import { DatePicker, Badge, Avatar, Button, Divider, Skeleton } from 'antd';
 import Moment from 'moment';
 import { useNavigate, useParams, useLocation, createSearchParams } from "react-router-dom";
 import InputMask from 'react-input-mask';
@@ -24,6 +24,7 @@ const Paiment = () => {
     const [found, setfound] = useState(true);
     const [houseData, setHouseData] = useState([])
     const [loading, setLoading] = useState(true);
+    const [loadingPayment, setLoadingPayment] = useState(false);
     const [indisponible, setIndisponible] = useState([])
     const [cc, setCc] = useState(null)
     const [expiration, setExpiration] = useState(null)
@@ -41,7 +42,6 @@ const Paiment = () => {
     }, []);
 
     useEffect(() => {
-        setOptions({ ...options, total: houseData.price * Moment(options.to).diff(options.from, 'days') + 15 })
         navigate({
             pathname: "/houses/" + id + '/booking',
             search: `?${createSearchParams({
@@ -72,7 +72,7 @@ const Paiment = () => {
                     data.disponibilities.map((d) => setIndisponible((indisponible) => [...indisponible, Moment(d.date).format('YYYY-MM-DD')]))
                     setHouseData(data)
                     setLoading(false)
-                    setOptions({ ...options, total: houseData.price * Moment(options.to).diff(options.from, 'days') + 15 })
+                    setOptions({ ...options, total: data.price * Moment(options.to).diff(options.from, 'days') + 15 })
                 } else {
                     setfound(false)
                 }
@@ -81,13 +81,15 @@ const Paiment = () => {
     }
 
 
-    async function book() {
+    async function bookHouse() {
+        setLoadingPayment(true)
+        console.log("clicked")
         let formData = new FormData();
 
         formData.append('house', options.house)
         formData.append('total', options.total)
-        formData.append('from', options.from)
-        formData.append('to', options.to)
+        formData.append('from', Moment(options.from).format('MMM DD YYYY'))
+        formData.append('to', Moment(options.to).format('MMM DD YYYY'))
         formData.append('travelers', options.travelers)
 
         return axios({
@@ -98,15 +100,17 @@ const Paiment = () => {
             },
             data: formData,
         })
-            .then((res) => { res.data() })
-            .catch((err) => { });
+            .then((result) => {
+                console.log(result.data);
+                if ('status' in result.data) {
+                    navigate('./done')
+                }
+            })
+            .catch(err => {
+                console.log(err.response.status)
+            })
     }
 
-    const bookingButton = async () => {
-        console.log();
-        let bookResult = await book();
-        console.log(bookResult)
-    }
     return (
         <div>
             <AppNavbar />
@@ -133,7 +137,9 @@ const Paiment = () => {
                                             <RangePicker
                                                 disabledDate={disabledDate}
                                                 defaultValue={[Moment(options.from), Moment(options.to)]}
-                                                onChange={(d) => setOptions({ ...options, from: d[0].toDate(), to: d[1].toDate() })}
+                                                onChange={(d) => {
+                                                    setOptions({ ...options, from: d[0].toDate(), to: d[1].toDate(), total: houseData.price * Moment(d[1].toDate()).diff(d[0].toDate(), 'days') + 15 })
+                                                }}
                                                 style={{ border: '1px solid #f0f0f0', padding: 19, borderRadius: 10 }}
                                                 placeholder={["Date d'arrivé", "Date de départ"]}
                                                 suffixIcon=""
@@ -146,19 +152,19 @@ const Paiment = () => {
                                                         Voyageurs
                                                     </span>
                                                     <div className="d-flex justify-content-center align-items-center">
-                                                        <Button variant="atypik" size="sm" style={{ width: "35px" }}
+                                                        <Btn variant="atypik" size="sm" style={{ width: "35px" }}
                                                             onClick={() => {
                                                                 setOptions({ ...options, travelers: options.travelers - 1 })
                                                             }}
-                                                            disabled={options.travelers <= 1}>-</Button>
+                                                            disabled={options.travelers <= 1}>-</Btn>
                                                         <Badge bg="light" text="dark" className='mx-2'>
                                                             {options.travelers}
                                                         </Badge>
-                                                        <Button variant="atypik" size="sm" style={{ width: "35px" }}
+                                                        <Btn variant="atypik" size="sm" style={{ width: "35px" }}
                                                             onClick={() => {
                                                                 setOptions({ ...options, travelers: options.travelers + 1 })
                                                             }}
-                                                            disabled={options.travelers > houseData.nbPerson - 1}>+</Button>
+                                                            disabled={options.travelers > houseData.nbPerson - 1}>+</Btn>
                                                     </div>
                                                 </div>
                                             </div>
@@ -253,8 +259,8 @@ const Paiment = () => {
                                 <div className="px-5 pb-5 ">
                                     {/* <Divider orientation='left'><h3>Confirmation</h3></Divider> */}
                                     <div className='text-center mt-5'>
-                                        <Button variant='atypik' onClick={() => bookingButton()} className='w-50 mb-3'>Payer et réserver</Button><br />
-                                        <small>En cliquant sur le bouton ci-dessous, j’accepte les conditions générales de vente et
+                                        <Button loading={loadingPayment} onClick={() => bookHouse()} style={{ border: 'none' }} className='w-50 mb-3 btn btn-atypik atypik'>Payer et réserver</Button><br />
+                                        <small>En cliquant sur le bouton ci-dessus, j’accepte les conditions générales de vente et
                                             d’utilisation de AtypikHouse et j’envoie ma demande pour de très belles vacances,
                                             équitables et responsables !
                                         </small>

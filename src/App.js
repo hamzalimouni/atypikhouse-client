@@ -22,6 +22,7 @@ import ConditionGeneral from './pages/ConditionGeneral';
 import Faq from './pages/Faq';
 import Reservations from './pages/Reservations';
 import Reservation from './pages/Reservation';
+import AnnonceReservations from './pages/AnnonceReservations';
 
 function App() {
 
@@ -41,6 +42,7 @@ function App() {
         <Route path="/houses/add" element={requireAuth(< NewHouse />)}></Route>
         <Route path="/houses/:id" element={<House />}></Route>
         <Route path="/houses/:id/booking" element={<Booking />}></Route>
+        <Route path="/houses/:id/reservations" element={<AnnonceReservations />}></Route>
         <Route path="/houses/:id/booking/done" element={<BookingConfirmation />}></Route>
         <Route path="/contact" element={<Contact />}></Route>
         <Route path="/cgu" element={<ConditionGeneral />}></Route>
