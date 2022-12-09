@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { Button, Col, Container, Image, Row } from 'react-bootstrap'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
-import { Divider, Skeleton, Badge, Popconfirm, message } from 'antd';
+import { Divider, Skeleton, Badge, Popconfirm, message, Empty } from 'antd';
 import bg from '../assets/img/bg.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons';
 import Cookies from 'js-cookie'
-import { API_URL } from '../Variables';
+import { API_URL, MEDIA_URL } from '../Variables';
 import { useNavigate } from 'react-router-dom';
 
 const Annonces = () => {
@@ -32,13 +32,9 @@ const Annonces = () => {
             <Navbar />
             <Container className='mt-5'>
                 <Divider><h2 className='text-center text-blue'>Mes annonces</h2></Divider>
-                {/* <div className='row justify-content-md-center mt-5'>
-                    <Empty description="Aucune annonce publiée" />
-                    <Button variant="atypik" className='mt-5 w-25 btn-sm'>Publier une annonce</Button>
-                </div> */}
                 <Container>
                     <Skeleton loading={loading} paragraph={{ rows: 10 }} active >
-                        {houses.map((h) => {
+                        {houses.length > 0 ? houses.map((h) => {
                             return <Row className='mt-5 border shadow-sm p-sm-3 mx-0' >
                                 <Row className='mx-auto text-center'>
                                     {h.status == "NEW_LISTING" ? <Badge status="processing" text={<small><strong>En cours de révision</strong></small>} color={'#aeaeae'} />
@@ -48,9 +44,9 @@ const Annonces = () => {
 
                                 </Row>
                                 <Col sm={2} className='text-center'>
-                                    <Image src={h.images[0] ? h.images[0].filePath + '/' + h.images[0].fileName : null} height={100} width={150} style={{ objectFit: 'cover' }} />
+                                    <Image src={MEDIA_URL + h?.images[0]?.fileName} height={100} width={150} style={{ objectFit: 'cover' }} />
                                 </Col>
-                                <Col sm={8} onClick={() => window.open('../houses/' + h.id, '_blank')}>
+                                <Col sm={8} role='button' onClick={() => window.open('../houses/' + h.id, '_blank')}>
                                     <h5 className='m-0'>{h.title}</h5>
                                     <small>{h.description}</small>
                                     <div className='d-flex'>
@@ -93,7 +89,12 @@ const Annonces = () => {
 
                                 </Col>
                             </Row>
-                        })}
+                        }) :
+                            <div className='row justify-content-md-center mt-5'>
+                                <Empty description="Aucune annonce publiée" />
+                                <Button variant="atypik" className='mt-5 w-25 btn-sm'>Publier votre première annonce</Button>
+                            </div>
+                        }
                     </Skeleton>
                 </Container>
 

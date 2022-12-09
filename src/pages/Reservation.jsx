@@ -7,7 +7,7 @@ import bg from '../assets/img/bg.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons';
 import Cookies from 'js-cookie'
-import { API_URL } from '../Variables';
+import { API_URL, MEDIA_URL } from '../Variables';
 import { useNavigate, useParams } from "react-router-dom";
 import moment from 'moment';
 import accessDeniedImage from '../assets/img/accessdenied.svg'
@@ -19,18 +19,8 @@ const Reservation = () => {
     const [notFound, setNotFound] = useState(false);
 
     let curUser = Cookies.get('user');
-    const image = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2VzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60";
 
     const [data, setData] = useState([]);
-    // console.log()
-    // useEffect(() => {
-    //     getHouses()
-    // }, []);
-    // const getHouses = () => {
-    //     fetch(API_URL + '/houses?owner.id=' + JSON.parse(curUser)['id'] + '&order[createdAt]=desc')
-    //         .then(res => res.json())
-    //         .then((result) => { setHouses(result["hydra:member"]) })
-    // }
 
     useEffect(() => {
         getReservation()
@@ -87,7 +77,12 @@ const Reservation = () => {
                                         }
                                         <Row className='mx-lg-5 d-flex align-items-center' onClick={() => window.open('/houses/' + data.house?.id, '_blank')}>
                                             <Col lg={4} className="p-0">
-                                                <img className='img-fluid rounded' width='100%' style={{ height: '100%' }} src={image} alt="" />
+                                                <div style={{
+                                                    height: 150, width: '100%', backgroundImage: `url(${MEDIA_URL + data.house?.images[0]?.fileName})`, backgroundPosition: 'center',
+                                                    backgroundSize: 'cover',
+                                                    backgroundRepeat: 'no-repeat',
+                                                    borderRadius: 10
+                                                }}></div>
                                             </Col>
                                             <Col lg={8}>
                                                 <h2 className='m-0 searchItemTitle pt-2'>{data.house?.title}</h2>

@@ -11,7 +11,7 @@ import L from 'leaflet';
 import MapCardHouse from '../components/MapCardHouse'
 import Moment from 'moment';
 import { createSearchParams, useNavigate, useLocation } from "react-router-dom";
-import { API_URL } from '../Variables';
+import { API_URL, MEDIA_URL } from '../Variables';
 
 const { RangePicker } = DatePicker;
 
@@ -21,14 +21,15 @@ const Houses = () => {
   const location = useLocation()
   const params = new URLSearchParams(location.search)
   const [options, setOptions] = useState({
-    travelers: parseInt(params.get("travelers")),
-    rooms: parseInt(params.get("rooms"))
+    travelers: parseInt(params.get("travelers")) || 1,
+    rooms: parseInt(params.get("rooms")) || 1
   });
-  const [destination, setDestination] = useState(params.get("destination"));
+  const [destination, setDestination] = useState(params.get("destination") || '');
   const [dates, setDates] = useState({
-    from: params.get("from"),
-    to: params.get("to")
+    from: params.get("from") || new Moment(),
+    to: params.get("to") || new Moment().add(1, 'days'),
   });
+
   const [houses, setHouses] = useState([])
   const [nbHouses, setNbHouses] = useState(0)
   const [loading, setLoading] = useState(true);
@@ -64,6 +65,10 @@ const Houses = () => {
       })
       .catch(error => { console.log(error); setHouses(null) });
   }
+
+  useEffect(() => {
+    handleSearch()
+  }, [dates, destination, options]);
 
   const handleSearch = () => {
     navigate({
@@ -112,7 +117,7 @@ const Houses = () => {
                       </div>
                     </div>
                   </Col>
-                  <Col lg={2} className="py-1">
+                  <Col lg={3} className="py-1">
                     <div className='atypik-input form-control p-0'>
                       <div className='w-100 d-flex align-items-center' style={{ height: "36px" }}>
                         <Popover placement="bottom" content={
@@ -170,9 +175,9 @@ const Houses = () => {
                       </div>
                     </div>
                   </Col>
-                  <Col lg={1} className="py-1">
+                  {/* <Col lg={1} className="py-1">
                     <Button variant="atypik" onClick={handleSearch}><FontAwesomeIcon icon={Icons.faSearch} /></Button>
-                  </Col>
+                  </Col> */}
                 </Row>
                 <Row className='my-3 pb-3 square border-bottom'>
                   <h1>Destination</h1>
@@ -191,6 +196,7 @@ const Houses = () => {
                       let ravg = 0;
                       h.reviews.map((r) => ravg += r.grade / h.reviews.length)
                       return <SearchItem
+                        thumbnail={MEDIA_URL + h.images[0]?.fileName}
                         searchOptions={{ from: dates.from, to: dates.to, travelers: options.travelers }}
                         id={h.id}
                         title={h.title}
@@ -230,6 +236,7 @@ const Houses = () => {
                         } >
                         <Popup className="p-0" style={{ width: '350px !important' }}>
                           <MapCardHouse
+                            thumbnail={MEDIA_URL + h.images[0]?.fileName}
                             id={h.id}
                             title={h.title}
                             location={h.address.city + ', ' + h.address.country}

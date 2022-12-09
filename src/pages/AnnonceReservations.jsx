@@ -58,7 +58,7 @@ const AnnonceReservations = () => {
     }
 
     function actionFormat(id, cell) {
-        return cell.status == 'APPROVED' ? <div className='d-flex'>
+        return cell.status == 'APPROVED' && moment().diff(cell.fromDate, 'days') < 0 ? <div className='d-flex'>
             <Popconfirm title="Voulez-vous vraiment annuler cette réservation?" onConfirm={() =>
                 fetch(API_URL + '/reservations/' + id, {
                     method: 'PATCH',

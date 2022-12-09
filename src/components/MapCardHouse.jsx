@@ -11,9 +11,9 @@ const MapCardHouse = (props) => {
     let navigate = useNavigate();
 
     return (
-        <div onClick={() => navigate("/houses/" + props.id)}>
+        <div role='button' onClick={() => navigate("/houses/" + props.id)}>
             <div style={{
-                height: 150, width: '100%', backgroundImage: `url(${props.image || bg})`, backgroundPosition: 'center',
+                height: 150, width: '100%', backgroundImage: `url(${props.thumbnail})`, backgroundPosition: 'center',
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
                 borderRadius: 10

@@ -9,7 +9,7 @@ import { DatePicker, Badge, Avatar, Button, Divider, Skeleton } from 'antd';
 import Moment from 'moment';
 import { useNavigate, useParams, useLocation, createSearchParams } from "react-router-dom";
 import InputMask from 'react-input-mask';
-import { API_URL } from '../Variables';
+import { API_URL, MEDIA_URL } from '../Variables';
 import notFoundImage from '../assets/img/notfound.svg'
 import Cookies from 'js-cookie'
 import axios from "axios";
@@ -268,7 +268,7 @@ const Paiment = () => {
                                 </div>
                             </Col>
                             <Col sm={12} md={6} lg={4} className='border rounded sticky-top h-100 p-5'>
-                                <img className='img-fluid' width='100%' style={{ height: '100%', borderRadius: 20 }} src={image} alt="" />
+                                <Image src={MEDIA_URL + houseData?.images[0]?.fileName} height={250} width='100%' style={{ objectFit: 'cover', borderRadius: 20 }} />
                                 <h4 className='p-2 text-center'>Title of the reservation house bla okaa</h4>
                                 <Divider />
                                 <div className='d-flex justify-content-between'>

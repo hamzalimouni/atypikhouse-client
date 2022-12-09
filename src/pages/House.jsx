@@ -10,10 +10,10 @@ import HouseImages from '../components/HouseImages'
 import { useNavigate, useLocation, createSearchParams } from "react-router-dom";
 import { Avatar, Divider, Rate } from 'antd';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import { DatePicker, Badge, Skeleton, message, Popconfirm } from 'antd';
+import { DatePicker, Badge, Skeleton, message, Popconfirm, Tag } from 'antd';
 import Moment from 'moment';
 import { useParams } from "react-router-dom";
-import { API_URL } from '../Variables';
+import { API_URL, MEDIA_URL } from '../Variables';
 import notFoundImage from '../assets/img/notfound.svg'
 import Cookies from 'js-cookie';
 
@@ -23,10 +23,9 @@ const House = () => {
   let curUser = JSON.parse(Cookies.get('user') || null);
   const { RangePicker } = DatePicker;
   const { id } = useParams()
-  const [travelers, setTravelers] = useState(1);
-  const [days, setDays] = useState(1);
   const [found, setfound] = useState(true);
   const [houseData, setHouseData] = useState([])
+  const [myReservation, setMyReservation] = useState([])
   const [loading, setLoading] = useState(true);
   const [images, setImages] = useState([])
   const [houseParams, setHouseParams] = useState([])
@@ -43,8 +42,8 @@ const House = () => {
   useEffect(() => {
     getHouse()
     getHouseParams()
-    console.log(options.from)
   }, []);
+
 
   useEffect(() => {
     navigate({
@@ -71,7 +70,7 @@ const House = () => {
         if (data.status == "APPROVED" || curUser?.roles.indexOf('ROLE_ADMIN') > -1) {
           const ig = []
           data.images.map((i) => {
-            ig.push({ image: i.filePath + '\\' + i.fileName })
+            ig.push({ image: MEDIA_URL + i.fileName })
           })
           data.disponibilities.map((d) => setIndisponible((indisponible) => [...indisponible, Moment(d.date).format('YYYY-MM-DD')]))
           let ravg = 0;
@@ -80,6 +79,7 @@ const House = () => {
           setImages(ig)
           setHouseData(data)
           setLoading(false)
+          setMyReservation(data.reservations.find(r => r.user.id === curUser.id))
         } else {
           setfound(false)
         }
@@ -212,7 +212,13 @@ const House = () => {
               {loading ?
                 <Skeleton.Image className="mx-auto" active style={{ width: 1000, height: 450, maxWidth: '100%' }} />
                 :
-                <HouseImages images={images} loading={loading} />
+                <>
+                  {myReservation ?
+                    <Tag color="success" className='p-2 my-3'>Vous avez déja réservé cette habitat <strong onClick={() => navigate('/account/reservations')}>voir mes réservation</strong></Tag>
+                    : null
+                  }
+                  <HouseImages images={images} loading={loading} />
+                </>
               }
             </Container >
           </div >
@@ -310,7 +316,7 @@ const House = () => {
                     <h4>Les avis ({houseData.reviews?.length} avis)</h4>
                     <Divider className='mt-0' />
 
-                    {Cookies.get('user') ?
+                    {Cookies.get('user') && myReservation && Moment().diff(myReservation.fromDate, 'days') >= 0 && myReservation.status != 'CANCELED' ?
                       <>
                         <Row>
                           <Form className="d-flex" onSubmit={onReviewSubmit}>
