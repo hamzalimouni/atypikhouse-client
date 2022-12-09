@@ -47,12 +47,12 @@ const AppNavbar = () => {
                     {!curUser ?
                         <Nav>
                             <Nav.Link onClick={() => { navigate("/posts") }}><Button variant="atypik">Devenir hôte</Button></Nav.Link>
-                            <Nav.Link>
-                                <NavDropdown title="Mon compte">
-                                    <NavDropdown.Item onClick={handleShowLogin} >Connexion</NavDropdown.Item>
-                                    <NavDropdown.Item onClick={handleShowRegister}>Inscription</NavDropdown.Item>
-                                </NavDropdown>
-                            </Nav.Link>
+                            {/* <Nav.Link> */}
+                            <NavDropdown title="Mon compte"  className='py-2'>
+                                <NavDropdown.Item onClick={handleShowLogin} >Connexion</NavDropdown.Item>
+                                <NavDropdown.Item onClick={handleShowRegister}>Inscription</NavDropdown.Item>
+                            </NavDropdown>
+                            {/* </Nav.Link> */}
                         </Nav> :
                         <Nav>
                             {
@@ -68,22 +68,19 @@ const AppNavbar = () => {
                                     <FontAwesomeIcon icon={Icons.faBell} color="#8ed081" stroke='#8ed081' size="2x" />
                                 </Badge>
                             </Nav.Link>
-
-                            <Nav.Link>
-                                <NavDropdown title="Mon compte">
-                                    <NavDropdown.Item onClick={() => { navigate("/account/settings") }}>Gérer mon compte</NavDropdown.Item>
-                                    <NavDropdown.Item href="">Messages</NavDropdown.Item>
-                                    <NavDropdown.Item onClick={() => { navigate("/account/annonces") }}>Mes annonces</NavDropdown.Item>
-                                    <NavDropdown.Item onClick={() => { navigate("/account/reservations") }}>Mes réservations</NavDropdown.Item>
-                                    <NavDropdown.Item href="">Commentaires</NavDropdown.Item>
-                                    <NavDropdown.Divider></NavDropdown.Divider>
-                                    <NavDropdown.Item onClick={() => {
-                                        Cookies.remove("token");
-                                        Cookies.remove("user");
-                                        window.location.href = "/"
-                                    }}>Se déconnecter</NavDropdown.Item>
-                                </NavDropdown>
-                            </Nav.Link>
+                            <NavDropdown title="Mon compte" className='py-2'>
+                                <NavDropdown.Item onClick={() => { navigate("/account/settings") }}>Gérer mon compte</NavDropdown.Item>
+                                <NavDropdown.Item href="">Messages</NavDropdown.Item>
+                                <NavDropdown.Item onClick={() => { navigate("/account/annonces") }}>Mes annonces</NavDropdown.Item>
+                                <NavDropdown.Item onClick={() => { navigate("/account/reservations") }}>Mes réservations</NavDropdown.Item>
+                                <NavDropdown.Item href="">Commentaires</NavDropdown.Item>
+                                <NavDropdown.Divider></NavDropdown.Divider>
+                                <NavDropdown.Item onClick={() => {
+                                    Cookies.remove("token");
+                                    Cookies.remove("user");
+                                    window.location.href = "/"
+                                }}>Se déconnecter</NavDropdown.Item>
+                            </NavDropdown>
                         </Nav>}
                 </Navbar.Collapse>
             </Container>

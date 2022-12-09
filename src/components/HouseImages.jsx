@@ -3,16 +3,12 @@ import bg from '../assets/img/bg.png';
 import '../assets/css/CardHouse.css';
 import { Col, Row, Modal } from 'react-bootstrap';
 import StarRatings from 'react-star-ratings';
-import { Carousel } from 'react-carousel-minimal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons';
 import { Image } from 'antd'
 
 const HouseImage = (props) => {
-    const [show, setShow] = useState(false);
-    function handleShow() {
-        setShow(true);
-    }
+
     let images = props.images;
     let length = images.length;
     return (
@@ -114,7 +110,7 @@ const HouseImage = (props) => {
                                                 >+{length - 5}</div> : null}
 
                                                 {[...Array(length - 5)].map((x, i) =>
-                                                    <Image src={images[length - i - 1]?.image} style={{ display: 'none' }} />
+                                                    <Image key={i} src={images[length - i - 1]?.image} style={{ display: 'none' }} />
                                                 )}
                                             </Col>
                                         </Row>
@@ -123,35 +119,7 @@ const HouseImage = (props) => {
                     }
                 </>
             }
-            <Modal show={show} fullscreen={true} onHide={() => setShow(false)} style={{ opacity: 1 }}>
-                <Modal.Body style={{
-                    backgroundColor: '#000',
-                    opacity: 1,
-                    textAlign: 'right'
-                }}>
-                    <FontAwesomeIcon icon={Icons.faClose} color="#fff" size="2x" onClick={() => setShow(false)} />
-                    <Carousel
-                        data={images}
-                        width="100%"
-                        height="600px"
-                        slideNumber={true}
-                        automatic={false}
-                        slideNumberStyle={{
-                            fontSize: '20px', fontWeight: 'bold',
-                        }}
-                        dots={true}
-                        slideBackgroundColor="black"
-                        slideImageFit="cover"
-                        thumbnails={false}
-                        style={{
-                            textAlign: "center",
-                            maxWidth: "100%",
-                            maxHeight: "600px",
-                            margin: "40px auto",
-                        }}
-                    />
-                </Modal.Body>
-            </Modal>
+
         </Row >
 
     )

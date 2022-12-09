@@ -29,7 +29,7 @@ const CardHouse = (props) => {
                 <Card.Text><FontAwesomeIcon icon={Icons.faLocationDot} color="#c0c0c0" /> {props.destination}</Card.Text>
             </Card.Body>
             <Card.Body>
-                <div class="d-flex justify-content-between">
+                <div className="d-flex justify-content-between">
                     <strong>
                         {props.price} € / nuit
                     </strong>

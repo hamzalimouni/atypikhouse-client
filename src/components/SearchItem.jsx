@@ -22,7 +22,7 @@ const SearchItem = (props) => {
                 {/* <img className='img-fluid' width='100%' height='214px' style={{ height: '100%' }} src={props.thumbnail} alt="" /> */}
             </Col>
             <Col lg={7}>
-                <div class="d-flex justify-content-between align-items-center mt-3">
+                <div className="d-flex justify-content-between align-items-center mt-3">
                     <h2 className='m-0  searchItemTitle'>{props.title}</h2>
                     <span className="rounded bg-atypik text-white float-right px-2" style={{ width: 'auto' }}>{props.category}</span>
                 </div>

@@ -26,6 +26,7 @@ const House = () => {
   const [found, setfound] = useState(true);
   const [houseData, setHouseData] = useState([])
   const [myReservation, setMyReservation] = useState([])
+  const [isMine, setIsMine] = useState(false)
   const [loading, setLoading] = useState(true);
   const [images, setImages] = useState([])
   const [houseParams, setHouseParams] = useState([])
@@ -67,7 +68,10 @@ const House = () => {
         }
       })
       .then(data => {
-        if (data.status == "APPROVED" || curUser?.roles.indexOf('ROLE_ADMIN') > -1) {
+        if (data.status == "APPROVED" ||
+          curUser?.roles.indexOf('ROLE_ADMIN') > -1 ||
+          curUser?.id == data.owner.id
+        ) {
           const ig = []
           data.images.map((i) => {
             ig.push({ image: MEDIA_URL + i.fileName })
@@ -79,7 +83,8 @@ const House = () => {
           setImages(ig)
           setHouseData(data)
           setLoading(false)
-          setMyReservation(data.reservations.find(r => r.user.id === curUser.id))
+          setMyReservation(data.reservations.find(r => r.user.id === curUser?.id))
+          setIsMine(curUser?.id == data.owner.id)
         } else {
           setfound(false)
         }
@@ -107,9 +112,13 @@ const House = () => {
   //   setDays(Moment(dates[1]).diff(dates[0], 'days'))
   // }
 
+  //   const disabledDate = (current) => {
+  //     return current && current < moment().startOf('day');
+  // };
+
   const disabledDate = (current) => {
     let index = indisponible.findIndex(date => date === Moment(current).format('YYYY-MM-DD'))
-    return index > -1 && true
+    return (index > -1 && true) || (current && current < Moment().startOf('day'));
   }
 
   async function changeStatus(status) {
@@ -207,6 +216,17 @@ const House = () => {
             </Container> : null
           }
 
+          {isMine ?
+            <Container className='text-center pt-4'>
+              {houseData.status == 'REJECTED' ?
+                <Tag color="error" className='p-2 my-3'><strong>Votre annonce est réfusée par notre equipe de révision</strong>, vous êtes le seul à pouvoir voir cette page</Tag>
+                : houseData.status == 'UNDER_REVIEW' ?
+                  <Tag color="warning" className='p-2 my-3'><strong>Votre annonce est en cours de révision</strong>, vous êtes le seul à pouvoir voir cette page</Tag>
+                  : null
+              }
+            </Container>
+            : null
+          }
           <div className="py-4">
             <Container className='text-center'>
               {loading ?
@@ -214,7 +234,7 @@ const House = () => {
                 :
                 <>
                   {myReservation ?
-                    <Tag color="success" className='p-2 my-3'>Vous avez déja réservé cette habitat <strong onClick={() => navigate('/account/reservations')}>voir mes réservation</strong></Tag>
+                    <Tag color="success" className='p-2 my-3'>Vous avez déja réservé cette habitat <strong role='button' onClick={() => navigate('/account/reservations')}>voir mes réservation</strong></Tag>
                     : null
                   }
                   <HouseImages images={images} loading={loading} />
@@ -337,6 +357,7 @@ const House = () => {
                       {
                         houseData.reviews?.sort((a, b) => (b.id - a.id)).map((r) => {
                           return <CommentCard
+                            key={r.id}
                             id={(curUser?.id === r.user.id) || curUser?.roles.indexOf('ROLE_ADMIN') > -1 ? r.id : null}
                             reload={getHouse}
                             user={r.user.firstname + ' ' + r.user.lastname}

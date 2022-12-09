@@ -37,7 +37,7 @@ const Annonces = () => {
                         {houses.length > 0 ? houses.map((h) => {
                             return <Row className='mt-5 border shadow-sm p-sm-3 mx-0' >
                                 <Row className='mx-auto text-center'>
-                                    {h.status == "NEW_LISTING" ? <Badge status="processing" text={<small><strong>En cours de révision</strong></small>} color={'#aeaeae'} />
+                                    {h.status == "UNDER_REVIEW" ? <Badge status="processing" text={<small><strong>En cours de révision</strong></small>} color={'#aeaeae'} />
                                         : h.status == "APPROVED" ? <Badge status="processing" text={<small><strong>Annonce approvée</strong></small>
                                         } color={'#4caf50'} />
                                             : <Badge status="error" text={<small><strong>Annonce rejetée</strong></small>} color={'#f44336'} />}

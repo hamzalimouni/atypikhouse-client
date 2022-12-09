@@ -19,7 +19,7 @@ const { RangePicker } = DatePicker;
 const SearchForm = () => {
     const navigate = useNavigate();
     const disabledDate = (current) => {
-        return current && current < moment().endOf('day');
+        return current && current < moment().startOf('day');
     };
     const [options, setOptions] = useState({
         travelers: 2,

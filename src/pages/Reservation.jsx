@@ -49,7 +49,6 @@ const Reservation = () => {
                 setNotFound(true)
                 console.log(error);
             });
-
     }
 
     return (
@@ -67,7 +66,7 @@ const Reservation = () => {
                             :
                             <Col md={8} className='mx-lg-5 border rounded mx-lg-auto mx-auto p-4'>
                                 <Skeleton loading={loading} paragraph={{ rows: 10 }} active >
-                                    <span onClick={() => navigate('../account/reservations')}><FontAwesomeIcon icon={Icons.faArrowLeft} color="#767A82" className='pe-1' /> Retour</span>
+                                    <span role='button' onClick={() => navigate('../account/reservations')}><FontAwesomeIcon icon={Icons.faArrowLeft} color="#767A82" className='pe-1' /> Retour</span>
                                     <div className="p-lg-5 pt-lg-0 pb-1">
                                         <Divider orientation='left'><h3>Votre réservation (#{data.id})</h3></Divider>
                                         {
@@ -75,7 +74,7 @@ const Reservation = () => {
                                                 <Tag color="error" className='mx-auto w-100 text-center p-2 fs-5 mb-3'>Votre réservation a été annulée par l'hôte</Tag>
                                                 : null
                                         }
-                                        <Row className='mx-lg-5 d-flex align-items-center' onClick={() => window.open('/houses/' + data.house?.id, '_blank')}>
+                                        <Row role='button' className='mx-lg-5 d-flex align-items-center' onClick={() => window.open('/houses/' + data.house?.id, '_blank')}>
                                             <Col lg={4} className="p-0">
                                                 <div style={{
                                                     height: 150, width: '100%', backgroundImage: `url(${MEDIA_URL + data.house?.images[0]?.fileName})`, backgroundPosition: 'center',

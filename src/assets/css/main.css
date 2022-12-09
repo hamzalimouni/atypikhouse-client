@@ -436,3 +436,7 @@
 .leaflet-popup-content {
     width: 200px !important;
 }
+
+.ant-image-mask {
+    z-index: 1 !important;
+}

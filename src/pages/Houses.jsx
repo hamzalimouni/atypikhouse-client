@@ -196,6 +196,7 @@ const Houses = () => {
                       let ravg = 0;
                       h.reviews.map((r) => ravg += r.grade / h.reviews.length)
                       return <SearchItem
+                        key={h.id}
                         thumbnail={MEDIA_URL + h.images[0]?.fileName}
                         searchOptions={{ from: dates.from, to: dates.to, travelers: options.travelers }}
                         id={h.id}
@@ -223,6 +224,7 @@ const Houses = () => {
                       let ravg = 0;
                       h.reviews.map((r) => ravg += r.grade / h.reviews.length)
                       return <Marker
+                        key={h.id}
                         position={[h.address?.latitude, h.address?.longitude]}
                         icon={
                           L.divIcon({

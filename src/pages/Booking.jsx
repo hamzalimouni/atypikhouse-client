@@ -13,19 +13,21 @@ import { API_URL, MEDIA_URL } from '../Variables';
 import notFoundImage from '../assets/img/notfound.svg'
 import Cookies from 'js-cookie'
 import axios from "axios";
+import LoginModal from '../components/LoginModal';
 
 const Paiment = () => {
     const location = useLocation()
     const navigate = useNavigate();
     const params = new URLSearchParams(location.search)
-    const image = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2VzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60";
     const { RangePicker } = DatePicker;
     const { id } = useParams()
+    const [showLogin, setShowLogin] = useState(false);
     const [found, setfound] = useState(true);
     const [houseData, setHouseData] = useState([])
     const [loading, setLoading] = useState(true);
     const [loadingPayment, setLoadingPayment] = useState(false);
     const [indisponible, setIndisponible] = useState([])
+    const [thumbnail, setThumbnail] = useState([])
     const [cc, setCc] = useState(null)
     const [expiration, setExpiration] = useState(null)
     const [cvv, setCvv] = useState(null)
@@ -54,7 +56,7 @@ const Paiment = () => {
 
     const disabledDate = (current) => {
         let index = indisponible.findIndex(date => date === Moment(current).format('YYYY-MM-DD'))
-        return index > -1 && true
+        return (index > -1 && true) || (current && current < Moment().startOf('day'));
     }
 
     const getHouse = async () => {
@@ -73,6 +75,7 @@ const Paiment = () => {
                     setHouseData(data)
                     setLoading(false)
                     setOptions({ ...options, total: data.price * Moment(options.to).diff(options.from, 'days') + 15 })
+                    setThumbnail(MEDIA_URL + data?.images[0]?.fileName)
                 } else {
                     setfound(false)
                 }
@@ -82,33 +85,39 @@ const Paiment = () => {
 
 
     async function bookHouse() {
-        setLoadingPayment(true)
-        console.log("clicked")
-        let formData = new FormData();
+        if (Cookies.get('user')) {
+            setLoadingPayment(true)
+            console.log("clicked")
+            let formData = new FormData();
 
-        formData.append('house', options.house)
-        formData.append('total', options.total)
-        formData.append('from', Moment(options.from).format('MMM DD YYYY'))
-        formData.append('to', Moment(options.to).format('MMM DD YYYY'))
-        formData.append('travelers', options.travelers)
+            formData.append('house', options.house)
+            formData.append('total', options.total)
+            formData.append('from', Moment(options.from).format('MMM DD YYYY'))
+            formData.append('to', Moment(options.to).format('MMM DD YYYY'))
+            formData.append('travelers', options.travelers)
 
-        return axios({
-            url: API_URL + '/reservations',
-            method: "POST",
-            headers: {
-                authorization: 'bearer ' + Cookies.get("token"),
-            },
-            data: formData,
-        })
-            .then((result) => {
-                console.log(result.data);
-                if ('status' in result.data) {
-                    navigate('./done')
-                }
+            return axios({
+                url: API_URL + '/reservations',
+                method: "POST",
+                headers: {
+                    authorization: 'bearer ' + Cookies.get("token"),
+                },
+                data: formData,
             })
-            .catch(err => {
-                console.log(err.response.status)
-            })
+                .then((result) => {
+                    console.log(result.data);
+                    if ('id' in result.data) {
+                        navigate('/account/reservation/' + result.data.id)
+                    }
+                })
+                .catch(err => {
+                    console.log(err.response.status)
+                })
+        } else {
+            // console.log("TCONNECTA")
+            setShowLogin(true)
+        }
+
     }
 
     return (
@@ -268,7 +277,7 @@ const Paiment = () => {
                                 </div>
                             </Col>
                             <Col sm={12} md={6} lg={4} className='border rounded sticky-top h-100 p-5'>
-                                <Image src={MEDIA_URL + houseData?.images[0]?.fileName} height={250} width='100%' style={{ objectFit: 'cover', borderRadius: 20 }} />
+                                <Image src={thumbnail} height={250} width='100%' style={{ objectFit: 'cover', borderRadius: 20 }} />
                                 <h4 className='p-2 text-center'>Title of the reservation house bla okaa</h4>
                                 <Divider />
                                 <div className='d-flex justify-content-between'>
@@ -289,6 +298,7 @@ const Paiment = () => {
                     </Row>
                 }
             </Container>
+            <LoginModal show={showLogin} onClose={() => setShowLogin(false)} />
             <Footer />
         </div>
     )
