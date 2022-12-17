@@ -10,7 +10,7 @@ import HouseImages from '../components/HouseImages'
 import { useNavigate, useLocation, createSearchParams } from "react-router-dom";
 import { Avatar, Divider, Rate } from 'antd';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import { DatePicker, Badge, Skeleton, message, Popconfirm, Tag } from 'antd';
+import { DatePicker, Badge, Skeleton, message, Popconfirm, Tag, Modal } from 'antd';
 import Moment from 'moment';
 import { useParams } from "react-router-dom";
 import { API_URL, MEDIA_URL } from '../Variables';
@@ -33,6 +33,9 @@ const House = () => {
   const [indisponible, setIndisponible] = useState([])
   const [rating, setRating] = useState(3)
   const [ratingAvg, setRatingAvg] = useState(3)
+  const [openMessage, setOpenMessage] = useState(false);
+  const [sendingMessage, setSendingMessage] = useState(false);
+  const [messageContent, setMessageContent] = useState('');
   const [options, setOptions] = useState({
     from: params.get("from") || new Moment(),
     to: params.get("to") || new Moment().add(1, 'days'),
@@ -47,6 +50,10 @@ const House = () => {
 
 
   useEffect(() => {
+    console.log(messageContent)
+  }, [messageContent]);
+
+  useEffect(() => {
     navigate({
       pathname: "/houses/" + id,
       search: `?${createSearchParams({
@@ -59,16 +66,21 @@ const House = () => {
 
   const getHouse = async () => {
     setLoading(true)
-    await fetch(API_URL + '/houses/' + id)
+    await fetch(API_URL + '/houses/' + id, Cookies.get("token") && {
+      headers: { 'Authorization': 'bearer ' + Cookies.get("token") }
+    })
       .then(response => {
         if (response.ok) {
           return response.json()
         } else if (response.status === 404) {
           return Promise.reject(404)
+        } else if (response.status === 403) {
+          console.log("TNAKET")
+          return Promise.reject(403)
         }
       })
       .then(data => {
-        if (data.status == "APPROVED" ||
+        if (data?.status == "APPROVED" ||
           curUser?.roles.indexOf('ROLE_ADMIN') > -1 ||
           curUser?.id == data.owner.id
         ) {
@@ -89,7 +101,7 @@ const House = () => {
           setfound(false)
         }
       })
-      .catch(error => { console.log(error); setfound(false) });
+      .catch(error => { console.log("AWDI RAH ERROR " + error); setfound(false) });
   }
 
   const getHouseParams = async () => {
@@ -263,7 +275,7 @@ const House = () => {
                         {houseData.owner?.firstname.charAt(0) + houseData.owner?.lastname.charAt(0)}
                       </Avatar>
                       <span className='ps-2'>Publiée par <strong className='text-weight-bold'>{houseData.owner?.firstname + ' ' + houseData.owner?.lastname}</strong></span>
-                      <Button size={'sm'} className='ms-3' variant="atypik">Envoyer un message</Button>
+                      <Button size={'sm'} onClick={() => setOpenMessage(true)} className='ms-3' variant="atypik">Envoyer un message</Button>
                     </div>
                     <Divider />
                     <div className='d-flex justify-content-around'>
@@ -372,7 +384,7 @@ const House = () => {
                 </Skeleton>
 
               </Col>
-              <Col sm={12} md={12} xs={{ order: 'first' }} lg={{ span: 4, order: 'last' }} className='shadow-sm sticky-top rounded h-100 p-4 mb-5'>
+              <Col sm={12} md={12} xs={{ order: 'first' }} lg={{ span: 4, order: 'last' }} className='shadow-sm sticky-top rounded h-100 p-4 mb-5' style={{ zIndex: 0 }}>
                 <Skeleton loading={loading} paragraph={{ rows: 10 }} active >
                   <div className='d-flex justify-content-between align-items-center'>
                     <span><strong style={{ fontSize: '1.6em' }}>{houseData.price}€ </strong>/ nuit</span>
@@ -443,6 +455,26 @@ const House = () => {
           </Container>
         </>
       }
+      <Modal
+        title="Envoyer un message"
+        open={openMessage}
+        onOk={() => { setSendingMessage(true) }}
+        confirmLoading={sendingMessage}
+        footer={
+          <Button size='sm' variant='atypik' disabled={messageContent == ''}>Envoyer</Button>
+        }
+        onCancel={() => setOpenMessage(false)}>
+        <FloatingLabel label="Message" className='w-100 pe-2'>
+          <Form.Control
+            as="textarea"
+            name="message"
+            value={messageContent}
+            onChange={(e) => setMessageContent(e.target.value)}
+            placeholder="message"
+            style={{ height: '200px' }}
+            required />
+        </FloatingLabel>
+      </Modal>
       <Footer />
     </div >
   )
