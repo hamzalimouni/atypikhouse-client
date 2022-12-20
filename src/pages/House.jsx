@@ -27,6 +27,7 @@ const House = () => {
   const [houseData, setHouseData] = useState([])
   const [myReservation, setMyReservation] = useState([])
   const [isMine, setIsMine] = useState(false)
+  const [sending, setSending] = useState(false)
   const [loading, setLoading] = useState(true);
   const [images, setImages] = useState([])
   const [houseParams, setHouseParams] = useState([])
@@ -49,9 +50,6 @@ const House = () => {
   }, []);
 
 
-  useEffect(() => {
-    console.log(messageContent)
-  }, [messageContent]);
 
   useEffect(() => {
     navigate({
@@ -75,7 +73,6 @@ const House = () => {
         } else if (response.status === 404) {
           return Promise.reject(404)
         } else if (response.status === 403) {
-          console.log("TNAKET")
           return Promise.reject(403)
         }
       })
@@ -127,6 +124,30 @@ const House = () => {
   //   const disabledDate = (current) => {
   //     return current && current < moment().startOf('day');
   // };
+
+  const sendMessage = async () => {
+    setSending(true)
+    await fetch(API_URL + '/messages', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'bearer ' + Cookies.get("token"),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ receiver: houseData?.owner, content: messageContent })
+    })
+      .then(data => data.json())
+      .then(res => {
+        if (res.content) {
+          message.success("Message envoyé avec success")
+          setOpenMessage(false)
+          setMessageContent('')
+          setSending(false)
+        } else {
+          message.error("Une erreur s'est produite, merci de ressayer")
+        }
+      })
+      .catch(error => { console.log(error); });
+  }
 
   const disabledDate = (current) => {
     let index = indisponible.findIndex(date => date === Moment(current).format('YYYY-MM-DD'))
@@ -275,7 +296,7 @@ const House = () => {
                         {houseData.owner?.firstname.charAt(0) + houseData.owner?.lastname.charAt(0)}
                       </Avatar>
                       <span className='ps-2'>Publiée par <strong className='text-weight-bold'>{houseData.owner?.firstname + ' ' + houseData.owner?.lastname}</strong></span>
-                      <Button size={'sm'} onClick={() => setOpenMessage(true)} className='ms-3' variant="atypik">Envoyer un message</Button>
+                      <Button size={'sm'} onClick={() => setOpenMessage(true)} disabled={!Cookies.get('user')} className='ms-3' variant="atypik">Envoyer un message</Button>
                     </div>
                     <Divider />
                     <div className='d-flex justify-content-around'>
@@ -461,7 +482,7 @@ const House = () => {
         onOk={() => { setSendingMessage(true) }}
         confirmLoading={sendingMessage}
         footer={
-          <Button size='sm' variant='atypik' disabled={messageContent == ''}>Envoyer</Button>
+          <Button size='sm' variant='atypik' onClick={sendMessage} disabled={messageContent == '' || sending}>Envoyer</Button>
         }
         onCancel={() => setOpenMessage(false)}>
         <FloatingLabel label="Message" className='w-100 pe-2'>

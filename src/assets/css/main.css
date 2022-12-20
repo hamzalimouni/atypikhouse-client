@@ -444,3 +444,8 @@
 .dropdown-menu {
     z-index: 9999 !important;
 }
+
+.conversation:focus {
+    background: white !important;
+    padding-left: 10px;
+}

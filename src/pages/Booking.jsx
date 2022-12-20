@@ -146,12 +146,12 @@ const Paiment = () => {
                         // Show error to your customer
                         // console.log();
                         setErrorMessage(result.error.message)
-                        setLoadingPayment(false);
                     } else {
                         // The payment succeeded!
                         bookHouse()
                     }
                 });
+            setLoadingPayment(false);
         } else {
             setShowLogin(true)
         }
@@ -163,8 +163,8 @@ const Paiment = () => {
 
         formData.append('house', options.house)
         formData.append('total', options.total)
-        formData.append('from', Moment(options.from).format('MMM DD YYYY'))
-        formData.append('to', Moment(options.to).format('MMM DD YYYY'))
+        formData.append('from', Moment(options.from))
+        formData.append('to', Moment(options.to))
         formData.append('travelers', options.travelers)
 
         return axios({
