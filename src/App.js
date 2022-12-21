@@ -11,11 +11,11 @@ import AnnoncesAdmin from './pages/admin/Annonces';
 import Dashboard from './pages/admin/Dashboard';
 import Categories from './pages/admin/Categories';
 import Equipment from './pages/admin/Equipment';
+import ReservationsAdmin from './pages/admin/Reservations'
 import Contact from './pages/Contact';
 import Properties from './pages/admin/Properties';
 import NewHouse from './pages/NewHouse';
 import Cookies from 'js-cookie'
-import { useEffect } from 'react';
 import Booking from './pages/Booking';
 import BookingConfirmation from './pages/BookingConfirmation';
 import ConditionGeneral from './pages/ConditionGeneral';
@@ -24,6 +24,7 @@ import Reservations from './pages/Reservations';
 import Reservation from './pages/Reservation';
 import AnnonceReservations from './pages/AnnonceReservations';
 import Messages from './pages/Messages';
+import Users from './pages/admin/Users';
 
 function App() {
 
@@ -56,9 +57,11 @@ function App() {
         <Route path="/account/reservation/:id" element={requireAuth(<Reservation />)}></Route>
         <Route path="/users/:id" element={<Profile />}></Route>
         <Route path="/admin/dashboard" element={requireAdmin(<Dashboard />)} ></Route>
+        <Route path="/admin/reservations" element={requireAdmin(<ReservationsAdmin />)} ></Route>
         <Route path="/admin/annonces" element={requireAdmin(<AnnoncesAdmin />)}></Route>
         <Route path="/admin/categories" element={requireAdmin(<Categories />)}></Route>
         <Route path="/admin/equipment" element={requireAdmin(<Equipment />)}></Route>
+        <Route path="/admin/users" element={requireAdmin(<Users />)}></Route>
         <Route path="/admin/properties" element={requireAdmin(<Properties />)}></Route>
       </Routes>
     </BrowserRouter>

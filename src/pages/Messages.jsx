@@ -11,6 +11,7 @@ import { API_URL, MEDIA_URL } from '../Variables';
 import { useNavigate, useParams } from "react-router-dom";
 import moment from 'moment';
 import accessDeniedImage from '../assets/img/accessdenied.svg'
+import { useRef } from 'react';
 
 const Messages = () => {
     const { id } = useParams()
@@ -24,6 +25,10 @@ const Messages = () => {
 
     const [data, setData] = useState([]);
     const [messages, setMessages] = useState([]);
+
+    const divRef = useRef(null);
+
+
 
     useEffect(() => {
         getConversations()
@@ -82,12 +87,20 @@ const Messages = () => {
                 .then(data => {
                     setMessages(data["hydra:member"]);
                     setLoadingMessages(false)
+
+                    setTimeout(() => {
+                        divRef.current.scrollTo({
+                            top: document.body.scrollHeight,
+                            behavior: 'smooth'
+                        });
+                    }, 100);
                 })
                 .catch(error => {
                     console.log(error);
                 });
         }
     }
+
 
     const getConversations = () => {
         setLoadingConversations(true)
@@ -136,39 +149,34 @@ const Messages = () => {
                         </Col>
                         <Col lg={8} className="position-relative p-0" style={{ height: 520 }}>
                             <Skeleton active loading={loadingMessages && id}>
-                                <div className='p-3 overflow-auto' style={{ height: 400 }}>
-                                    {
-                                        messages.map(m => {
-                                            if (m?.sender?.id === JSON.parse(curUser)?.id) {
-                                                return <div className='d-flex mb-3'>
-                                                    <small>Vous : </small>
-                                                    <div className='w-75'>
-                                                        <p className='bg-atypik px-3 py-2 text-white ms-3 m-0' style={{ borderRadius: 20, borderTopLeftRadius: 0 }}>
-                                                            {m.content}</p>
-                                                        <small className='float-end pe-1'>{moment(m.createdAt).calendar()} </small>
-                                                    </div>
-
+                                <div className='p-3 overflow-auto' ref={divRef} style={{ height: 400 }}>
+                                    {messages.map(m => {
+                                        if (m?.sender?.id === JSON.parse(curUser)?.id) {
+                                            return <div className='d-flex mb-3'>
+                                                <small>Vous: </small>
+                                                <div className='w-100'>
+                                                    <p className='bg-atypik px-3 py-2 text-white ms-3 m-0' style={{ borderRadius: 20, borderTopLeftRadius: 0 }}>
+                                                        {m.content}</p>
+                                                    <small className='float-end pe-1'>{moment(m.createdAt).calendar()} </small>
                                                 </div>
-                                            } else {
-                                                return <div className='d-flex mb-3'>
-                                                    <Avatar style={{ backgroundColor: '#F97316', verticalAlign: 'middle' }} size="small">
-                                                        MM
-                                                    </Avatar>
-                                                    <div className='w-75'>
-                                                        <p className='bg-light px-3 py-2 border ms-3 m-0' style={{ borderRadius: 20, borderTopLeftRadius: 0 }}>
-                                                            {m.content}</p>
-                                                        <small className='float-end pe-1'>{moment(m.createdAt).calendar()} </small>
-                                                    </div>
+
+                                            </div>
+                                        } else {
+                                            return <div className='d-flex mb-3'>
+                                                <Avatar style={{ backgroundColor: '#F97316', verticalAlign: 'middle' }} size="small">
+                                                    MM
+                                                </Avatar>
+                                                <div className='w-100'>
+                                                    <p className='bg-light px-3 py-2 border ms-3 m-0' style={{ borderRadius: 20, borderTopLeftRadius: 0 }}>
+                                                        {m.content}</p>
+                                                    <small className='float-end pe-1'>{moment(m.createdAt).calendar()} </small>
                                                 </div>
-                                            }
-
-
-                                        })
-                                    }
-
+                                            </div>
+                                        }
+                                    })}
                                 </div>
                             </Skeleton>
-                            <div className='position-absolute bottom-0 w-100 pb-2 px-2'>
+                            {id && <div className='position-absolute bottom-0 w-100 pb-2 px-2'>
                                 <Divider></Divider>
                                 <Form className="d-flex " onSubmit={sendMessage} >
                                     <small>Vous: </small>
@@ -185,7 +193,7 @@ const Messages = () => {
                                     </FloatingLabel>
                                     <Button type="submit" variant='atypik' style={{ borderRadius: 30, height: 50 }}><FontAwesomeIcon icon={Icons.faArrowRight} color="#fff" className='px-2' /></Button>
                                 </Form>
-                            </div>
+                            </div>}
                         </Col>
                     </Row>
                 </Container>

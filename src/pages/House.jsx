@@ -144,6 +144,7 @@ const House = () => {
           setSending(false)
         } else {
           message.error("Une erreur s'est produite, merci de ressayer")
+          setSending(false)
         }
       })
       .catch(error => { console.log(error); });
@@ -395,7 +396,7 @@ const House = () => {
                             reload={getHouse}
                             user={r.user.firstname + ' ' + r.user.lastname}
                             comment={r.comment}
-                            date={Moment(r.createdAt).format("DD/MM/YYYY")}
+                            date={Moment(r.createdAt).fromNow()}
                             rating={r.grade}
                           />
                         })

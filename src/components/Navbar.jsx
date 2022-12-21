@@ -119,7 +119,7 @@ const AppNavbar = () => {
                                                 </Col>
                                                 <Col md={10}>
                                                     <p className='p-0 m-0'>{n.content}</p>
-                                                    <small>{moment(n.createdAt).calendar()}</small>
+                                                    <small>{moment(n.createdAt).fromNow()}</small>
                                                 </Col>
                                             </Row>
                                             :
@@ -133,7 +133,7 @@ const AppNavbar = () => {
                                                     </Col>
                                                     <Col md={10}>
                                                         <p className='p-0 m-0'>{n.content}</p>
-                                                        <small>{moment(n.createdAt).calendar()}</small>
+                                                        <small>{moment(n.createdAt).fromNow()}</small>
                                                     </Col>
                                                 </Row>
                                                 :
@@ -147,7 +147,7 @@ const AppNavbar = () => {
                                                         </Col>
                                                         <Col md={10}>
                                                             <p className='p-0 m-0'>{n.content}</p>
-                                                            <small>{moment(n.createdAt).calendar()}</small>
+                                                            <small>{moment(n.createdAt).fromNow()}</small>
                                                         </Col>
                                                     </Row>
                                                     :
@@ -161,7 +161,7 @@ const AppNavbar = () => {
                                                             </Col>
                                                             <Col md={10}>
                                                                 <p className='p-0 m-0'>{n.content}</p>
-                                                                <small>{moment(n.createdAt).calendar()}</small>
+                                                                <small>{moment(n.createdAt).fromNow()}</small>
                                                             </Col>
                                                         </Row>
                                                         :
@@ -175,7 +175,7 @@ const AppNavbar = () => {
                                                                 </Col>
                                                                 <Col md={10}>
                                                                     <p className='p-0 m-0'>{n.content}</p>
-                                                                    <small>{moment(n.createdAt).calendar()}</small>
+                                                                    <small>{moment(n.createdAt).fromNow()}</small>
                                                                 </Col>
                                                             </Row> : n.type == "ANNONCE_APPROVED" ?
                                                                 <Row role='button' onClick={() => navigate("/houses/" + n.data)}>
@@ -187,7 +187,7 @@ const AppNavbar = () => {
                                                                     </Col>
                                                                     <Col md={10}>
                                                                         <p className='p-0 m-0'>{n.content}</p>
-                                                                        <small>{moment(n.createdAt).calendar()}</small>
+                                                                        <small>{moment(n.createdAt).fromNow()}</small>
                                                                     </Col>
                                                                 </Row> : n.type == "ANNONCE_REJECTED" ?
                                                                     <Row role='button' onClick={() => navigate("/houses/" + n.data)}>
@@ -199,9 +199,21 @@ const AppNavbar = () => {
                                                                         </Col>
                                                                         <Col md={10}>
                                                                             <p className='p-0 m-0'>{n.content}</p>
-                                                                            <small>{moment(n.createdAt).calendar()}</small>
+                                                                            <small>{moment(n.createdAt).fromNow()}</small>
                                                                         </Col>
-                                                                    </Row> : <></>
+                                                                    </Row> : n.type == "NEW_MESSAGE" ?
+                                                                        <Row role='button' onClick={() => navigate("/account/messages/" + n.data)}>
+                                                                            <Col md={2}>
+                                                                                <Tag
+                                                                                    icon={<FontAwesomeIcon icon={Icons.faMessage} />}
+                                                                                    color="error"
+                                                                                    className='rounded-pill'></Tag>
+                                                                            </Col>
+                                                                            <Col md={10}>
+                                                                                <p className='p-0 m-0'>{n.content}</p>
+                                                                                <small>{moment(n.createdAt).fromNow()}</small>
+                                                                            </Col>
+                                                                        </Row> : <></>
 
                                     }
 
