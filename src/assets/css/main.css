@@ -1,5 +1,11 @@
 /*  Fonts   */
-@import url('https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Amatic+SC&family=Poppins&display=swap');
+
+
+* {
+    font-family: 'Poppins', sans-serif;
+}
 
 /* Start Global Rules */
 :root {
