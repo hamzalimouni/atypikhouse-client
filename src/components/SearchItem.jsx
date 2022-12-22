@@ -1,14 +1,11 @@
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
-import { Card, Col, Row } from 'react-bootstrap'
+import { Col } from 'react-bootstrap'
 import * as Icons from '@fortawesome/free-solid-svg-icons'
-import { Divider } from 'antd'
-import { useNavigate } from "react-router-dom";
 
 
 const SearchItem = (props) => {
-    const image = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2VzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60";
     return (
         <div role='button'  className='border searchItem shadow-sm row mb-3 p-0 rounded' onClick={
             () => { window.open('../houses/' + props.id + '?from=' + props.searchOptions.from + '&to=' + props.searchOptions.to + '&travelers=' + props.searchOptions.travelers, '_blank') }

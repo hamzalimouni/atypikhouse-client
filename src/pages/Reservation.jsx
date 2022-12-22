@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Col, Container, Image, Row } from 'react-bootstrap'
+import { Col, Container, Image, Row } from 'react-bootstrap'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
-import { Divider, Empty, Tag, Skeleton, Descriptions } from 'antd';
-import bg from '../assets/img/bg.png';
+import { Divider, Tag, Skeleton, Descriptions } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons';
 import Cookies from 'js-cookie'
@@ -18,20 +17,14 @@ const Reservation = () => {
         document.title = "Réservation - AtypikHouse";
     }, [])
 
-    const { id } = useParams()
     let navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [notFound, setNotFound] = useState(false);
 
-    let curUser = Cookies.get('user');
-
     const [data, setData] = useState([]);
 
+    const { id } = useParams()
     useEffect(() => {
-        getReservation()
-    }, []);
-
-    const getReservation = () => {
         fetch(API_URL + '/reservations/' + id, {
             method: 'GET',
             headers: {
@@ -54,7 +47,7 @@ const Reservation = () => {
                 setNotFound(true)
                 console.log(error);
             });
-    }
+    }, [id]);
 
     return (
         <div>
@@ -66,7 +59,7 @@ const Reservation = () => {
                             <Container className='text-center mt-5'>
                                 <Image src={accessDeniedImage} height={300}></Image>
                                 <h2 className='mt-5'>Nous sommes désolés</h2>
-                                <a>Mais vous n'avez pas la permission pour accéder à cette page</a>
+                                <p>Mais vous n'avez pas la permission pour accéder à cette page</p>
                             </Container>
                             :
                             <Col md={8} className='mx-lg-5 border rounded mx-lg-auto mx-auto p-4'>
@@ -75,7 +68,7 @@ const Reservation = () => {
                                     <div className="p-lg-5 pt-lg-0 pb-1">
                                         <Divider orientation='left'><h3>Votre réservation (#{data.id})</h3></Divider>
                                         {
-                                            data.status == "CANCELED" ?
+                                            data.status === "CANCELED" ?
                                                 <Tag color="error" className='mx-auto w-100 text-center p-2 fs-5 mb-3'>Votre réservation a été annulée par l'hôte</Tag>
                                                 : null
                                         }

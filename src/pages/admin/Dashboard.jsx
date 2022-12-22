@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react'
-import { Col, Container, Row, Table, Badge, Button } from 'react-bootstrap';
+import { Col, Container, Row} from 'react-bootstrap';
 import Sidebar from '../../components/admin/Sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons';
-import { Divider } from 'antd';
 import Cookies from 'js-cookie'
 
 const Dashboard = () => {

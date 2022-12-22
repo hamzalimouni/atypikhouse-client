@@ -1,5 +1,5 @@
 import React from 'react'
-import { Nav, Container, NavDropdown, Button, Image, Modal, Row, Col } from 'react-bootstrap';
+import { Nav, Image } from 'react-bootstrap';
 import logo from '../../assets/img/logo.png';
 import { useNavigate, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

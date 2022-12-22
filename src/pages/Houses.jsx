@@ -67,10 +67,6 @@ const Houses = () => {
   }
 
   useEffect(() => {
-    handleSearch()
-  }, [dates, destination, options]);
-
-  const handleSearch = () => {
     navigate({
       pathname: "/houses",
       search: `?${createSearchParams({
@@ -83,7 +79,9 @@ const Houses = () => {
     })
     getHouses()
     setLoading(true)
-  };
+  }, [dates, destination, options]);
+
+
   return (
     <div>
       <AppNavbar />

@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import { Button, Col, Container, Image, Row } from 'react-bootstrap'
+import React, { useEffect } from 'react'
+import { Col, Container, Row } from 'react-bootstrap'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
-import { Divider, Empty, Badge, Descriptions } from 'antd';
-import bg from '../assets/img/bg.png';
+import { Divider, Descriptions } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons';
 import Cookies from 'js-cookie'
-import { API_URL } from '../Variables';
-import SearchItem from '../components/SearchItem';
 
 const Reservations = () => {
 

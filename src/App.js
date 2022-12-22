@@ -1,11 +1,9 @@
-import logo from './logo.svg';
 import './App.css';
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import House from './pages/House';
 import Houses from './pages/Houses';
 import Account from './pages/Account';
-import Profile from './pages/Profile';
 import Annonces from './pages/Annonces';
 import AnnoncesAdmin from './pages/admin/Annonces';
 import Dashboard from './pages/admin/Dashboard';
@@ -55,7 +53,6 @@ function App() {
         <Route path="/account/messages" element={requireAuth(<Messages />)}></Route>
         <Route path="/account/messages/:id" element={requireAuth(<Messages />)}></Route>
         <Route path="/account/reservation/:id" element={requireAuth(<Reservation />)}></Route>
-        <Route path="/users/:id" element={<Profile />}></Route>
         <Route path="/admin/dashboard" element={requireAdmin(<Dashboard />)} ></Route>
         <Route path="/admin/reservations" element={requireAdmin(<ReservationsAdmin />)} ></Route>
         <Route path="/admin/annonces" element={requireAdmin(<AnnoncesAdmin />)}></Route>

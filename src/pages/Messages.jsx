@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Col, Container, FloatingLabel, Form, Image, Row } from 'react-bootstrap'
+import { Button, Col, Container, FloatingLabel, Form, Row } from 'react-bootstrap'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
-import { Divider, Empty, Tag, Skeleton, Avatar } from 'antd';
-import bg from '../assets/img/bg.png';
+import { Divider, Skeleton, Avatar } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons';
 import Cookies from 'js-cookie'
-import { API_URL, MEDIA_URL } from '../Variables';
+import { API_URL } from '../Variables';
 import { useNavigate, useParams } from "react-router-dom";
 import moment from 'moment';
-import accessDeniedImage from '../assets/img/accessdenied.svg'
 import { useRef } from 'react';
 
 const Messages = () => {
@@ -23,7 +21,6 @@ const Messages = () => {
     let navigate = useNavigate();
     const [loadingMessages, setLoadingMessages] = useState(true);
     const [loadingConversations, setLoadingConversations] = useState(true);
-    const [notFound, setNotFound] = useState(false);
     const [messageContent, setMessageContent] = useState();
 
     let curUser = Cookies.get('user');
@@ -42,18 +39,9 @@ const Messages = () => {
 
     useEffect(() => {
         getMessages();
-        console.log(id);
     }, [id]);
 
-    // useEffect(() => {
-    //     const interval = setInterval(() => {
-    //         getMessages();
-    //     }, 1000)
-    //     return () => clearInterval(interval)
-    // }, []);
-
     const sendMessage = async (e) => {
-        console.log(e);
         e.preventDefault();
 
         await fetch(API_URL + '/messages', {

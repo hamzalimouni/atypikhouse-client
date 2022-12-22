@@ -91,7 +91,7 @@ const Users = () => {
                 })
                     .then(
                         (result) => {
-                            if (result.status == 204) {
+                            if (result.status === 204) {
                                 message.success('Utilisateur supprimée avec succès');
                             } else {
                                 message.error('Impossible de supprimer l\'utilisateur');
@@ -159,7 +159,7 @@ const Users = () => {
                             <TableHeaderColumn className='border' dataSort={true} dataField='email'>Email</TableHeaderColumn>
                             <TableHeaderColumn className='border' dataSort={true} dataField='number'>Tél</TableHeaderColumn>
                             <TableHeaderColumn width='13*%' className='border' dataSort={true} dataField='birthday' dataFormat={(b) => moment(b).format('DD MMM YYYY')}>Date de naissance</TableHeaderColumn>
-                            <TableHeaderColumn width='8%' className='border' dataSort={true} dataField='roles' dataFormat={(roles) => roles[0] == "ROLE_ADMIN" ? <Badge bg='primary'>Admin</Badge> : <Badge bg='atypik'>User</Badge>}>Role</TableHeaderColumn>
+                            <TableHeaderColumn width='8%' className='border' dataSort={true} dataField='roles' dataFormat={(roles) => roles[0] === "ROLE_ADMIN" ? <Badge bg='primary'>Admin</Badge> : <Badge bg='atypik'>User</Badge>}>Role</TableHeaderColumn>
                             <TableHeaderColumn className='border' dataField='id' dataFormat={actionFormat}>-</TableHeaderColumn>
                         </BootstrapTable>
                     </Spin>
@@ -167,7 +167,7 @@ const Users = () => {
                 <Modal title="Fiche de l'utilisateur" open={isModalOpen} onOk={() => setIsModalOpen(false)} onCancel={() => setIsModalOpen(false)}>
                     <Container>
                         <Descriptions bordered column={1}>
-                            <Descriptions.Item label="Role">{modalData?.roles && modalData?.roles[0] == "ROLE_ADMIN" ? <Badge bg='primary'>Admin</Badge> : <Badge bg='atypik'>User</Badge>}</Descriptions.Item>
+                            <Descriptions.Item label="Role">{modalData?.roles && modalData?.roles[0] === "ROLE_ADMIN" ? <Badge bg='primary'>Admin</Badge> : <Badge bg='atypik'>User</Badge>}</Descriptions.Item>
                             <Descriptions.Item label="Nom">{modalData?.firstname}</Descriptions.Item>
                             <Descriptions.Item label="Prénom">{modalData.lastname}</Descriptions.Item>
                             <Descriptions.Item label="Tél">{modalData.number}</Descriptions.Item>
@@ -194,7 +194,7 @@ const Users = () => {
                                                     Nom
                                                 </Form.Label>
                                                 <Col sm="9">
-                                                    <Form.Control type="text" onChange={(e) => setEditUserData({ ...editUserData, ['firstname']: e.target.value })} value={editUserData['firstname']} />
+                                                    <Form.Control type="text" onChange={(e) => setEditUserData({ ...editUserData, 'firstname': e.target.value })} value={editUserData['firstname']} />
                                                 </Col>
                                             </Form.Group>
                                             <Form.Group as={Row} className="mb-3">
@@ -202,7 +202,7 @@ const Users = () => {
                                                     Prénom
                                                 </Form.Label>
                                                 <Col sm="9">
-                                                    <Form.Control type="text" onChange={(e) => setEditUserData({ ...editUserData, ['lastname']: e.target.value })} value={editUserData['lastname']} />
+                                                    <Form.Control type="text" onChange={(e) => setEditUserData({ ...editUserData, 'lastname': e.target.value })} value={editUserData['lastname']} />
                                                 </Col>
                                             </Form.Group>
                                             <Form.Group as={Row} className="mb-3">
@@ -210,7 +210,7 @@ const Users = () => {
                                                     Email
                                                 </Form.Label>
                                                 <Col sm="9">
-                                                    <Form.Control type="text" onChange={(e) => setEditUserData({ ...editUserData, ['email']: e.target.value })} value={editUserData['email']} />
+                                                    <Form.Control type="text" onChange={(e) => setEditUserData({ ...editUserData, 'email': e.target.value })} value={editUserData['email']} />
                                                 </Col>
                                             </Form.Group>
                                             <Form.Group as={Row} className="mb-3">
@@ -218,7 +218,7 @@ const Users = () => {
                                                     Téléphone
                                                 </Form.Label>
                                                 <Col sm="9">
-                                                    <Form.Control type="text" onChange={(e) => setEditUserData({ ...editUserData, ['number']: e.target.value })} value={editUserData['number']} />
+                                                    <Form.Control type="text" onChange={(e) => setEditUserData({ ...editUserData, 'number': e.target.value })} value={editUserData['number']} />
                                                 </Col>
                                             </Form.Group>
                                             <Form.Group as={Row} className="mb-3">
@@ -226,7 +226,7 @@ const Users = () => {
                                                     Date de naissance
                                                 </Form.Label>
                                                 <Col sm="9">
-                                                    <Form.Control type="date" onChange={(e) => setEditUserData({ ...editUserData, ['birthday']: e.target.value })} value={moment(editUserData['birthday']).format('YYYY-MM-DD')} />
+                                                    <Form.Control type="date" onChange={(e) => setEditUserData({ ...editUserData, 'birthday': e.target.value })} value={moment(editUserData['birthday']).format('YYYY-MM-DD')} />
                                                 </Col>
                                             </Form.Group>
                                         </>,
@@ -240,7 +240,7 @@ const Users = () => {
                                                     Adresse
                                                 </Form.Label>
                                                 <Col sm="9">
-                                                    <Form.Control type="text" onChange={(e) => setEditUserData({ ...editUserData, ['address']: { ...editUserData.address, address: e.target.value } })} value={editUserData.address && editUserData?.address['address']} />
+                                                    <Form.Control type="text" onChange={(e) => setEditUserData({ ...editUserData, 'address': { ...editUserData.address, address: e.target.value } })} value={editUserData.address && editUserData?.address['address']} />
                                                 </Col>
                                             </Form.Group>
                                             <Form.Group as={Row} className="mb-3">
@@ -248,7 +248,7 @@ const Users = () => {
                                                     Ville
                                                 </Form.Label>
                                                 <Col sm="9">
-                                                    <Form.Control type="text" onChange={(e) => setEditUserData({ ...editUserData, ['address']: { ...editUserData.address, city: e.target.value } })} value={editUserData.address && editUserData?.address['city']} />
+                                                    <Form.Control type="text" onChange={(e) => setEditUserData({ ...editUserData, 'address': { ...editUserData.address, city: e.target.value } })} value={editUserData.address && editUserData?.address['city']} />
                                                 </Col>
                                             </Form.Group>
                                             <Form.Group as={Row} className="mb-3">
@@ -256,7 +256,7 @@ const Users = () => {
                                                     Code postal
                                                 </Form.Label>
                                                 <Col sm="9">
-                                                    <Form.Control type="text" onChange={(e) => setEditUserData({ ...editUserData, ['address']: { ...editUserData.address, zipcode: e.target.value } })} value={editUserData.address && editUserData?.address['zipcode']} />
+                                                    <Form.Control type="text" onChange={(e) => setEditUserData({ ...editUserData, 'address': { ...editUserData.address, zipcode: e.target.value } })} value={editUserData.address && editUserData?.address['zipcode']} />
                                                 </Col>
                                             </Form.Group>
                                             <Form.Group as={Row} className="mb-3">
@@ -264,7 +264,7 @@ const Users = () => {
                                                     Pays
                                                 </Form.Label>
                                                 <Col sm="9">
-                                                    <Form.Control type="text" onChange={(e) => setEditUserData({ ...editUserData, ['address']: { ...editUserData.address, country: e.target.value } })} value={editUserData.address && editUserData?.address['country']} />
+                                                    <Form.Control type="text" onChange={(e) => setEditUserData({ ...editUserData, 'address': { ...editUserData.address, country: e.target.value } })} value={editUserData.address && editUserData?.address['country']} />
                                                 </Col>
                                             </Form.Group>
                                         </>,

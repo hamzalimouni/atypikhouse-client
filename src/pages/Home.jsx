@@ -8,7 +8,6 @@ import campfire from '../assets/icons/campfire.png'
 import review from '../assets/icons/review.png'
 import happy from '../assets/icons/happy.png'
 import ReviewCard from '../components/ReviewCard'
-import HorizontalScroll from 'react-scroll-horizontal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons'
 

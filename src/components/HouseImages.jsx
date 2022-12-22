@@ -1,10 +1,6 @@
-import React, { useState } from 'react'
-import bg from '../assets/img/bg.png';
+import React from 'react'
 import '../assets/css/CardHouse.css';
-import { Col, Row, Modal } from 'react-bootstrap';
-import StarRatings from 'react-star-ratings';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import * as Icons from '@fortawesome/free-solid-svg-icons';
+import { Col, Row } from 'react-bootstrap';
 import { Image } from 'antd'
 
 const HouseImage = (props) => {

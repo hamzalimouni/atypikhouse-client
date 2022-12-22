@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Col, Container, Image, Row } from 'react-bootstrap'
+import { Button, Container } from 'react-bootstrap'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
-import { Divider, Empty, Badge, Avatar, Skeleton } from 'antd';
-import bg from '../assets/img/bg.png';
+import { Divider, Empty, Avatar, Skeleton } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons';
 import Cookies from 'js-cookie'
 import { API_URL, MEDIA_URL } from '../Variables';
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import moment from 'moment';
 
 const Reservations = () => {
@@ -18,17 +17,12 @@ const Reservations = () => {
     }, [])
 
     let navigate = useNavigate();
-    let curUser = Cookies.get('user');
+
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 
-
-
     useEffect(() => {
-        getReservations()
-    }, []);
-
-    const getReservations = () => {
+        let curUser = Cookies.get('user');
         fetch(API_URL + '/reservations?user.id=' + JSON.parse(curUser)['id'] + '&order[createdAt]=desc', {
             method: 'GET',
             headers: {
@@ -37,7 +31,7 @@ const Reservations = () => {
         })
             .then(res => res.json())
             .then((result) => { setData(result["hydra:member"]); setLoading(false) })
-    }
+    }, []);
 
     return (
         <div>
@@ -57,7 +51,7 @@ const Reservations = () => {
                                             <Avatar size={80} src={MEDIA_URL + r.house?.images[0]?.fileName} />
                                             <div className='ms-4'>
                                                 <strong className=''>{r.house.title}</strong>
-                                                {r.status == "CANCELED" ? <span className="ms-3 rounded bg-danger text-white float-right px-2 py-1">Annulée</span> : null}
+                                                {r.status === "CANCELED" ? <span className="ms-3 rounded bg-danger text-white float-right px-2 py-1">Annulée</span> : null}
                                                 <div className='d-flex align-items-center mt-2'>
                                                     <FontAwesomeIcon icon={Icons.faCalendar} color="#4caf50" className='px-2' />
                                                     <span>{moment(r.fromDate).format('DD MMM YYYY')}</span>

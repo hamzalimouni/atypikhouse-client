@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Col, Container, Image, Badge, ButtonGroup, Dropdown } from 'react-bootstrap'
+import { Button, Container, Badge, ButtonGroup, Dropdown } from 'react-bootstrap'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
 import { Divider, Modal, Popconfirm, Skeleton, Descriptions, message } from 'antd';
-import bg from '../assets/img/bg.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons';
 import Cookies from 'js-cookie'

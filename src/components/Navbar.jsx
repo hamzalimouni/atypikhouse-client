@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/css/main.css'
 import '../assets/css/navbar.css'
 import logo from '../assets/img/logo.png';
-import { Navbar, Container, Nav, NavDropdown, Button, Image, Modal, Row, Col } from 'react-bootstrap';
+import { Navbar, Container, Nav, NavDropdown, Button, Image, Row, Col } from 'react-bootstrap';
 import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal';
 import { Drawer, Badge, Skeleton, Tag } from 'antd';

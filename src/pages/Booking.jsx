@@ -2,21 +2,19 @@ import * as Icons from '@fortawesome/free-solid-svg-icons'
 import * as Brands from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useState, useEffect } from 'react'
-import { Button as Btn, Col, Container, Image, Row, Form, FloatingLabel, ButtonGroup } from 'react-bootstrap'
+import { Button as Btn, Col, Container, Image, Row, Form, FloatingLabel } from 'react-bootstrap'
 import AppNavbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { DatePicker, Badge, Avatar, Spin, Divider, Skeleton, Tag } from 'antd';
 import Moment from 'moment';
 import { useNavigate, useParams, useLocation, createSearchParams } from "react-router-dom";
-import InputMask from 'react-input-mask';
 import { API_URL, MEDIA_URL } from '../Variables';
 import notFoundImage from '../assets/img/notfound.svg'
 import Cookies from 'js-cookie'
 import axios from "axios";
 import LoginModal from '../components/LoginModal';
-import { CardCvcElement, CardElement, CardExpiryElement, CardNumberElement, Elements, useElements, useStripe } from '@stripe/react-stripe-js';
+import { CardCvcElement, CardExpiryElement, CardNumberElement, Elements, useElements, useStripe } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { PaymentElement } from '@stripe/react-stripe-js';
 
 const stripePromise = loadStripe('pk_test_631m0AfxKfhX0g5eGHVmynE8006o5Rg39s', { locale: 'fr' });
 

@@ -1,4 +1,4 @@
-import { faBed, faDoorOpen, faLocationDot, faPerson, faRuler, faShower, faSquare, faStar, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faLocationDot, faStar, } from '@fortawesome/free-solid-svg-icons'
 import * as Icons from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useState, useEffect } from 'react'
@@ -9,7 +9,7 @@ import CommentCard from '../components/CommentCard'
 import HouseImages from '../components/HouseImages'
 import { useNavigate, useLocation, createSearchParams } from "react-router-dom";
 import { Avatar, Divider, Rate } from 'antd';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { DatePicker, Badge, Skeleton, message, Popconfirm, Tag, Modal } from 'antd';
 import Moment from 'moment';
 import { useParams } from "react-router-dom";

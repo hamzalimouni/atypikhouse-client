@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Container, Dropdown, Badge, Button, ButtonGroup } from 'react-bootstrap';
 import Sidebar from '../../components/admin/Sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -71,7 +71,7 @@ const Reservations = () => {
                 })
                     .then(
                         (result) => {
-                            if (result.status == 204) {
+                            if (result.status === 204) {
                                 message.success('Réservation supprimée avec succès');
                             } else {
                                 message.error('Impossible de supprimer la réservation');
@@ -84,7 +84,7 @@ const Reservations = () => {
                     <FontAwesomeIcon icon={Icons.faTrash} />
                 </Button>
             </Popconfirm>
-            {(cell.status == 'APPROVED') && (<div className='d-flex'>
+            {(cell.status === 'APPROVED') && (<div className='d-flex'>
                 <Popconfirm title="Voulez-vous vraiment annuler cette réservation?" onConfirm={() =>
                     fetch(API_URL + '/reservations/' + id, {
                         method: 'PATCH',
@@ -96,7 +96,7 @@ const Reservations = () => {
                     })
                         .then(res => res.json())
                         .then((result) => {
-                            if (result.status == 'CANCELED') {
+                            if (result.status === 'CANCELED') {
                                 message.success('Réservation annulée avec succès');
                             } else {
                                 message.error('Impossible d\'annuler la réservation');
@@ -111,11 +111,6 @@ const Reservations = () => {
             </div>)}
         </div>;
     }
-
-    function statusFormat(status) {
-        return <Badge bg={status == 'APPROVED' ? 'atypik' : (status == "REJECTED" ? "danger" : "primary")}>{status}</Badge>;
-    }
-
 
 
     const options = {
@@ -139,7 +134,7 @@ const Reservations = () => {
                             <TableHeaderColumn dataSort={true} dataField='toDate' dataFormat={(d) => moment(d).format('DD MMM YYYY')}>A</TableHeaderColumn>
                             <TableHeaderColumn width={'10%'} dataSort={true} dataField='nbPersons'>Nb voyageurs</TableHeaderColumn>
                             <TableHeaderColumn width={'10%'} dataSort={true} dataField='amount' dataFormat={(m) => m + ' €'}>Montant payé</TableHeaderColumn>
-                            <TableHeaderColumn width={'10%'} dataSort={true} dataField='status' dataFormat={(s) => s == 'APPROVED' ? <Badge bg='atypik'>RÉSERVÉE</Badge> : <Badge bg='danger'>ANNULÉE</Badge>}>Status</TableHeaderColumn>
+                            <TableHeaderColumn width={'10%'} dataSort={true} dataField='status' dataFormat={(s) => s === 'APPROVED' ? <Badge bg='atypik'>RÉSERVÉE</Badge> : <Badge bg='danger'>ANNULÉE</Badge>}>Status</TableHeaderColumn>
                             <TableHeaderColumn width={'10%'} dataField='id' dataFormat={actionFormat}>-</TableHeaderColumn>
                         </BootstrapTable>
                     </Spin>

@@ -4,7 +4,7 @@ import Footer from '../components/Footer'
 import AppNavbar from '../components/Navbar'
 import review from '../assets/icons/review.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faContactBook, faContactCard, faLocation, faLocationDot, faMailBulk, faPhone, faVoicemail } from '@fortawesome/free-solid-svg-icons'
+import { faContactCard, faLocationDot, faPhone } from '@fortawesome/free-solid-svg-icons'
 import '../assets/css/contact.css'
 
 const Contact = () => {
