@@ -11,6 +11,10 @@ import Cookies from 'js-cookie';
 
 const Categories = () => {
 
+    useEffect(() => {
+        document.title = "Gestion des categories - AtypikHouse";
+    }, []);
+
     const [items, setItems] = useState([]);
     const [show, setShow] = useState(false);
     const [loading, setLoading] = useState(true);

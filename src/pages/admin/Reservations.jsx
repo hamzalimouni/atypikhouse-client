@@ -11,6 +11,11 @@ import moment from 'moment'
 import { API_URL } from '../../Variables';
 
 const Reservations = () => {
+
+    useEffect(() => {
+        document.title = "Gestion des réservations - AtypikHouse";
+    }, []);
+
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);

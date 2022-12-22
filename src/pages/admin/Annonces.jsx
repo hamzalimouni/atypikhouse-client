@@ -10,6 +10,10 @@ import Cookies from 'js-cookie'
 import { API_URL } from '../../Variables';
 
 const Annonces = () => {
+    useEffect(() => {
+        document.title = "Gestion des annonces - AtypikHouse";
+    }, []);
+
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const myButton = () => {
@@ -86,6 +90,8 @@ const Annonces = () => {
     function statusFormat(status) {
         return <Badge bg={status == 'APPROVED' ? 'atypik' : (status == "REJECTED" ? "danger" : "primary")}>{status}</Badge>;
     }
+
+
 
     const options = {
         btnGroup: myButton

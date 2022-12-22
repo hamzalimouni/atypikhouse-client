@@ -13,6 +13,11 @@ import moment from 'moment';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
 const AnnonceReservations = () => {
+
+    useEffect(() => {
+        document.title = "Réservations - AtypikHouse";
+    }, []);
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalData, setModalData] = useState([]);
 

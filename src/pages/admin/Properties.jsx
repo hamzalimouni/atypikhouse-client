@@ -11,6 +11,10 @@ import Cookies from 'js-cookie';
 
 const Properties = () => {
 
+    useEffect(() => {
+        document.title = "Gestion des propriétes - AtypikHouse";
+    }, []);
+
     const [items, setItems] = useState([]);
     const [show, setShow] = useState(false);
     const [loading, setLoading] = useState(true);

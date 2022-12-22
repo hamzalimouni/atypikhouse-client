@@ -13,6 +13,11 @@ import moment from 'moment';
 import accessDeniedImage from '../assets/img/accessdenied.svg'
 
 const Reservation = () => {
+
+    useEffect(() => {
+        document.title = "Réservation - AtypikHouse";
+    }, [])
+
     const { id } = useParams()
     let navigate = useNavigate();
     const [loading, setLoading] = useState(true);

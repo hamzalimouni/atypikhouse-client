@@ -12,6 +12,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import moment from 'moment';
 
 const Reservations = () => {
+
+    useEffect(() => {
+        document.title = "Mes réservations - AtypikHouse";
+    }, [])
+
     let navigate = useNavigate();
     let curUser = Cookies.get('user');
     const [data, setData] = useState([]);

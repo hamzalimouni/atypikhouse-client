@@ -14,6 +14,11 @@ import accessDeniedImage from '../assets/img/accessdenied.svg'
 import { useRef } from 'react';
 
 const Messages = () => {
+
+    useEffect(() => {
+        document.title = "Mes messages - AtypikHouse";
+    }, []);
+
     const { id } = useParams()
     let navigate = useNavigate();
     const [loadingMessages, setLoadingMessages] = useState(true);

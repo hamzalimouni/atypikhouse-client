@@ -11,6 +11,10 @@ import Cookies from 'js-cookie';
 
 const Equipment = () => {
 
+    useEffect(() => {
+        document.title = "Gestion des equipments - AtypikHouse";
+    }, []);
+
     const [items, setItems] = useState([]);
     const [show, setShow] = useState(false);
     const [loading, setLoading] = useState(true);

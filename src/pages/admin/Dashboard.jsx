@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Col, Container, Row, Table, Badge, Button } from 'react-bootstrap';
 import Sidebar from '../../components/admin/Sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -7,6 +7,11 @@ import { Divider } from 'antd';
 import Cookies from 'js-cookie'
 
 const Dashboard = () => {
+
+    useEffect(() => {
+        document.title = "Admin panel - AtypikHouse";
+    }, []);
+
     let curUser = Cookies.get('user');
 
     if (!curUser) {

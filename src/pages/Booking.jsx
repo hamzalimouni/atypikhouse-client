@@ -22,6 +22,10 @@ const stripePromise = loadStripe('pk_test_631m0AfxKfhX0g5eGHVmynE8006o5Rg39s', {
 
 const Paiment = () => {
 
+    useEffect(() => {
+        document.title = "Réserver - AtypikHouse";
+    }, []);
+
     let stripe, elements;
     const location = useLocation()
     const navigate = useNavigate();

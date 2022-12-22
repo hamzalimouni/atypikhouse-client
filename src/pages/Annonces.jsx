@@ -11,6 +11,11 @@ import { API_URL, MEDIA_URL } from '../Variables';
 import { useNavigate } from 'react-router-dom';
 
 const Annonces = () => {
+
+    useEffect(() => {
+        document.title = "Mes annonces - AtypikHouse";
+    }, []);
+
     let navigate = useNavigate();
     let curUser = Cookies.get('user');
     const [houses, setHouses] = useState([]);

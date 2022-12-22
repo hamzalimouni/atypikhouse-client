@@ -11,6 +11,11 @@ import { API_URL } from '../Variables';
 import SearchItem from '../components/SearchItem';
 
 const Reservations = () => {
+
+    useEffect(() => {
+        document.title = "Réservation confirmée - AtypikHouse";
+    }, []);
+
     let curUser = Cookies.get('user');
     const image = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2VzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60";
 

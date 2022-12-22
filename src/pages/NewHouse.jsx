@@ -23,6 +23,10 @@ const { Step } = Steps;
 
 const NewHouse = () => {
 
+    useEffect(() => {
+        document.title = "Publier une annonce - AtypikHouse";
+    }, [])
+
     let navigate = useNavigate();
     const provider = new OpenStreetMapProvider();
 

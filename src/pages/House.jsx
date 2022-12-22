@@ -44,12 +44,11 @@ const House = () => {
   })
 
   const navigate = useNavigate();
+
   useEffect(() => {
     getHouse()
     getHouseParams()
   }, []);
-
-
 
   useEffect(() => {
     navigate({
@@ -94,6 +93,7 @@ const House = () => {
           setLoading(false)
           setMyReservation(data.reservations.find(r => r.user.id === curUser?.id))
           setIsMine(curUser?.id == data.owner.id)
+          document.title = data.title + " - AtypikHouse";
         } else {
           setfound(false)
         }

@@ -12,6 +12,10 @@ import moment from 'moment';
 
 const Users = () => {
 
+    useEffect(() => {
+        document.title = "Gestion des utilisateurs - AtypikHouse";
+    }, []);
+
     const [items, setItems] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(false);

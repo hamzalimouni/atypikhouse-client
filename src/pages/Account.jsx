@@ -18,9 +18,11 @@ import { Spin } from 'antd';
 import { useNavigate } from "react-router-dom";
 
 const Account = () => {
-    if (!Cookies.get("user")) {
-        window.location.href = "/"
-    }
+
+    useEffect(() => {
+        document.title = "Mon compte - AtypikHouse";
+    }, []);
+
     useEffect(() => {
         document.title = "Mon compte - Atypikhouse"
         fetch(API_URL + '/me', {
