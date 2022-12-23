@@ -17,7 +17,7 @@ const Faq = () => {
                     <h2 className='text-atypik mt-3 mb-3'>Nos réponses à vos questions</h2>
                     <Accordion defaultActiveKey="0">
                         <Accordion.Item eventKey="0">
-                            <Accordion.Header >Facturez-vous des frais pour vos services ?</Accordion.Header>
+                            <Accordion.Header>Facturez-vous des frais pour vos services ?</Accordion.Header>
                             <Accordion.Body>
                                 Non, atypikhouse.com ne facture aucun frais pour ses services. Notre service est entièrement gratuit et nous n'ajouterons à votre hébergement aucun frais supplémentaire pour notre service.
                             </Accordion.Body>
