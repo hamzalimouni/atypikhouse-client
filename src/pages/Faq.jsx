@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Accordion, Container, Row } from 'react-bootstrap'
 import Footer from '../components/Footer'
 import AppNavbar from '../components/Navbar'
 
 const Faq = () => {
+
+    useEffect(() => {
+        document.title = "Les questions fréquentes - AtypikHouse";
+    }, []);
+
     return (
         <div>
             <AppNavbar />

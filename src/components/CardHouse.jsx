@@ -1,7 +1,7 @@
 import React from 'react'
 import bg from '../assets/img/bg.png';
 import '../assets/css/CardHouse.css';
-import { Card, Row } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import * as Icons from '@fortawesome/free-solid-svg-icons';
@@ -29,7 +29,7 @@ const CardHouse = (props) => {
                 <Card.Text><FontAwesomeIcon icon={Icons.faLocationDot} color="#c0c0c0" /> {props.destination}</Card.Text>
             </Card.Body>
             <Card.Body>
-                <div class="d-flex justify-content-between">
+                <div className="d-flex justify-content-between">
                     <strong>
                         {props.price} € / nuit
                     </strong>

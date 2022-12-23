@@ -1,9 +1,6 @@
 import React from 'react'
-import bg from '../assets/img/bg.png';
 import '../assets/css/CardHouse.css';
-import { Card, Row } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
 import * as Icons from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from "react-router-dom";
 
@@ -11,9 +8,9 @@ const MapCardHouse = (props) => {
     let navigate = useNavigate();
 
     return (
-        <div onClick={() => navigate("/houses/" + props.id)}>
+        <div role='button' onClick={() => navigate("/houses/" + props.id)}>
             <div style={{
-                height: 150, width: '100%', backgroundImage: `url(${props.image || bg})`, backgroundPosition: 'center',
+                height: 150, width: '100%', backgroundImage: `url(${props.thumbnail})`, backgroundPosition: 'center',
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
                 borderRadius: 10

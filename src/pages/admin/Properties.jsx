@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Form, Container, Row, Modal, Badge, Button, ButtonGroup } from 'react-bootstrap';
+import { Form, Container, Modal, Button, ButtonGroup } from 'react-bootstrap';
 import Sidebar from '../../components/admin/Sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons';
@@ -10,6 +10,10 @@ import { API_URL } from '../../Variables';
 import Cookies from 'js-cookie';
 
 const Properties = () => {
+
+    useEffect(() => {
+        document.title = "Gestion des propriétes - AtypikHouse";
+    }, []);
 
     const [items, setItems] = useState([]);
     const [show, setShow] = useState(false);
@@ -26,8 +30,6 @@ const Properties = () => {
         setData({ id: null, name: null, type: null, isRequired: null, category: null })
         setShow(false);
     }
-    const handleShow = () => setShow(true);
-
 
     useEffect(() => {
         getProperties();
@@ -84,7 +86,7 @@ const Properties = () => {
                 })
                     .then(
                         (result) => {
-                            if (result.status == 204) {
+                            if (result.status === 204) {
                                 message.success('Propriété supprimée avec succès');
                             } else {
                                 message.error('Impossible de supprimer la propriété car il est mentioné dans des annonces publiées');
@@ -105,10 +107,6 @@ const Properties = () => {
                 <FontAwesomeIcon icon={Icons.faEdit} />
             </Button>
         </div>;
-    }
-
-    function statusFormat(status) {
-        return status ? <Badge bg='atypik'>Activée</Badge> : <Badge bg='danger'>Désactivée</Badge>;
     }
 
     const options = {
@@ -193,7 +191,7 @@ const Properties = () => {
                                 <Form.Label>Titre</Form.Label>
                                 <Form.Control type="text" name="name"
                                     value={data['name'] ? data['name'] : null}
-                                    onChange={(e) => setData({ ...data, ['name']: e.target.value })}
+                                    onChange={(e) => setData({ ...data, 'name': e.target.value })}
                                     required />
                             </Form.Group>
                             <Form.Group className="mb-3">

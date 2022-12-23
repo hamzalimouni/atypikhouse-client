@@ -6,7 +6,7 @@ import '../assets/css/navbar.css'
 import bg from '../assets/img/bg.png';
 import { Container, Row, Col, Form, Button, InputGroup, Badge } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCalendar, faCalendarDays, faCoffee, faLocationPin, faPeopleArrows, faPeopleGroup } from '@fortawesome/free-solid-svg-icons'
+import { faCalendarDays, faLocationPin, faPeopleGroup } from '@fortawesome/free-solid-svg-icons'
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import moment from 'moment';
@@ -19,7 +19,7 @@ const { RangePicker } = DatePicker;
 const SearchForm = () => {
     const navigate = useNavigate();
     const disabledDate = (current) => {
-        return current && current < moment().endOf('day');
+        return current && current < moment().startOf('day');
     };
     const [options, setOptions] = useState({
         travelers: 2,

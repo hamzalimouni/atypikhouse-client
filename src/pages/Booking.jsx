@@ -2,32 +2,47 @@ import * as Icons from '@fortawesome/free-solid-svg-icons'
 import * as Brands from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useState, useEffect } from 'react'
-import { Button, Col, Container, Image, Row, Form, FloatingLabel, ButtonGroup } from 'react-bootstrap'
+import { Button as Btn, Col, Container, Image, Row, Form, FloatingLabel } from 'react-bootstrap'
 import AppNavbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import { DatePicker, Badge, Avatar, message, Divider, Skeleton } from 'antd';
+import { DatePicker, Badge, Avatar, Spin, Divider, Skeleton, Tag } from 'antd';
 import Moment from 'moment';
 import { useNavigate, useParams, useLocation, createSearchParams } from "react-router-dom";
-import InputMask from 'react-input-mask';
-import { API_URL } from '../Variables';
+import { API_URL, MEDIA_URL } from '../Variables';
 import notFoundImage from '../assets/img/notfound.svg'
 import Cookies from 'js-cookie'
 import axios from "axios";
+import LoginModal from '../components/LoginModal';
+import { CardCvcElement, CardExpiryElement, CardNumberElement, Elements, useElements, useStripe } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe('pk_test_631m0AfxKfhX0g5eGHVmynE8006o5Rg39s', { locale: 'fr' });
 
 const Paiment = () => {
+
+    useEffect(() => {
+        document.title = "Réserver - AtypikHouse";
+    }, []);
+
+    let stripe, elements;
     const location = useLocation()
     const navigate = useNavigate();
     const params = new URLSearchParams(location.search)
-    const image = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2VzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60";
     const { RangePicker } = DatePicker;
     const { id } = useParams()
+    const [showLogin, setShowLogin] = useState(false);
     const [found, setfound] = useState(true);
     const [houseData, setHouseData] = useState([])
     const [loading, setLoading] = useState(true);
+    const [loadingPayment, setLoadingPayment] = useState(true);
     const [indisponible, setIndisponible] = useState([])
+    const [thumbnail, setThumbnail] = useState([])
+    const [errorMessage, setErrorMessage] = useState(null);
+    const [card, setCard] = useState(null);
     const [cc, setCc] = useState(null)
     const [expiration, setExpiration] = useState(null)
     const [cvv, setCvv] = useState(null)
+    const [stripeClientSecret, setStripeClientSecret] = useState(null)
     const [options, setOptions] = useState({
         house: parseInt(id),
         from: params.get("from") || new Moment(),
@@ -36,12 +51,33 @@ const Paiment = () => {
         total: 0
     })
 
+
     useEffect(() => {
         getHouse()
+
     }, []);
 
     useEffect(() => {
-        setOptions({ ...options, total: houseData.price * Moment(options.to).diff(options.from, 'days') + 15 })
+        if (options.total > 0) {
+            axios({
+                url: API_URL + '/stripe/client_secret',
+                method: "POST",
+                data: JSON.stringify({
+                    amount: Math.round(options.total * 100)
+                }),
+            })
+                .then((result) => {
+                    console.log(result.data)
+                    setStripeClientSecret(result.data.client_secret)
+                    setLoadingPayment(false)
+                })
+                .catch(err => {
+                    console.log(err.response.status)
+                })
+        }
+    }, [options.total])
+
+    useEffect(() => {
         navigate({
             pathname: "/houses/" + id + '/booking',
             search: `?${createSearchParams({
@@ -54,7 +90,7 @@ const Paiment = () => {
 
     const disabledDate = (current) => {
         let index = indisponible.findIndex(date => date === Moment(current).format('YYYY-MM-DD'))
-        return index > -1 && true
+        return (index > -1 && true) || (current && current < Moment().startOf('day'));
     }
 
     const getHouse = async () => {
@@ -72,7 +108,8 @@ const Paiment = () => {
                     data.disponibilities.map((d) => setIndisponible((indisponible) => [...indisponible, Moment(d.date).format('YYYY-MM-DD')]))
                     setHouseData(data)
                     setLoading(false)
-                    setOptions({ ...options, total: houseData.price * Moment(options.to).diff(options.from, 'days') + 15 })
+                    setOptions({ ...options, total: data.price * Moment(options.to).diff(options.from, 'days') + 15 })
+                    setThumbnail(MEDIA_URL + data?.images[0]?.fileName)
                 } else {
                     setfound(false)
                 }
@@ -81,13 +118,55 @@ const Paiment = () => {
     }
 
 
-    async function book() {
+
+    const InitStripe = () => {
+        stripe = useStripe();
+        elements = useElements();
+    }
+
+    const onBookHouse = async (e) => {
+        e.preventDefault();
+
+        if (Cookies.get('user')) {
+
+
+            setLoadingPayment(true)
+
+            if (!stripe || !elements) {
+                setErrorMessage('Une erreur est survenue, veuillez réessayer plus tard.')
+                setLoadingPayment(false)
+                return;
+            }
+            stripe
+                .confirmCardPayment(stripeClientSecret, {
+                    payment_method: {
+                        card: elements?.getElement(CardNumberElement)
+                    }
+                })
+                .then(function (result) {
+                    if (result.error) {
+                        // Show error to your customer
+                        // console.log();
+                        setErrorMessage(result.error.message)
+                    } else {
+                        // The payment succeeded!
+                        bookHouse()
+                    }
+                });
+            setLoadingPayment(false);
+        } else {
+            setShowLogin(true)
+        }
+    }
+
+    async function bookHouse() {
+
         let formData = new FormData();
 
         formData.append('house', options.house)
         formData.append('total', options.total)
-        formData.append('from', options.from)
-        formData.append('to', options.to)
+        formData.append('from', Moment(options.from))
+        formData.append('to', Moment(options.to))
         formData.append('travelers', options.travelers)
 
         return axios({
@@ -98,15 +177,19 @@ const Paiment = () => {
             },
             data: formData,
         })
-            .then((res) => { res.data() })
-            .catch((err) => { });
+            .then((result) => {
+                console.log(result.data);
+                if ('id' in result.data) {
+                    navigate('/account/reservation/' + result.data.id)
+                }
+            })
+            .catch(err => {
+                setErrorMessage('Une erreur est survenue, veuillez nous contacter.')
+            })
+
+
     }
 
-    const bookingButton = async () => {
-        console.log();
-        let bookResult = await book();
-        console.log(bookResult)
-    }
     return (
         <div>
             <AppNavbar />
@@ -133,7 +216,9 @@ const Paiment = () => {
                                             <RangePicker
                                                 disabledDate={disabledDate}
                                                 defaultValue={[Moment(options.from), Moment(options.to)]}
-                                                onChange={(d) => setOptions({ ...options, from: d[0].toDate(), to: d[1].toDate() })}
+                                                onChange={(d) => {
+                                                    setOptions({ ...options, from: d[0].toDate(), to: d[1].toDate(), total: houseData.price * Moment(d[1].toDate()).diff(d[0].toDate(), 'days') + 15 })
+                                                }}
                                                 style={{ border: '1px solid #f0f0f0', padding: 19, borderRadius: 10 }}
                                                 placeholder={["Date d'arrivé", "Date de départ"]}
                                                 suffixIcon=""
@@ -146,19 +231,19 @@ const Paiment = () => {
                                                         Voyageurs
                                                     </span>
                                                     <div className="d-flex justify-content-center align-items-center">
-                                                        <Button variant="atypik" size="sm" style={{ width: "35px" }}
+                                                        <Btn variant="atypik" size="sm" style={{ width: "35px" }}
                                                             onClick={() => {
                                                                 setOptions({ ...options, travelers: options.travelers - 1 })
                                                             }}
-                                                            disabled={options.travelers <= 1}>-</Button>
+                                                            disabled={options.travelers <= 1}>-</Btn>
                                                         <Badge bg="light" text="dark" className='mx-2'>
                                                             {options.travelers}
                                                         </Badge>
-                                                        <Button variant="atypik" size="sm" style={{ width: "35px" }}
+                                                        <Btn variant="atypik" size="sm" style={{ width: "35px" }}
                                                             onClick={() => {
                                                                 setOptions({ ...options, travelers: options.travelers + 1 })
                                                             }}
-                                                            disabled={options.travelers > houseData.nbPerson - 1}>+</Button>
+                                                            disabled={options.travelers > houseData.nbPerson - 1}>+</Btn>
                                                     </div>
                                                 </div>
                                             </div>
@@ -174,7 +259,7 @@ const Paiment = () => {
                                                 MM
                                             </Avatar>
                                             <div className=''>
-                                                <strong className='m-0'>MOUDOU MOHAMMED</strong> · <small>Paris, France</small>
+                                                <strong className='m-0'>{houseData.owner?.firstname + ' ' + houseData.owner?.lastname}</strong> · <small>{houseData.owner?.address?.city + ', ' + houseData.owner?.address?.country}</small>
                                             </div>
                                         </div>
 
@@ -190,79 +275,108 @@ const Paiment = () => {
                                     </div>
 
                                 </div>
-                                <div className="px-5 pb-5">
-                                    <Divider orientation='left'><h3>Paiement</h3></Divider>
-                                    <span className='ms-4 d-flex align-items-center'>
-                                        <FontAwesomeIcon icon={Icons.faLock} color="#cecece" className='me-2' size='1x' />
-                                        Paiement sécurisé avec
-                                        <FontAwesomeIcon icon={Brands.faCcVisa} color="#cecece" className='mx-2' size='2x' />
-                                        <FontAwesomeIcon icon={Brands.faCcMastercard} color="#cecece" className='me-2' size='2x' />
-                                    </span>
-                                    <Col md={6} className='ms-3'>
-                                        <FloatingLabel label="Nom complet" className='my-3'>
-                                            <Form.Control
-                                                type="text"
-                                                placeholder="Titre"
-                                                name="title"
-                                                required />
-                                        </FloatingLabel>
-                                        <InputMask mask="9999-9999-9999-9999" maskChar="_" onChange={(e) => setCc(e.value)}>
-                                            {() =>
-                                                <FloatingLabel label="Numéro de carte" className='my-3'>
-                                                    <Form.Control
-                                                        value={cc}
-                                                        type="text"
-                                                        placeholder="Titre"
-                                                        name="title"
-                                                        required />
-                                                </FloatingLabel>
+                                <form onSubmit={onBookHouse}>
+                                    <div className="px-5 pb-5 text-center">
+                                        <Divider orientation='left'><h3>Paiement</h3></Divider>
+                                        {errorMessage && <Tag color="error" className='p-2 fs-6 mb-3'>{errorMessage}</Tag>}
+                                        <span className='d-flex align-items-center justify-content-center'>
+                                            <FontAwesomeIcon icon={Icons.faLock} color="#cecece" className='me-2' size='1x' />
+                                            Paiement sécurisé avec
+                                            <FontAwesomeIcon icon={Brands.faCcVisa} color="#cecece" className='mx-2' size='2x' />
+                                            <FontAwesomeIcon icon={Brands.faCcMastercard} color="#cecece" className='me-2' size='2x' />
+                                        </span>
+                                        <Spin spinning={loadingPayment}>
+                                            {
+                                                stripeClientSecret && (
+
+                                                    <Col md={6} className='ms-3 mt-3 mx-md-auto'>
+                                                        <Elements stripe={stripePromise} options={{
+                                                            clientSecret: stripeClientSecret,
+                                                        }}>
+                                                            {/* <CardElement onReady={el => setCard(el)} /> */}
+                                                            <CardNumberElement className='form-control py-2' />
+                                                            <Row className='mt-2'>
+                                                                <Col>
+                                                                    <CardExpiryElement className='form-control py-2' />
+                                                                </Col>
+                                                                <Col>
+                                                                    <CardCvcElement className='form-control py-2' />
+                                                                </Col>
+                                                            </Row>
+                                                            <InitStripe />
+                                                        </Elements>
+                                                    </Col>
+                                                )
                                             }
-                                        </InputMask>
-                                        <Row>
-                                            <Col>
-                                                <InputMask mask="99/99" maskChar="_" onChange={(e) => setExpiration(e.value)}>
-                                                    {() =>
-                                                        <FloatingLabel label="Date d'expiration">
-                                                            <Form.Control
-                                                                value={expiration}
-                                                                type="text"
-                                                                placeholder="Titre"
-                                                                name="title"
-                                                                required />
-                                                        </FloatingLabel>
-                                                    }
-                                                </InputMask>
-                                            </Col>
-                                            <Col>
-                                                <InputMask mask="9999" maskChar=" " onChange={(e) => setCvv(e.value)}>
-                                                    {() =>
-                                                        <FloatingLabel label="Cryptogramme">
-                                                            <Form.Control
-                                                                value={cvv}
-                                                                type="text"
-                                                                placeholder="Titre"
-                                                                name="title"
-                                                                required />
-                                                        </FloatingLabel>
-                                                    }
-                                                </InputMask>
-                                            </Col>
-                                        </Row>
-                                    </Col>
-                                </div>
-                                <div className="px-5 pb-5 ">
-                                    {/* <Divider orientation='left'><h3>Confirmation</h3></Divider> */}
-                                    <div className='text-center mt-5'>
-                                        <Button variant='atypik' onClick={() => bookingButton()} className='w-50 mb-3'>Payer et réserver</Button><br />
-                                        <small>En cliquant sur le bouton ci-dessous, j’accepte les conditions générales de vente et
-                                            d’utilisation de AtypikHouse et j’envoie ma demande pour de très belles vacances,
-                                            équitables et responsables !
-                                        </small>
+                                        </Spin>
+
+                                        {/* <Col md={6} className='ms-3'>
+                                            <FloatingLabel label="Nom complet" className='my-3'>
+                                                <Form.Control
+                                                    type="text"
+                                                    placeholder="Titre"
+                                                    name="title"
+                                                    required />
+                                            </FloatingLabel>
+                                            <InputMask mask="9999-9999-9999-9999" maskChar="_" onChange={(e) => setCc(e.value)}>
+                                                {() =>
+                                                    <FloatingLabel label="Numéro de carte" className='my-3'>
+                                                        <Form.Control
+                                                            value={cc}
+                                                            type="text"
+                                                            placeholder="Titre"
+                                                            name="title"
+                                                            required />
+                                                    </FloatingLabel>
+                                                }
+                                            </InputMask>
+                                            <Row>
+                                                <Col>
+                                                    <InputMask mask="99/99" maskChar="_" onChange={(e) => setExpiration(e.value)}>
+                                                        {() =>
+                                                            <FloatingLabel label="Date d'expiration">
+                                                                <Form.Control
+                                                                    value={expiration}
+                                                                    type="text"
+                                                                    placeholder="Titre"
+                                                                    name="title"
+                                                                    required />
+                                                            </FloatingLabel>
+                                                        }
+                                                    </InputMask>
+                                                </Col>
+                                                <Col>
+                                                    <InputMask mask="9999" maskChar=" " onChange={(e) => setCvv(e.value)}>
+                                                        {() =>
+                                                            <FloatingLabel label="Cryptogramme">
+                                                                <Form.Control
+                                                                    value={cvv}
+                                                                    type="text"
+                                                                    placeholder="Titre"
+                                                                    name="title"
+                                                                    required />
+                                                            </FloatingLabel>
+                                                        }
+                                                    </InputMask>
+                                                </Col>
+                                            </Row>
+                                        </Col> */}
                                     </div>
-                                </div>
+                                    <div className="px-5 pb-5 ">
+                                        {/* <Divider orientation='left'><h3>Confirmation</h3></Divider> */}
+                                        <div className='text-center'>
+                                            {/* onClick={() => bookHouse()} */}
+                                            <button disabled={loadingPayment} type='submit' style={{ border: 'none' }} className='w-50 mb-3 btn btn-atypik atypik'>Payer et réserver</button><br />
+                                            <small>En cliquant sur le bouton ci-dessus, j’accepte les conditions générales de vente et
+                                                d’utilisation de AtypikHouse et j’envoie ma demande pour de très belles vacances,
+                                                équitables et responsables !
+                                            </small>
+                                        </div>
+                                    </div>
+                                </form>
                             </Col>
                             <Col sm={12} md={6} lg={4} className='border rounded sticky-top h-100 p-5'>
-                                <img className='img-fluid' width='100%' style={{ height: '100%', borderRadius: 20 }} src={image} alt="" />
+                                <Image src={thumbnail} height={250} width='100%' style={{ objectFit: 'cover', borderRadius: 20 }} />
                                 <h4 className='p-2 text-center'>Title of the reservation house bla okaa</h4>
                                 <Divider />
                                 <div className='d-flex justify-content-between'>
@@ -283,6 +397,7 @@ const Paiment = () => {
                     </Row>
                 }
             </Container>
+            <LoginModal show={showLogin} onClose={() => setShowLogin(false)} />
             <Footer />
         </div>
     )

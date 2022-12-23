@@ -1,23 +1,25 @@
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
-import { Card, Col, Row } from 'react-bootstrap'
+import { Col } from 'react-bootstrap'
 import * as Icons from '@fortawesome/free-solid-svg-icons'
-import { Divider } from 'antd'
-import { useNavigate } from "react-router-dom";
 
 
 const SearchItem = (props) => {
-    const image = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2VzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60";
     return (
-        <div className='border searchItem shadow-sm row mb-3 p-0 rounded' onClick={
+        <div role='button'  className='border searchItem shadow-sm row mb-3 p-0 rounded' onClick={
             () => { window.open('../houses/' + props.id + '?from=' + props.searchOptions.from + '&to=' + props.searchOptions.to + '&travelers=' + props.searchOptions.travelers, '_blank') }
         }>
             <Col lg={5} className="p-0">
-                <img className='img-fluid' width='100%' style={{ height: '100%' }} src={image} alt="" />
+                <div style={{
+                    height: 214, width: '100%', backgroundImage: `url(${props.thumbnail})`, backgroundPosition: 'center',
+                    backgroundSize: 'cover',
+                    backgroundRepeat: 'no-repeat',
+                }}></div>
+                {/* <img className='img-fluid' width='100%' height='214px' style={{ height: '100%' }} src={props.thumbnail} alt="" /> */}
             </Col>
             <Col lg={7}>
-                <div class="d-flex justify-content-between align-items-center mt-3">
+                <div className="d-flex justify-content-between align-items-center mt-3">
                     <h2 className='m-0  searchItemTitle'>{props.title}</h2>
                     <span className="rounded bg-atypik text-white float-right px-2" style={{ width: 'auto' }}>{props.category}</span>
                 </div>

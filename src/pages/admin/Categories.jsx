@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Form, Container, Row, Modal, Badge, Button, ButtonGroup } from 'react-bootstrap';
+import { Form, Container, Modal, Badge, Button, ButtonGroup } from 'react-bootstrap';
 import Sidebar from '../../components/admin/Sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons';
@@ -10,6 +10,10 @@ import { API_URL } from '../../Variables';
 import Cookies from 'js-cookie';
 
 const Categories = () => {
+
+    useEffect(() => {
+        document.title = "Gestion des categories - AtypikHouse";
+    }, []);
 
     const [items, setItems] = useState([]);
     const [show, setShow] = useState(false);
@@ -23,7 +27,6 @@ const Categories = () => {
         setData({ id: null, name: null, status: null })
         setShow(false);
     }
-    const handleShow = () => setShow(true);
 
     const getCategories = () => {
         fetch(API_URL + '/categories')
@@ -65,7 +68,7 @@ const Categories = () => {
                 })
                     .then(
                         (result) => {
-                            if (result.status == 204) {
+                            if (result.status === 204) {
                                 message.success('Catégorie supprimée avec succès');
                             } else {
                                 message.error('Impossible de supprimer la catégorie car elle contient des annonces publiées');
@@ -106,7 +109,7 @@ const Categories = () => {
             id ? 'PATCH' : 'POST',
             {
                 'name': form.name.value,
-                'status': (form.status.value == 'true' ? true : false)
+                'status': (form.status.value === 'true' ? true : false)
             },
             id ? ('/' + id) : '',
             id ? 'application/merge-patch+json' : 'application/json'
@@ -165,7 +168,7 @@ const Categories = () => {
                                 <Form.Label>Titre</Form.Label>
                                 <Form.Control type="text" name="name"
                                     value={data['name'] ? data['name'] : null}
-                                    onChange={(e) => setData({ ...data, ['name']: e.target.value })}
+                                    onChange={(e) => setData({ ...data, 'name': e.target.value })}
                                     required />
                             </Form.Group>
                             <Form.Group className="mb-3">

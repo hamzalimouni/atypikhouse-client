@@ -1,8 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react';
-import { Button, Col, Container, Form, Nav, Row } from 'react-bootstrap'
+import { Button, Col, Container, Form, Row } from 'react-bootstrap'
 import Navbar from '../components/Navbar'
-import { Radio, Space, Tabs } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
@@ -18,9 +17,11 @@ import { Spin } from 'antd';
 import { useNavigate } from "react-router-dom";
 
 const Account = () => {
-    if (!Cookies.get("user")) {
-        window.location.href = "/"
-    }
+
+    useEffect(() => {
+        document.title = "Mon compte - AtypikHouse";
+    }, []);
+
     useEffect(() => {
         document.title = "Mon compte - Atypikhouse"
         fetch(API_URL + '/me', {

@@ -1,5 +1,11 @@
 /*  Fonts   */
-@import url('https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Amatic+SC&family=Poppins&display=swap');
+
+
+* {
+    font-family: 'Poppins', sans-serif;
+}
 
 /* Start Global Rules */
 :root {
@@ -435,4 +441,17 @@
 
 .leaflet-popup-content {
     width: 200px !important;
+}
+
+.ant-image-mask {
+    z-index: 1 !important;
+}
+
+.dropdown-menu {
+    z-index: 9999 !important;
+}
+
+.conversation:focus {
+    background: white !important;
+    padding-left: 10px;
 }

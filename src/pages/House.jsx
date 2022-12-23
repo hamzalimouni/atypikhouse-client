@@ -1,4 +1,4 @@
-import { faBed, faDoorOpen, faLocationDot, faPerson, faRuler, faShower, faSquare, faStar, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faLocationDot, faStar, } from '@fortawesome/free-solid-svg-icons'
 import * as Icons from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useState, useEffect } from 'react'
@@ -9,11 +9,11 @@ import CommentCard from '../components/CommentCard'
 import HouseImages from '../components/HouseImages'
 import { useNavigate, useLocation, createSearchParams } from "react-router-dom";
 import { Avatar, Divider, Rate } from 'antd';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import { DatePicker, Badge, Skeleton, message, Popconfirm } from 'antd';
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import { DatePicker, Badge, Skeleton, message, Popconfirm, Tag, Modal } from 'antd';
 import Moment from 'moment';
 import { useParams } from "react-router-dom";
-import { API_URL } from '../Variables';
+import { API_URL, MEDIA_URL } from '../Variables';
 import notFoundImage from '../assets/img/notfound.svg'
 import Cookies from 'js-cookie';
 
@@ -23,16 +23,20 @@ const House = () => {
   let curUser = JSON.parse(Cookies.get('user') || null);
   const { RangePicker } = DatePicker;
   const { id } = useParams()
-  const [travelers, setTravelers] = useState(1);
-  const [days, setDays] = useState(1);
   const [found, setfound] = useState(true);
   const [houseData, setHouseData] = useState([])
+  const [myReservation, setMyReservation] = useState([])
+  const [isMine, setIsMine] = useState(false)
+  const [sending, setSending] = useState(false)
   const [loading, setLoading] = useState(true);
   const [images, setImages] = useState([])
   const [houseParams, setHouseParams] = useState([])
   const [indisponible, setIndisponible] = useState([])
   const [rating, setRating] = useState(3)
   const [ratingAvg, setRatingAvg] = useState(3)
+  const [openMessage, setOpenMessage] = useState(false);
+  const [sendingMessage, setSendingMessage] = useState(false);
+  const [messageContent, setMessageContent] = useState('');
   const [options, setOptions] = useState({
     from: params.get("from") || new Moment(),
     to: params.get("to") || new Moment().add(1, 'days'),
@@ -40,10 +44,10 @@ const House = () => {
   })
 
   const navigate = useNavigate();
+
   useEffect(() => {
     getHouse()
     getHouseParams()
-    console.log(options.from)
   }, []);
 
   useEffect(() => {
@@ -59,19 +63,26 @@ const House = () => {
 
   const getHouse = async () => {
     setLoading(true)
-    await fetch(API_URL + '/houses/' + id)
+    await fetch(API_URL + '/houses/' + id, Cookies.get("token") && {
+      headers: { 'Authorization': 'bearer ' + Cookies.get("token") }
+    })
       .then(response => {
         if (response.ok) {
           return response.json()
         } else if (response.status === 404) {
           return Promise.reject(404)
+        } else if (response.status === 403) {
+          return Promise.reject(403)
         }
       })
       .then(data => {
-        if (data.status == "APPROVED" || curUser?.roles.indexOf('ROLE_ADMIN') > -1) {
+        if (data?.status == "APPROVED" ||
+          curUser?.roles.indexOf('ROLE_ADMIN') > -1 ||
+          curUser?.id == data.owner.id
+        ) {
           const ig = []
           data.images.map((i) => {
-            ig.push({ image: i.filePath + '\\' + i.fileName })
+            ig.push({ image: MEDIA_URL + i.fileName })
           })
           data.disponibilities.map((d) => setIndisponible((indisponible) => [...indisponible, Moment(d.date).format('YYYY-MM-DD')]))
           let ravg = 0;
@@ -80,11 +91,14 @@ const House = () => {
           setImages(ig)
           setHouseData(data)
           setLoading(false)
+          setMyReservation(data.reservations.find(r => r.user.id === curUser?.id))
+          setIsMine(curUser?.id == data.owner.id)
+          document.title = data.title + " - AtypikHouse";
         } else {
           setfound(false)
         }
       })
-      .catch(error => { console.log(error); setfound(false) });
+      .catch(error => { console.log("AWDI RAH ERROR " + error); setfound(false) });
   }
 
   const getHouseParams = async () => {
@@ -107,9 +121,38 @@ const House = () => {
   //   setDays(Moment(dates[1]).diff(dates[0], 'days'))
   // }
 
+  //   const disabledDate = (current) => {
+  //     return current && current < moment().startOf('day');
+  // };
+
+  const sendMessage = async () => {
+    setSending(true)
+    await fetch(API_URL + '/messages', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'bearer ' + Cookies.get("token"),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ receiver: houseData?.owner, content: messageContent })
+    })
+      .then(data => data.json())
+      .then(res => {
+        if (res.content) {
+          message.success("Message envoyé avec success")
+          setOpenMessage(false)
+          setMessageContent('')
+          setSending(false)
+        } else {
+          message.error("Une erreur s'est produite, merci de ressayer")
+          setSending(false)
+        }
+      })
+      .catch(error => { console.log(error); });
+  }
+
   const disabledDate = (current) => {
     let index = indisponible.findIndex(date => date === Moment(current).format('YYYY-MM-DD'))
-    return index > -1 && true
+    return (index > -1 && true) || (current && current < Moment().startOf('day'));
   }
 
   async function changeStatus(status) {
@@ -207,12 +250,29 @@ const House = () => {
             </Container> : null
           }
 
+          {isMine ?
+            <Container className='text-center pt-4'>
+              {houseData.status == 'REJECTED' ?
+                <Tag color="error" className='p-2 my-3'><strong>Votre annonce est réfusée par notre equipe de révision</strong>, vous êtes le seul à pouvoir voir cette page</Tag>
+                : houseData.status == 'UNDER_REVIEW' ?
+                  <Tag color="warning" className='p-2 my-3'><strong>Votre annonce est en cours de révision</strong>, vous êtes le seul à pouvoir voir cette page</Tag>
+                  : null
+              }
+            </Container>
+            : null
+          }
           <div className="py-4">
             <Container className='text-center'>
               {loading ?
                 <Skeleton.Image className="mx-auto" active style={{ width: 1000, height: 450, maxWidth: '100%' }} />
                 :
-                <HouseImages images={images} loading={loading} />
+                <>
+                  {myReservation ?
+                    <Tag color="success" className='p-2 my-3'>Vous avez déja réservé cette habitat <strong role='button' onClick={() => navigate('/account/reservations')}>voir mes réservation</strong></Tag>
+                    : null
+                  }
+                  <HouseImages images={images} loading={loading} />
+                </>
               }
             </Container >
           </div >
@@ -237,7 +297,7 @@ const House = () => {
                         {houseData.owner?.firstname.charAt(0) + houseData.owner?.lastname.charAt(0)}
                       </Avatar>
                       <span className='ps-2'>Publiée par <strong className='text-weight-bold'>{houseData.owner?.firstname + ' ' + houseData.owner?.lastname}</strong></span>
-                      <Button size={'sm'} className='ms-3' variant="atypik">Envoyer un message</Button>
+                      <Button size={'sm'} onClick={() => setOpenMessage(true)} disabled={!Cookies.get('user')} className='ms-3' variant="atypik">Envoyer un message</Button>
                     </div>
                     <Divider />
                     <div className='d-flex justify-content-around'>
@@ -310,7 +370,7 @@ const House = () => {
                     <h4>Les avis ({houseData.reviews?.length} avis)</h4>
                     <Divider className='mt-0' />
 
-                    {Cookies.get('user') ?
+                    {Cookies.get('user') && myReservation && Moment().diff(myReservation.fromDate, 'days') >= 0 && myReservation.status != 'CANCELED' ?
                       <>
                         <Row>
                           <Form className="d-flex" onSubmit={onReviewSubmit}>
@@ -331,11 +391,12 @@ const House = () => {
                       {
                         houseData.reviews?.sort((a, b) => (b.id - a.id)).map((r) => {
                           return <CommentCard
+                            key={r.id}
                             id={(curUser?.id === r.user.id) || curUser?.roles.indexOf('ROLE_ADMIN') > -1 ? r.id : null}
                             reload={getHouse}
                             user={r.user.firstname + ' ' + r.user.lastname}
                             comment={r.comment}
-                            date={Moment(r.createdAt).format("DD/MM/YYYY")}
+                            date={Moment(r.createdAt).fromNow()}
                             rating={r.grade}
                           />
                         })
@@ -345,7 +406,7 @@ const House = () => {
                 </Skeleton>
 
               </Col>
-              <Col sm={12} md={12} xs={{ order: 'first' }} lg={{ span: 4, order: 'last' }} className='shadow-sm sticky-top rounded h-100 p-4 mb-5'>
+              <Col sm={12} md={12} xs={{ order: 'first' }} lg={{ span: 4, order: 'last' }} className='shadow-sm sticky-top rounded h-100 p-4 mb-5' style={{ zIndex: 0 }}>
                 <Skeleton loading={loading} paragraph={{ rows: 10 }} active >
                   <div className='d-flex justify-content-between align-items-center'>
                     <span><strong style={{ fontSize: '1.6em' }}>{houseData.price}€ </strong>/ nuit</span>
@@ -416,6 +477,26 @@ const House = () => {
           </Container>
         </>
       }
+      <Modal
+        title="Envoyer un message"
+        open={openMessage}
+        onOk={() => { setSendingMessage(true) }}
+        confirmLoading={sendingMessage}
+        footer={
+          <Button size='sm' variant='atypik' onClick={sendMessage} disabled={messageContent == '' || sending}>Envoyer</Button>
+        }
+        onCancel={() => setOpenMessage(false)}>
+        <FloatingLabel label="Message" className='w-100 pe-2'>
+          <Form.Control
+            as="textarea"
+            name="message"
+            value={messageContent}
+            onChange={(e) => setMessageContent(e.target.value)}
+            placeholder="message"
+            style={{ height: '200px' }}
+            required />
+        </FloatingLabel>
+      </Modal>
       <Footer />
     </div >
   )

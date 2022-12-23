@@ -1,9 +1,14 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import Footer from '../components/Footer'
 import AppNavbar from '../components/Navbar'
 
 const ConditionGeneral = () => {
+
+    useEffect(() => {
+        document.title = "Conditions générales d'utilisation et de vente - AtypikHouse";
+    }, []);
+
     return (
         <div>
             <AppNavbar />

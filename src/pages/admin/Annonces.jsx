@@ -1,5 +1,5 @@
-import React, { Fragment, useState, useEffect } from 'react'
-import { Col, Container, Row, Dropdown, Badge, Button, ButtonGroup } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react'
+import { Container, Dropdown, Badge, Button, ButtonGroup } from 'react-bootstrap';
 import Sidebar from '../../components/admin/Sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons';
@@ -10,6 +10,10 @@ import Cookies from 'js-cookie'
 import { API_URL } from '../../Variables';
 
 const Annonces = () => {
+    useEffect(() => {
+        document.title = "Gestion des annonces - AtypikHouse";
+    }, []);
+
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const myButton = () => {
@@ -61,7 +65,7 @@ const Annonces = () => {
                 })
                     .then(
                         (result) => {
-                            if (result.status == 204) {
+                            if (result.status === 204) {
                                 message.success('Annonce supprimée avec succès');
                             } else {
                                 message.error('Impossible de supprimer l\'annonce');
@@ -84,8 +88,10 @@ const Annonces = () => {
     }
 
     function statusFormat(status) {
-        return <Badge bg={status == 'APPROVED' ? 'atypik' : (status == "REJECTED" ? "danger" : "primary")}>{status}</Badge>;
+        return <Badge bg={status === 'APPROVED' ? 'atypik' : (status === "REJECTED" ? "danger" : "primary")}>{status}</Badge>;
     }
+
+
 
     const options = {
         btnGroup: myButton

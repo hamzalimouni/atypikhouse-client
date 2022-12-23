@@ -4,7 +4,7 @@ import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
 import { Divider, Steps, message, Spin } from 'antd';
 import countries from "i18n-iso-countries";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import 'leaflet/dist/leaflet.css';
 import { Calendar } from "react-multi-date-picker"
@@ -23,16 +23,20 @@ const { Step } = Steps;
 
 const NewHouse = () => {
 
+    useEffect(() => {
+        document.title = "Publier une annonce - AtypikHouse";
+    }, [])
+
     let navigate = useNavigate();
     const provider = new OpenStreetMapProvider();
 
     countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
 
     const getMapAdress = async () => {
-        // let result = await provider.search({ query: address.address + ', ' + address.city + ', ' + address.zipcode + ', ' + address.country });
-        // if (result.length > 0) {
-        //     setAddress({ ...address, latitude: result[0].y, longitude: result[0].x })
-        // }
+        let result = await provider.search({ query: address.address + ', ' + address.city + ', ' + address.zipcode + ', ' + address.country });
+        if (result.length > 0) {
+            setAddress({ ...address, latitude: result[0].y, longitude: result[0].x })
+        }
     }
 
     const [disabled, setDisabled] = useState(true);
@@ -82,22 +86,22 @@ const NewHouse = () => {
     }
 
     useEffect(() => {
-        verifyValidity();
-        console.log(imageFiles)
         propsData.map((p) => {
             if (p.isRequired) {
                 if (properties[p.id] === undefined) {
                     return setIsValid((isValid) => ({ ...isValid, [p.id]: false }))
                 }
             }
+            return null
         });
-    }, [images, data, current, address, properties, equipments, disponibilities]);
+        verifyValidity();
+    }, [images, data, current, address, properties, equipments, disponibilities, propsData, ]);
 
     const onInputDataChange = e => {
         const { name, value } = e.currentTarget
         setValidAndInvalid(e);
         setData({ ...data, [name]: value })
-        if (name == "category") {
+        if (name === "category") {
             getProperties(value);
         }
         verifyValidity();
@@ -113,7 +117,7 @@ const NewHouse = () => {
     const onInputPropsChange = e => {
         const { name, value, checked, type } = e.currentTarget
         setValidAndInvalid(e);
-        setProperties({ ...properties, [name]: type == "checkbox" ? checked : value })
+        setProperties({ ...properties, [name]: type === "checkbox" ? checked : value })
         verifyValidity();
     }
 
@@ -128,14 +132,13 @@ const NewHouse = () => {
     const onDisponibilitiesChange = e => {
         setCalendar(e)
         let dates = []
-        e.map((d) => {
-            dates.push(d.toDate())
-        })
+        e.map((d) => dates.push(d.toDate()))
+
         setDisponibilities(dates)
     }
 
     const setValidAndInvalid = e => {
-        const { name, value } = e.currentTarget
+        const { name } = e.currentTarget
         let isv = e.currentTarget.checkValidity();
         setIsInvalid({ ...isInvalid, [name]: isv ? false : true })
         setIsValid(prev => {
@@ -146,20 +149,20 @@ const NewHouse = () => {
     }
 
     const verifyValidity = () => {
-        if (current == 0) {
+        if (current === 0) {
             setDisabled(isValid.category && isValid.title && isValid.description && isValid.price ? false : true)
         }
-        if (current == 1) {
+        if (current === 1) {
             setDisabled(isValid.address && isValid.city && isValid.zipcode ? false : true)
             if (!disabled) {
                 getMapAdress();
             }
         }
-        if (current == 2) {
-            let isV = propsData.map((p) => { return p.isRequired ? isValid[p.id] : null }).filter(i => i === false).length == 0;
+        if (current === 2) {
+            let isV = propsData.map((p) => { return p.isRequired ? isValid[p.id] : null }).filter(i => i === false).length === 0;
             setDisabled(isV && isValid.surface && isValid.nbPerson && isValid.rooms && isValid.beds ? false : true)
         }
-        if (current == 5) {
+        if (current === 5) {
             setDisabled(images.length > 0 ? false : true)
         }
     }
@@ -411,7 +414,7 @@ const NewHouse = () => {
             </FloatingLabel>
             {
                 propsData.map((p) => {
-                    return p.type == "bool" ?
+                    return p.type === "bool" ?
                         <Form.Check
                             style={{ fontSize: '1.2rem' }}
                             name={p.id}
@@ -558,7 +561,7 @@ const NewHouse = () => {
     const next = () => {
         setCurrent(current + 1);
         setDisabled(true);
-        if (current == 2 || current == 3) {
+        if (current === 2 || current === 3) {
             setDisabled(false)
         }
     };
@@ -570,7 +573,6 @@ const NewHouse = () => {
 
     const handleSubmit = async (event) => {
         setSpining(true);
-        const form = event.currentTarget;
 
         event.preventDefault();
         event.stopPropagation();
