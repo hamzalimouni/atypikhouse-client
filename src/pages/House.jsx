@@ -84,6 +84,7 @@ const House = () => {
           data.images.map((i) => {
             ig.push({ image: MEDIA_URL + i.fileName })
           })
+          setIndisponible([]);
           data.disponibilities.map((d) => setIndisponible((indisponible) => [...indisponible, Moment(d.date).format('YYYY-MM-DD')]))
           let ravg = 0;
           data.reviews?.map((r) => ravg += r.grade / data.reviews.length)
@@ -94,6 +95,15 @@ const House = () => {
           setMyReservation(data.reservations.find(r => r.user.id === curUser?.id))
           setIsMine(curUser?.id == data.owner.id)
           document.title = data.title + " - AtypikHouse";
+          let reservedDates = [];
+          data.reservations.map((r) => {
+            if (Moment(r.fromDate).isSameOrAfter(Moment())) {
+              for (var m = Moment(r.fromDate); m.isBefore(r.toDate); m.add(1, 'days')) {
+                reservedDates.push(m.format('YYYY-MM-DD'));
+              }
+            }
+          })
+          reservedDates.map((d) => setIndisponible((indisponible) => [...indisponible, d]))
         } else {
           setfound(false)
         }
@@ -461,15 +471,27 @@ const House = () => {
                     <strong>Total:</strong>
                     <strong>{houseData.price * Moment(options.to).diff(options.from, 'days') + 15} €</strong>
                   </div>
-                  <Button onClick={() =>
-                    navigate({
-                      pathname: "/houses/" + id + '/booking',
-                      search: `?${createSearchParams({
-                        from: Moment(options.from).format('MM/DD/YYYY'),
-                        to: Moment(options.to).format('MM/DD/YYYY'),
-                        travelers: options.travelers,
-                      })}`
+                  <Button onClick={() => {
+                    let isDispo = true;
+                    indisponible.map((i) => {
+                      if (Moment(i).isBetween(Moment(options.from).format('MM/DD/YYYY'), Moment(options.to).format('MM/DD/YYYY'))) {
+                        isDispo = false;
+                        return;
+                      }
                     })
+                    if (isDispo) {
+                      navigate({
+                        pathname: "/houses/" + id + '/booking',
+                        search: `?${createSearchParams({
+                          from: Moment(options.from).format('MM/DD/YYYY'),
+                          to: Moment(options.to).format('MM/DD/YYYY'),
+                          travelers: options.travelers,
+                        })}`
+                      })
+                    } else {
+                      message.error("L'habitat n'est pas disponible aux dates sélectionnées.");
+                    }
+                  }
                   } variant="atypik" className='w-100 mt-5'>Réserver</Button>
                 </Skeleton>
               </Col>

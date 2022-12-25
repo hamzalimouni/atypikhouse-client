@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react'
 import { Button as Btn, Col, Container, Image, Row, Form, FloatingLabel } from 'react-bootstrap'
 import AppNavbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import { DatePicker, Badge, Avatar, Spin, Divider, Skeleton, Tag } from 'antd';
+import { DatePicker, Badge, Avatar, Spin, Divider, Skeleton, Tag, message } from 'antd';
 import Moment from 'moment';
 import { useNavigate, useParams, useLocation, createSearchParams } from "react-router-dom";
 import { API_URL, MEDIA_URL } from '../Variables';
@@ -38,10 +38,7 @@ const Paiment = () => {
     const [indisponible, setIndisponible] = useState([])
     const [thumbnail, setThumbnail] = useState([])
     const [errorMessage, setErrorMessage] = useState(null);
-    const [card, setCard] = useState(null);
-    const [cc, setCc] = useState(null)
-    const [expiration, setExpiration] = useState(null)
-    const [cvv, setCvv] = useState(null)
+    const [messageContent, setMessageContent] = useState(null);
     const [stripeClientSecret, setStripeClientSecret] = useState(null)
     const [options, setOptions] = useState({
         house: parseInt(id),
@@ -110,6 +107,15 @@ const Paiment = () => {
                     setLoading(false)
                     setOptions({ ...options, total: data.price * Moment(options.to).diff(options.from, 'days') + 15 })
                     setThumbnail(MEDIA_URL + data?.images[0]?.fileName)
+                    let reservedDates = [];
+                    data.reservations.map((r) => {
+                        if (Moment(r.fromDate).isSameOrAfter(Moment())) {
+                            for (var m = Moment(r.fromDate); m.isBefore(r.toDate); m.add(1, 'days')) {
+                                reservedDates.push(m.format('YYYY-MM-DD'));
+                            }
+                        }
+                    })
+                    reservedDates.map((d) => setIndisponible((indisponible) => [...indisponible, d]))
                 } else {
                     setfound(false)
                 }
@@ -129,31 +135,44 @@ const Paiment = () => {
 
         if (Cookies.get('user')) {
 
+            let isDispo = true;
+            indisponible.map((i) => {
+                if (Moment(i).isBetween(Moment(options.from).format('MM/DD/YYYY'), Moment(options.to).format('MM/DD/YYYY'))) {
+                    isDispo = false;
+                    return;
+                }
+            })
+            if (isDispo) {
+                setLoadingPayment(true)
 
-            setLoadingPayment(true)
-
-            if (!stripe || !elements) {
-                setErrorMessage('Une erreur est survenue, veuillez réessayer plus tard.')
-                setLoadingPayment(false)
-                return;
+                if (!stripe || !elements) {
+                    setErrorMessage('Une erreur est survenue, veuillez réessayer plus tard.')
+                    setLoadingPayment(false)
+                    return;
+                }
+                stripe
+                    .confirmCardPayment(stripeClientSecret, {
+                        payment_method: {
+                            card: elements?.getElement(CardNumberElement)
+                        }
+                    })
+                    .then(function (result) {
+                        if (result.error) {
+                            // Show error to your customer
+                            // console.log();
+                            setErrorMessage(result.error.message)
+                        } else {
+                            // The payment succeeded!
+                            bookHouse()
+                        }
+                    });
+                setLoadingPayment(false);
+            } else {
+                setErrorMessage('L\'habitat n\'est pas disponible aux dates sélectionnées.')
             }
-            stripe
-                .confirmCardPayment(stripeClientSecret, {
-                    payment_method: {
-                        card: elements?.getElement(CardNumberElement)
-                    }
-                })
-                .then(function (result) {
-                    if (result.error) {
-                        // Show error to your customer
-                        // console.log();
-                        setErrorMessage(result.error.message)
-                    } else {
-                        // The payment succeeded!
-                        bookHouse()
-                    }
-                });
-            setLoadingPayment(false);
+
+
+
         } else {
             setShowLogin(true)
         }
@@ -178,10 +197,30 @@ const Paiment = () => {
             data: formData,
         })
             .then((result) => {
-                console.log(result.data);
-                if ('id' in result.data) {
-                    navigate('/account/reservation/' + result.data.id)
-                }
+                fetch(API_URL + '/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'bearer ' + Cookies.get("token"),
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        receiver: { id: houseData.owner.id },
+                        content: messageContent
+                    })
+                })
+                    .then(data => data.json())
+                    .then(res => {
+                        if ('id' in result.data) {
+                            navigate('/account/reservation/' + result.data.id)
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        if ('id' in result.data) {
+                            navigate('/account/reservation/' + result.data.id)
+                        }
+                    });
+
             })
             .catch(err => {
                 setErrorMessage('Une erreur est survenue, veuillez nous contacter.')
@@ -253,13 +292,13 @@ const Paiment = () => {
                                 <div className="px-5 pb-5 ">
                                     <Divider orientation='left'><h3>Message</h3></Divider>
                                     <div className='ms-3'>
-                                        <p className=''>N’hésitez pas à dire un mot à { } au sujet de votre réservation.</p>
+                                        <p className=''>N’hésitez pas à dire un mot à l'hébergeur au sujet de votre réservation.</p>
                                         <div className='d-flex align-items-center'>
                                             <Avatar style={{ backgroundColor: '#F97316', verticalAlign: 'middle' }} size="large" className='me-2'>
-                                                MM
+                                                {houseData.owner?.firstname.charAt(0) + houseData.owner?.lastname.charAt(0)}
                                             </Avatar>
                                             <div className=''>
-                                                <strong className='m-0'>{houseData.owner?.firstname + ' ' + houseData.owner?.lastname}</strong> · <small>{houseData.owner?.address?.city + ', ' + houseData.owner?.address?.country}</small>
+                                                <strong className='m-0'>{houseData.owner?.firstname + ' ' + houseData.owner?.lastname}</strong> · <small>{houseData.owner?.address && (houseData.owner?.address?.city + ', ' + houseData.owner?.address?.country)}</small>
                                             </div>
                                         </div>
 
@@ -267,6 +306,8 @@ const Paiment = () => {
                                             <Form.Control
                                                 as="textarea"
                                                 placeholder="Votre message"
+                                                onChange={(e) => setMessageContent(e.target.value)}
+                                                value={messageContent}
                                                 name="message"
                                                 style={{ height: '150px' }}
                                                 required
@@ -377,7 +418,7 @@ const Paiment = () => {
                             </Col>
                             <Col sm={12} md={6} lg={4} className='border rounded sticky-top h-100 p-5'>
                                 <Image src={thumbnail} height={250} width='100%' style={{ objectFit: 'cover', borderRadius: 20 }} />
-                                <h4 className='p-2 text-center'>Title of the reservation house bla okaa</h4>
+                                <h4 className='p-2 text-center'>{houseData.title}</h4>
                                 <Divider />
                                 <div className='d-flex justify-content-between'>
                                     <span>{houseData.price} € x {Moment(options.to).diff(options.from, 'days')} nuit :</span>

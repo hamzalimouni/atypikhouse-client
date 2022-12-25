@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import 'antd/dist/antd.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/css/main.css'
@@ -10,9 +10,9 @@ import { faCalendarDays, faLocationPin, faPeopleGroup } from '@fortawesome/free-
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import moment from 'moment';
-import { DatePicker, Popover } from 'antd';
+import { DatePicker, Popover, AutoComplete } from 'antd';
 import { createSearchParams, useNavigate } from "react-router-dom";
-
+import { API_URL } from '../Variables';
 
 const { RangePicker } = DatePicker;
 
@@ -26,10 +26,36 @@ const SearchForm = () => {
         rooms: 1
     });
     const [destination, setDestination] = useState("");
+    const [destinationOptions, setDestinationOptions] = useState([]);
     const [dates, setDates] = useState({
         from: new Date(),
         to: moment(new Date()).add(1, 'days')
     });
+
+    useEffect(() => {
+        console.log(destinationOptions);
+    }, [destinationOptions])
+
+
+    useEffect(() => {
+        fetch(API_URL + '/search')
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    setDestinationOptions([]);
+                    let filteredArray = result.filter((v, i, a) => a.findIndex(t => (JSON.stringify(t) === JSON.stringify(v))) === i);
+                    filteredArray.map((a) => {
+                        // setDestinationOptions(...destinationOptions, [])
+                        setDestinationOptions(destinationOptions => [...destinationOptions, { value: a.city + ', ' + a.country }]);
+
+                    })
+                },
+                (error) => {
+                    console.log(error)
+                }
+            )
+    }, []);
+
 
     const handleOptions = (name, operation) => {
         setOptions(prev => {
@@ -38,6 +64,8 @@ const SearchForm = () => {
             }
         })
     };
+
+
     const handleSearch = () => {
         navigate({
             pathname: "/houses",
@@ -65,8 +93,17 @@ const SearchForm = () => {
                     <Col lg className='py-2'>
                         <InputGroup className='atypik-input'>
                             <InputGroup.Text className='icon'><FontAwesomeIcon icon={faLocationPin} /></InputGroup.Text>
-                            <Form.Control className='input'
+                            {/* <Form.Control className='input'
                                 placeholder="Destination" onChange={(e) => setDestination(e.target.value)}
+                            /> */}
+                            <AutoComplete
+                                className='form-control input border-0 pt-1'
+                                options={destinationOptions}
+                                onSelect={(e) => setDestination(e)}
+                                filterOption={(inputValue, option) =>
+                                    option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                                }
+                                placeholder="Destination"
                             />
                         </InputGroup>
                     </Col>

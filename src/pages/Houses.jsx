@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { Badge, Button, Col, Container, Form, InputGroup, Row } from 'react-bootstrap'
 import AppNavbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import { DatePicker, Popover, Skeleton } from 'antd';
+import { DatePicker, Popover, Skeleton, AutoComplete } from 'antd';
 import SearchItem from '../components/SearchItem'
 import * as Icons from '@fortawesome/free-solid-svg-icons'
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
@@ -33,6 +33,7 @@ const Houses = () => {
   const [houses, setHouses] = useState([])
   const [nbHouses, setNbHouses] = useState(0)
   const [loading, setLoading] = useState(true);
+  const [destinationOptions, setDestinationOptions] = useState([]);
 
   const handleOptions = (name, operation) => {
     setOptions(prev => {
@@ -44,11 +45,28 @@ const Houses = () => {
 
   useEffect(() => {
     getHouses()
+    fetch(API_URL + '/search')
+      .then(res => res.json())
+      .then(
+        (result) => {
+          setDestinationOptions([]);
+          let filteredArray = result.filter((v, i, a) => a.findIndex(t => (JSON.stringify(t) === JSON.stringify(v))) === i);
+          filteredArray.map((a) => {
+            // setDestinationOptions(...destinationOptions, [])
+            setDestinationOptions(destinationOptions => [...destinationOptions, { value: a.city + ', ' + a.country }]);
+
+          })
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
   }, []);
 
   const getHouses = async () => {
+    let adrQuery = destination != "" ? "&address.city=" + destination.split(', ')[0] + "&address.country=" + destination.split(', ')[1] : '';
     await fetch(API_URL + "/houses?rooms[gte]=" + options.rooms +
-      "&nbPerson[gte]=" + options.travelers +
+      `${adrQuery}&nbPerson[gte]=` + options.travelers +
       "&status=APPROVED" +
       "&order[createdAt]=DESC")
       .then(response => {
@@ -94,10 +112,22 @@ const Houses = () => {
                   <Col className="py-1">
                     <InputGroup className='atypik-input'>
                       <InputGroup.Text className='icon'><FontAwesomeIcon icon={Icons.faLocationPin} /></InputGroup.Text>
-                      <Form.Control className='input'
+                      {/* <Form.Control className='input'
                         placeholder="Destination"
                         value={destination}
                         onChange={(d) => setDestination(d.target.value)}
+                      /> */}
+
+                      <AutoComplete
+                        className='form-control input border-0'
+                        options={destinationOptions}
+                        value={destination}
+                        onSelect={(e) => setDestination(e)}
+                        onChange={(e) => setDestination(e)}
+                        filterOption={(inputValue, option) =>
+                          option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                        }
+                        placeholder="Destination"
                       />
                     </InputGroup>
                   </Col>
