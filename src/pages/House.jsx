@@ -143,7 +143,7 @@ const House = () => {
         'Authorization': 'bearer ' + Cookies.get("token"),
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ receiver: houseData?.owner, content: messageContent })
+      body: JSON.stringify({ receiver: { id: houseData?.owner?.id }, content: messageContent })
     })
       .then(data => data.json())
       .then(res => {

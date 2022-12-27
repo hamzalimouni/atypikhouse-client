@@ -33,11 +33,6 @@ const SearchForm = () => {
     });
 
     useEffect(() => {
-        console.log(destinationOptions);
-    }, [destinationOptions])
-
-
-    useEffect(() => {
         fetch(API_URL + '/search')
             .then(res => res.json())
             .then(
@@ -89,7 +84,7 @@ const SearchForm = () => {
                 <Row className="align-items-center">
                     <h1 className='sbTitle'>Quelle sera votre prochaine destination ?</h1>
                 </Row>
-                <Row className="align-items-center my-5">
+                <Row className="align-items-center my-5 bg-white p-2 rounded">
                     <Col lg className='py-2'>
                         <InputGroup className='atypik-input'>
                             <InputGroup.Text className='icon'><FontAwesomeIcon icon={faLocationPin} /></InputGroup.Text>
@@ -97,7 +92,7 @@ const SearchForm = () => {
                                 placeholder="Destination" onChange={(e) => setDestination(e.target.value)}
                             /> */}
                             <AutoComplete
-                                className='form-control input border-0 pt-1'
+                                className='form-control input border-0'
                                 options={destinationOptions}
                                 onSelect={(e) => setDestination(e)}
                                 filterOption={(inputValue, option) =>

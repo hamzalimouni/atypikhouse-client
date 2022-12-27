@@ -40,7 +40,7 @@ const Annonces = () => {
                     <Skeleton loading={loading} paragraph={{ rows: 10 }} active >
                         {houses.length > 0 ? houses.map((h) => {
                             return <Row className='mt-5 border shadow-sm p-sm-3 mx-0' >
-                                <Row className='mx-auto text-center'>
+                                <Row className='mx-auto text-center mb-2'>
                                     {h.status == "UNDER_REVIEW" ? <Badge status="processing" text={<small><strong>En cours de révision</strong></small>} color={'#aeaeae'} />
                                         : h.status == "APPROVED" ? <Badge status="processing" text={<small><strong>Annonce approvée</strong></small>
                                         } color={'#4caf50'} />
@@ -52,7 +52,7 @@ const Annonces = () => {
                                 </Col>
                                 <Col sm={8} role='button' onClick={() => window.open('../houses/' + h.id, '_blank')}>
                                     <h5 className='m-0'>{h.title}</h5>
-                                    <small>{h.description}</small>
+                                    <small className='annonceDescription mt-2'>{h.description}</small>
                                     <div className='d-flex'>
                                         <div className='p-3'>
                                             <FontAwesomeIcon icon={Icons.faEuro} color="#8ed081" /> <small>{h.price}</small>

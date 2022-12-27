@@ -143,6 +143,7 @@ const Paiment = () => {
                 }
             })
             if (isDispo) {
+                console.log("PAYMENT...")
                 setLoadingPayment(true)
 
                 if (!stripe || !elements) {
@@ -161,12 +162,13 @@ const Paiment = () => {
                             // Show error to your customer
                             // console.log();
                             setErrorMessage(result.error.message)
+                            setLoadingPayment(false);
                         } else {
                             // The payment succeeded!
                             bookHouse()
                         }
                     });
-                setLoadingPayment(false);
+                
             } else {
                 setErrorMessage('L\'habitat n\'est pas disponible aux dates sélectionnées.')
             }
@@ -197,33 +199,37 @@ const Paiment = () => {
             data: formData,
         })
             .then((result) => {
-                fetch(API_URL + '/messages', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': 'bearer ' + Cookies.get("token"),
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        receiver: { id: houseData.owner.id },
-                        content: messageContent
+                if (messageContent) {
+                    fetch(API_URL + '/messages', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': 'bearer ' + Cookies.get("token"),
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            receiver: { id: houseData.owner.id },
+                            content: messageContent
+                        })
                     })
-                })
-                    .then(data => data.json())
-                    .then(res => {
-                        if ('id' in result.data) {
-                            navigate('/account/reservation/' + result.data.id)
-                        }
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        if ('id' in result.data) {
-                            navigate('/account/reservation/' + result.data.id)
-                        }
-                    });
-
+                        .then(data => data.json())
+                        .then(res => {
+                            if ('id' in result.data) {
+                                navigate('/account/reservation/' + result.data.id)
+                            }
+                        })
+                        .catch(error => {
+                            console.log(error);
+                            if ('id' in result.data) {
+                                navigate('/account/reservation/' + result.data.id)
+                            }
+                        });
+                } else {
+                    navigate('/account/reservation/' + result.data.id)
+                }
             })
             .catch(err => {
                 setErrorMessage('Une erreur est survenue, veuillez nous contacter.')
+                setLoadingPayment(false);
             })
 
 

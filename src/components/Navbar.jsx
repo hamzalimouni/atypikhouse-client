@@ -89,7 +89,6 @@ const AppNavbar = () => {
                                 <NavDropdown.Item onClick={() => { navigate("/account/messages") }}>Messages</NavDropdown.Item>
                                 <NavDropdown.Item onClick={() => { navigate("/account/annonces") }}>Mes annonces</NavDropdown.Item>
                                 <NavDropdown.Item onClick={() => { navigate("/account/reservations") }}>Mes réservations</NavDropdown.Item>
-                                <NavDropdown.Item href="">Commentaires</NavDropdown.Item>
                                 <NavDropdown.Divider></NavDropdown.Divider>
                                 <NavDropdown.Item onClick={() => {
                                     Cookies.remove("token");
@@ -105,11 +104,11 @@ const AppNavbar = () => {
             <Drawer title="Notifications" placement="right" onClose={() => setOpen(false)} open={open}>
                 <Skeleton loading={loadingNotifs} active>
                     {
-                        notifications?.map((n) => {
+                        notifications.length > 0 && notifications?.map((n) => {
                             return (
                                 <Row className='border-bottom py-3'>
                                     {
-                                        n.type == "ADD" ?
+                                        n.type == "NEW" ?
                                             <Row>
                                                 <Col md={2}>
                                                     <Tag

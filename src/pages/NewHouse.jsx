@@ -32,11 +32,16 @@ const NewHouse = () => {
 
     countries.registerLocale(require("i18n-iso-countries/langs/fr.json"));
 
-    const getMapAdress = async () => {
-        let result = await provider.search({ query: address.address + ', ' + address.city + ', ' + address.zipcode + ', ' + address.country });
-        if (result.length > 0) {
-            setAddress({ ...address, latitude: result[0].y, longitude: result[0].x })
-        }
+    const getMapAddress = async () => {
+        await provider.search({ query: address.address + ', ' + address.city + ', ' + address.zipcode + ', ' + address.country })
+            .then((result) => {
+                if (result.length > 0) {
+                    setAddress({ ...address, latitude: result[0].y, longitude: result[0].x })
+                } else {
+                    message.error('Impossible d\'obtenir cette address, Merci de le préciser manuellement')
+                }
+            })
+            .catch((err) => { console.log(err); message.error('Impossible d\'obtenir cette address, Merci de le préciser manuellement') })
     }
 
     const [disabled, setDisabled] = useState(true);
@@ -60,7 +65,7 @@ const NewHouse = () => {
     const [dragActive, setDragActive] = useState(false);
     const [published, isPublished] = useState(false)
     const inputRef = React.useRef(null);
-    const [spining, setSpining] = useState(false);
+    const [spining, setSpining] = useState(true);
 
     useEffect(() => {
         getCategories()
@@ -70,7 +75,7 @@ const NewHouse = () => {
     const getCategories = () => {
         fetch(API_URL + '/categories')
             .then(res => res.json())
-            .then((result) => { setCategories(result["hydra:member"]) })
+            .then((result) => { setCategories(result["hydra:member"]); setSpining(false) })
     }
 
     const getEquipments = () => {
@@ -95,7 +100,7 @@ const NewHouse = () => {
             return null
         });
         verifyValidity();
-    }, [images, data, current, address, properties, equipments, disponibilities, propsData, ]);
+    }, [images, data, current, address, properties, equipments, disponibilities, propsData,]);
 
     const onInputDataChange = e => {
         const { name, value } = e.currentTarget
@@ -154,9 +159,6 @@ const NewHouse = () => {
         }
         if (current === 1) {
             setDisabled(isValid.address && isValid.city && isValid.zipcode ? false : true)
-            if (!disabled) {
-                getMapAdress();
-            }
         }
         if (current === 2) {
             let isV = propsData.map((p) => { return p.isRequired ? isValid[p.id] : null }).filter(i => i === false).length === 0;
@@ -321,6 +323,7 @@ const NewHouse = () => {
                     </FloatingLabel>
                 </Col>
             </Row>
+            <Button onClick={() => getMapAddress()} variant='warning' className='text-white' size='sm'>Préciser l'address automatiquement dans la carte</Button>
             <Divider className='py-3'>
                 <FontAwesomeIcon icon={Icons.faArrowDown} color='#9ca3af' />
                 <small className='px-3'>Merci de préciser l'adresse dans la carte si ce n'est pas déjà fait automatiquement</small>
@@ -550,7 +553,7 @@ const NewHouse = () => {
                         <CardHouse
                             image={images[0]}
                             title={data.title}
-                            destination={data.city + ', ' + data.country}
+                            destination={address.city + ', ' + address.country}
                             price={data.price}
                             reviews="-" />
                     </Col>}

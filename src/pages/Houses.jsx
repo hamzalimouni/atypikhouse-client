@@ -30,6 +30,9 @@ const Houses = () => {
     to: params.get("to") || new Moment().add(1, 'days'),
   });
 
+  const [filtreOptions, setFiltreOptions] = useState({
+    category: params.get("category") || ''
+  })
   const [houses, setHouses] = useState([])
   const [nbHouses, setNbHouses] = useState(0)
   const [loading, setLoading] = useState(true);
@@ -92,7 +95,8 @@ const Houses = () => {
         from: Moment(dates.from).format('MM/DD/YYYY'),
         to: Moment(dates.to).format('MM/DD/YYYY'),
         travelers: options.travelers,
-        rooms: options.rooms
+        rooms: options.rooms,
+        category: filtreOptions.category
       })}`
     })
     getHouses()
