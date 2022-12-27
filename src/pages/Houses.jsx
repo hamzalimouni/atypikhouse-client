@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { Badge, Button, Col, Container, Form, InputGroup, Row } from 'react-bootstrap'
 import AppNavbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import { DatePicker, Popover, Skeleton, AutoComplete } from 'antd';
+import { DatePicker, Popover, Skeleton, AutoComplete, Pagination } from 'antd';
 import SearchItem from '../components/SearchItem'
 import * as Icons from '@fortawesome/free-solid-svg-icons'
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
@@ -22,7 +22,9 @@ const Houses = () => {
   const params = new URLSearchParams(location.search)
   const [options, setOptions] = useState({
     travelers: parseInt(params.get("travelers")) || 1,
-    rooms: parseInt(params.get("rooms")) || 1
+    rooms: parseInt(params.get("rooms")) || 1,
+    category: params.get("category") || '',
+    page: params.get("page") || 1
   });
   const [destination, setDestination] = useState(params.get("destination") || '');
   const [dates, setDates] = useState({
@@ -30,9 +32,6 @@ const Houses = () => {
     to: params.get("to") || new Moment().add(1, 'days'),
   });
 
-  const [filtreOptions, setFiltreOptions] = useState({
-    category: params.get("category") || ''
-  })
   const [houses, setHouses] = useState([])
   const [nbHouses, setNbHouses] = useState(0)
   const [loading, setLoading] = useState(true);
@@ -47,7 +46,6 @@ const Houses = () => {
   };
 
   useEffect(() => {
-    getHouses()
     fetch(API_URL + '/search')
       .then(res => res.json())
       .then(
@@ -68,8 +66,9 @@ const Houses = () => {
 
   const getHouses = async () => {
     let adrQuery = destination != "" ? "&address.city=" + destination.split(', ')[0] + "&address.country=" + destination.split(', ')[1] : '';
-    await fetch(API_URL + "/houses?rooms[gte]=" + options.rooms +
-      `${adrQuery}&nbPerson[gte]=` + options.travelers +
+    await fetch(API_URL + "/houses?page=" + options.page + "&rooms[gte]=" + options.rooms +
+      `${adrQuery}&nbPerson[gte]=` + options.travelers + (
+        options.category != "" ? "&category.id=" + options.category : "") +
       "&status=APPROVED" +
       "&order[createdAt]=DESC")
       .then(response => {
@@ -96,12 +95,13 @@ const Houses = () => {
         to: Moment(dates.to).format('MM/DD/YYYY'),
         travelers: options.travelers,
         rooms: options.rooms,
-        category: filtreOptions.category
+        category: options.category,
+        page: options.page
       })}`
     })
     getHouses()
     setLoading(true)
-  }, [dates, destination, options]);
+  }, [dates, destination, options, options]);
 
 
   return (
@@ -215,7 +215,7 @@ const Houses = () => {
                   <h1>Destination</h1>
                   <div className="result-list-total-filter d-flex justify-content-between align-items-center">
                     <div className="result-total">
-                      <span>{nbHouses} logments trouvé</span>
+                      <span>{nbHouses} logments trouvé <small>{options.category != "" && houses.length > 0 && ("( dans la catégory " + houses[0].category.name + ' )')}</small></span>
                     </div>
                     <div className="filter">
                       <Button variant="atypik">Filter</Button>
@@ -224,7 +224,7 @@ const Houses = () => {
                 </Row>
                 <Skeleton loading={loading} paragraph={{ rows: 15 }} active >
                   {
-                    houses.map((h) => {
+                    houses && houses.map((h) => {
                       let ravg = 0;
                       h.reviews.map((r) => ravg += r.grade / h.reviews.length)
                       return <SearchItem
@@ -243,7 +243,23 @@ const Houses = () => {
                         reviews={ravg == 0 ? '-' : ravg.toFixed(1) + ' (' + h.reviews.length + ')'} />
                     })
                   }
+                  <Pagination
+                    className='text-center mx-auto'
+                    total={nbHouses}
+                    // showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+                    defaultPageSize={30}
+                    defaultCurrent={options.page}
+                    hideOnSinglePage={true}
+                    onChange={(p, s) => {
+                      setOptions(prev => {
+                        return {
+                          ...prev, 'page': p
+                        }
+                      })
+                    }}
+                  />
                 </Skeleton>
+
               </Col>
               <Col className="sticky-top h-100 ">
                 <MapContainer center={[48.8566, 2.3522]} zoom={5} className="mt-3" style={{ height: '90vh' }}>
@@ -252,7 +268,7 @@ const Houses = () => {
                     url='https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png'
                   />
                   {
-                    houses.map((h) => {
+                    houses && houses.map((h) => {
                       let ravg = 0;
                       h.reviews.map((r) => ravg += r.grade / h.reviews.length)
                       return <Marker

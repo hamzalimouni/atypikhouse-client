@@ -488,3 +488,24 @@ input#rc_select_1 {
 .hideScroll::-webkit-scrollbar {
     display: none;
 }
+
+.ant-pagination-options {
+    display: none !important;
+}
+
+.ant-pagination-item-active {
+    font-weight: 500;
+    background: var(--main-color) !important;
+    border-color: var(--main-color) !important;
+    color: white !important;
+}
+
+.ant-pagination-item-link, .ant-pagination-item {
+    border-radius: 11px !important;
+}
+
+
+.ant-pagination-item:hover, .ant-pagination-item-link:hover {
+    border: 1px solid var(--main-color) !important;
+    color:var(--main-color)
+}
