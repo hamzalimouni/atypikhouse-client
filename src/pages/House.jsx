@@ -464,12 +464,12 @@ const House = () => {
                   </div>
                   <div className='d-flex justify-content-between'>
                     <span>Les frais de service:</span>
-                    <span>15 €</span>
+                    <span>Gratuit</span>
                   </div>
                   <Divider />
                   <div className='d-flex justify-content-between'>
                     <strong>Total:</strong>
-                    <strong>{houseData.price * Moment(options.to).diff(options.from, 'days') + 15} €</strong>
+                    <strong>{houseData.price * Moment(options.to).diff(options.from, 'days')} €</strong>
                   </div>
                   <Button onClick={() => {
                     let isDispo = true;

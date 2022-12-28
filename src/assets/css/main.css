@@ -509,3 +509,7 @@ input#rc_select_1 {
     border: 1px solid var(--main-color) !important;
     color:var(--main-color)
 }
+
+.ant-select-selection-search {
+    padding-top: 4px !important;
+}

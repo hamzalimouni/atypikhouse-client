@@ -23,6 +23,7 @@ import Reservation from './pages/Reservation';
 import AnnonceReservations from './pages/AnnonceReservations';
 import Messages from './pages/Messages';
 import Users from './pages/admin/Users';
+import Apropos from './pages/Apropos';
 
 function App() {
 
@@ -47,6 +48,7 @@ function App() {
         <Route path="/contact" element={<Contact />}></Route>
         <Route path="/cgu" element={<ConditionGeneral />}></Route>
         <Route path="/faq" element={<Faq />}></Route>
+        <Route path="/about-us" element={<Apropos />}></Route>
         <Route path="/account/settings" element={requireAuth(<Account />)}></Route>
         <Route path="/account/annonces" element={requireAuth(<Annonces />)}></Route>
         <Route path="/account/reservations" element={requireAuth(<Reservations />)}></Route>

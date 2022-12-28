@@ -105,7 +105,7 @@ const Paiment = () => {
                     data.disponibilities.map((d) => setIndisponible((indisponible) => [...indisponible, Moment(d.date).format('YYYY-MM-DD')]))
                     setHouseData(data)
                     setLoading(false)
-                    setOptions({ ...options, total: data.price * Moment(options.to).diff(options.from, 'days') + 15 })
+                    setOptions({ ...options, total: data.price * Moment(options.to).diff(options.from, 'days') })
                     setThumbnail(MEDIA_URL + data?.images[0]?.fileName)
                     let reservedDates = [];
                     data.reservations.map((r) => {
@@ -168,7 +168,7 @@ const Paiment = () => {
                             bookHouse()
                         }
                     });
-                
+
             } else {
                 setErrorMessage('L\'habitat n\'est pas disponible aux dates sélectionnées.')
             }
@@ -432,7 +432,7 @@ const Paiment = () => {
                                 </div>
                                 <div className='d-flex justify-content-between'>
                                     <span>Les frais de service:</span>
-                                    <span>15 €</span>
+                                    <span>Gratuit</span>
                                 </div>
                                 <Divider />
                                 <div className='d-flex justify-content-between'>

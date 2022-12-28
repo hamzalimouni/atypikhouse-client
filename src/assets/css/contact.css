@@ -1,9 +1,0 @@
-@media (max-width:768px) {
-    .container {
-        gap: 40px;
-    }
-}
-
-.contact-info {
-    min-height: 500px;
-}
