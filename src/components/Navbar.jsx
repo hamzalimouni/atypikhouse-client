@@ -50,16 +50,16 @@ const AppNavbar = () => {
 
     return (
         <Navbar collapseOnSelect expand="lg" className='border-bottom'>
-            <Container>
+            <Container className='pt-1'>
                 <Navbar.Brand><Image onClick={() => { navigate("/") }} className="logo" src={logo} height='30px' /></Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
-                    <Nav className="mx-auto mt-2">
-                        <Nav.Link onClick={() => { navigate("/") }}>Accueil</Nav.Link>
+                    <Nav className="mx-auto">
+                        <Nav.Link className='fs-6' onClick={() => { navigate("/") }}>Accueil</Nav.Link>
                         {/* <Nav.Link href="">Destinations</Nav.Link>
                         <Nav.Link href="">Catégories</Nav.Link> */}
-                        <Nav.Link onClick={() => { navigate("/contact") }}>Nous contacter</Nav.Link>
-                        <Nav.Link onClick={() => { navigate("/about-us") }}>À propos</Nav.Link>
+                        <Nav.Link className='fs-6' onClick={() => { navigate("/contact") }}>Nous contacter</Nav.Link>
+                        <Nav.Link className='fs-6' onClick={() => { navigate("/about-us") }}>À propos</Nav.Link>
                     </Nav>
                     {!curUser ?
                         <Nav>
@@ -81,11 +81,11 @@ const AppNavbar = () => {
                                     </div>
                             }
                             <Nav.Link onClick={() => setOpen(true)} className='pt-3 px-3'>
-                                <Badge dot={true}>
-                                    <FontAwesomeIcon icon={Icons.faBell} color="#8ed081" stroke='#8ed081' size="2x" />
+                                <Badge count={notifications.length} >
+                                    <FontAwesomeIcon icon={Icons.faBell} color="#5A626F" stroke='#5A626F' size="2x" />
                                 </Badge>
                             </Nav.Link>
-                            <NavDropdown title="Mon compte" className='py-2'>
+                            <NavDropdown title="Mon compte" className='py-2 fs-6'>
                                 <NavDropdown.Item onClick={() => { navigate("/account/settings") }}>Gérer mon compte</NavDropdown.Item>
                                 <NavDropdown.Item onClick={() => { navigate("/account/messages") }}>Messages</NavDropdown.Item>
                                 <NavDropdown.Item onClick={() => { navigate("/account/annonces") }}>Mes annonces</NavDropdown.Item>

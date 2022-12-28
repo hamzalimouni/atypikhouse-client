@@ -9,18 +9,25 @@
 
 /* Start Global Rules */
 :root {
-    --main-color: #8ED081;
-    --main-color-hovered: #83c177;
+    --main-color: #00820B;
+    --main-color-hovered: #006a09;
     --second-color: #FDFDFD;
-    --icon-color: #FFB703;
+    --icon-color: #ff9800;
+    --orange-color: #ff9800;
     --transition-main-value: 0.3s;
-    --bs-primary: #8ED081;
+    --bs-primary: #00820B;
     --blue-color: #0a2d74;
     --blue-color-hovered: #07245f;
     --bs-nav-link-color: #0a2d74;
     --main-padding-value: 100px;
-    --steps: #83c177;
+    --steps: #00820B;
     /* redeclared */
+}
+
+.btn.disabled,
+.btn:disabled,
+fieldset:disabled .btn {
+    opacity: 0.30 !important
 }
 
 .nav-pills {
@@ -500,14 +507,16 @@ input#rc_select_1 {
     color: white !important;
 }
 
-.ant-pagination-item-link, .ant-pagination-item {
+.ant-pagination-item-link,
+.ant-pagination-item {
     border-radius: 11px !important;
 }
 
 
-.ant-pagination-item:hover, .ant-pagination-item-link:hover {
+.ant-pagination-item:hover,
+.ant-pagination-item-link:hover {
     border: 1px solid var(--main-color) !important;
-    color:var(--main-color)
+    color: var(--main-color)
 }
 
 .ant-select-selection-search {
