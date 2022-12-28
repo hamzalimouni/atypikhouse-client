@@ -24,6 +24,7 @@ import AnnonceReservations from './pages/AnnonceReservations';
 import Messages from './pages/Messages';
 import Users from './pages/admin/Users';
 import Apropos from './pages/Apropos';
+import NotFound from './pages/NotFound';
 
 function App() {
 
@@ -62,6 +63,7 @@ function App() {
         <Route path="/admin/equipment" element={requireAdmin(<Equipment />)}></Route>
         <Route path="/admin/users" element={requireAdmin(<Users />)}></Route>
         <Route path="/admin/properties" element={requireAdmin(<Properties />)}></Route>
+        <Route path='*' element={<NotFound />}/>
       </Routes>
     </BrowserRouter>
   );

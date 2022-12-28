@@ -55,13 +55,13 @@ const Annonces = () => {
                                     <small className='annonceDescription mt-2'>{h.description}</small>
                                     <div className='d-flex'>
                                         <div className='p-3'>
-                                            <FontAwesomeIcon icon={Icons.faEuro} color="#8ed081" /> <small>{h.price}</small>
+                                            <FontAwesomeIcon icon={Icons.faEuro} color="#00820B" /> <small>{h.price}</small>
                                         </div>
                                         <div className='p-3'>
-                                            <FontAwesomeIcon icon={Icons.faPeopleGroup} color="#8ed081" /> <small>{h.nbPerson}</small>
+                                            <FontAwesomeIcon icon={Icons.faPeopleGroup} color="#00820B" /> <small>{h.nbPerson}</small>
                                         </div>
                                         <div className='p-3'>
-                                            <FontAwesomeIcon icon={Icons.faDoorOpen} color="#8ed081" /> <small>{h.rooms}</small>
+                                            <FontAwesomeIcon icon={Icons.faDoorOpen} color="#00820B" /> <small>{h.rooms}</small>
                                         </div>
                                     </div>
                                 </Col>
