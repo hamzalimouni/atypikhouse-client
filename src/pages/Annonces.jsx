@@ -68,7 +68,7 @@ const Annonces = () => {
                                 <Col sm={2}>
                                     <Button variant='flat' onClick={() => navigate('../houses/' + h.id + '/reservations')} className='text-warning btn-sm w-100'><FontAwesomeIcon icon={Icons.faReorder} /> Les réservations</Button>
 
-                                    <Button variant='flat' className='text-primary btn-sm w-100'><FontAwesomeIcon icon={Icons.faEdit} /> Modifier</Button>
+                                    <Button variant='flat' onClick={() => navigate('../houses/' + h.id + '/edit')} className='text-primary btn-sm w-100'><FontAwesomeIcon icon={Icons.faEdit} /> Modifier</Button>
                                     <Popconfirm title="Voulez-vous vraiment supprimer cette annonce?" onConfirm={() =>
                                         fetch(API_URL + '/houses/' + h.id, {
                                             method: 'DELETE',

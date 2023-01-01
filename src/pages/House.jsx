@@ -342,7 +342,7 @@ const House = () => {
                       <Row>
                         {
                           houseParams.map((h) => {
-                            return <Col key={h.id} lg={4}>{h.propriety?.name} : {h.value}</Col>
+                            return <Col key={h.id} lg={4}>{h.propriety?.name} : {h.value == 1 ? 'Oui' : h.value}</Col>
                           })
                         }
                       </Row>
