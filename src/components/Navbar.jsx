@@ -50,19 +50,20 @@ const AppNavbar = () => {
 
     return (
         <Navbar collapseOnSelect expand="lg" className='border-bottom'>
-            <Container>
+            <Container className='pt-1'>
                 <Navbar.Brand><Image onClick={() => { navigate("/") }} className="logo" src={logo} height='30px' /></Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="mx-auto">
-                        <Nav.Link href="">Destinations</Nav.Link>
-                        <Nav.Link href="">Catégories</Nav.Link>
-                        <Nav.Link href="">Nous contacter</Nav.Link>
-                        <Nav.Link href="">À propos</Nav.Link>
+                        <Nav.Link className='fs-6' onClick={() => { navigate("/") }}>Accueil</Nav.Link>
+                        {/* <Nav.Link href="">Destinations</Nav.Link>
+                        <Nav.Link href="">Catégories</Nav.Link> */}
+                        <Nav.Link className='fs-6' onClick={() => { navigate("/contact") }}>Nous contacter</Nav.Link>
+                        <Nav.Link className='fs-6' onClick={() => { navigate("/about-us") }}>À propos</Nav.Link>
                     </Nav>
                     {!curUser ?
                         <Nav>
-                            <Nav.Link onClick={() => { navigate("/posts") }}><Button variant="atypik">Devenir hôte</Button></Nav.Link>
+                            <Nav.Link onClick={handleShowRegister}><Button variant="atypik">Devenir hôte</Button></Nav.Link>
                             {/* <Nav.Link> */}
                             <NavDropdown title="Mon compte" className='py-2'>
                                 <NavDropdown.Item onClick={handleShowLogin} >Connexion</NavDropdown.Item>
@@ -80,16 +81,15 @@ const AppNavbar = () => {
                                     </div>
                             }
                             <Nav.Link onClick={() => setOpen(true)} className='pt-3 px-3'>
-                                <Badge dot={true}>
-                                    <FontAwesomeIcon icon={Icons.faBell} color="#8ed081" stroke='#8ed081' size="2x" />
+                                <Badge count={notifications.length} >
+                                    <FontAwesomeIcon icon={Icons.faBell} color="#5A626F" stroke='#5A626F' size="2x" />
                                 </Badge>
                             </Nav.Link>
-                            <NavDropdown title="Mon compte" className='py-2'>
+                            <NavDropdown title="Mon compte" className='py-2 fs-6'>
                                 <NavDropdown.Item onClick={() => { navigate("/account/settings") }}>Gérer mon compte</NavDropdown.Item>
                                 <NavDropdown.Item onClick={() => { navigate("/account/messages") }}>Messages</NavDropdown.Item>
                                 <NavDropdown.Item onClick={() => { navigate("/account/annonces") }}>Mes annonces</NavDropdown.Item>
                                 <NavDropdown.Item onClick={() => { navigate("/account/reservations") }}>Mes réservations</NavDropdown.Item>
-                                <NavDropdown.Item href="">Commentaires</NavDropdown.Item>
                                 <NavDropdown.Divider></NavDropdown.Divider>
                                 <NavDropdown.Item onClick={() => {
                                     Cookies.remove("token");
@@ -105,11 +105,11 @@ const AppNavbar = () => {
             <Drawer title="Notifications" placement="right" onClose={() => setOpen(false)} open={open}>
                 <Skeleton loading={loadingNotifs} active>
                     {
-                        notifications?.map((n) => {
+                        notifications.length > 0 && notifications?.map((n) => {
                             return (
                                 <Row className='border-bottom py-3'>
                                     {
-                                        n.type == "ADD" ?
+                                        n.type == "NEW" ?
                                             <Row>
                                                 <Col md={2}>
                                                     <Tag

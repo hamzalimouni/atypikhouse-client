@@ -23,6 +23,9 @@ import Reservation from './pages/Reservation';
 import AnnonceReservations from './pages/AnnonceReservations';
 import Messages from './pages/Messages';
 import Users from './pages/admin/Users';
+import Apropos from './pages/Apropos';
+import NotFound from './pages/NotFound';
+import Edit from './pages/Edit';
 
 function App() {
 
@@ -40,6 +43,7 @@ function App() {
         <Route path="/" element={<Home />} ></Route>
         <Route path="/houses" element={< Houses />}></Route>
         <Route path="/houses/add" element={requireAuth(< NewHouse />)}></Route>
+        <Route path="/houses/:id/edit" element={requireAuth(< Edit />)}></Route>
         <Route path="/houses/:id" element={<House />}></Route>
         <Route path="/houses/:id/booking" element={<Booking />}></Route>
         <Route path="/houses/:id/reservations" element={requireAuth(<AnnonceReservations />)}></Route>
@@ -47,6 +51,7 @@ function App() {
         <Route path="/contact" element={<Contact />}></Route>
         <Route path="/cgu" element={<ConditionGeneral />}></Route>
         <Route path="/faq" element={<Faq />}></Route>
+        <Route path="/about-us" element={<Apropos />}></Route>
         <Route path="/account/settings" element={requireAuth(<Account />)}></Route>
         <Route path="/account/annonces" element={requireAuth(<Annonces />)}></Route>
         <Route path="/account/reservations" element={requireAuth(<Reservations />)}></Route>
@@ -60,6 +65,7 @@ function App() {
         <Route path="/admin/equipment" element={requireAdmin(<Equipment />)}></Route>
         <Route path="/admin/users" element={requireAdmin(<Users />)}></Route>
         <Route path="/admin/properties" element={requireAdmin(<Properties />)}></Route>
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

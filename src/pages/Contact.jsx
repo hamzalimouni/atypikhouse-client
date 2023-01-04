@@ -5,7 +5,6 @@ import AppNavbar from '../components/Navbar'
 import review from '../assets/icons/review.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faContactCard, faLocationDot, faPhone } from '@fortawesome/free-solid-svg-icons'
-import '../assets/css/contact.css'
 
 const Contact = () => {
 
@@ -16,7 +15,7 @@ const Contact = () => {
     return (
         <div>
             <AppNavbar />
-            <div className="contact-us main-background-color py-4">
+            <div className="py-4">
                 <Container>
                     <div className='text-center py-4 d-flex justify-content-center align-items-center'>
                         <Image className='atypik-img-title' src={review} height='70px' />
@@ -24,7 +23,7 @@ const Contact = () => {
                     </div>
                     <Row className='mt-4 d-flex justify-content-center container'>
                         <Col sm={12} md={6} lg={4} xl={5}>
-                            <Card className="contact-info p-5">
+                            <Card className="p-5">
                                 <Card.Title className='text-center pb-4'>Information de contact</Card.Title>
                                 <Card.Text>Remplissez le formulaire et notre équipe vous répondra dans les 24 heures</Card.Text>
                                 <div className="icons d-flex flex-column my-3">
@@ -44,7 +43,7 @@ const Contact = () => {
                             </Card>
                         </Col>
                         <Col sm={12} md={6} lg={4} xl={5}>
-                            <Card className="contact-info p-5">
+                            <Card className="p-5">
                                 <Card.Title className='text-center pb-4'>Formulaire de contact</Card.Title>
                                 <Form>
                                     <Form.Group className='mb-3'>
@@ -68,12 +67,12 @@ const Contact = () => {
                     </Row>
                 </Container>
             </div>
-            <Container className='py-4'>
+            {/* <Container className='py-4'>
                 <div className='text-center py-4 d-flex justify-content-center align-items-center'>
                     <Image className='atypik-img-title' src={review} height='70px' />
                     <h2 className='atypik-cur-title m-0 px-2'> Notre localisation</h2>
                 </div>
-            </Container>
+            </Container> */}
             <Footer />
         </div>
     )

@@ -7,9 +7,9 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
 import * as Icons from '@fortawesome/free-solid-svg-icons';
 const CardHouse = (props) => {
     return (
-        <Card className='mt-4'>
+        <Card className='mt-4' role='button'>
             <div style={{
-                height: 300, width: '100%', backgroundImage: `url(${props.image || bg})`, backgroundPosition: 'center',
+                height: 300, width: '100%', backgroundImage: `url(${props.image})`, backgroundPosition: 'center',
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
                 borderRadius: 20

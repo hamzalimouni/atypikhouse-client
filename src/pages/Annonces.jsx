@@ -40,7 +40,7 @@ const Annonces = () => {
                     <Skeleton loading={loading} paragraph={{ rows: 10 }} active >
                         {houses.length > 0 ? houses.map((h) => {
                             return <Row className='mt-5 border shadow-sm p-sm-3 mx-0' >
-                                <Row className='mx-auto text-center'>
+                                <Row className='mx-auto text-center mb-2'>
                                     {h.status == "UNDER_REVIEW" ? <Badge status="processing" text={<small><strong>En cours de révision</strong></small>} color={'#aeaeae'} />
                                         : h.status == "APPROVED" ? <Badge status="processing" text={<small><strong>Annonce approvée</strong></small>
                                         } color={'#4caf50'} />
@@ -52,23 +52,23 @@ const Annonces = () => {
                                 </Col>
                                 <Col sm={8} role='button' onClick={() => window.open('../houses/' + h.id, '_blank')}>
                                     <h5 className='m-0'>{h.title}</h5>
-                                    <small>{h.description}</small>
+                                    <small className='annonceDescription mt-2'>{h.description}</small>
                                     <div className='d-flex'>
                                         <div className='p-3'>
-                                            <FontAwesomeIcon icon={Icons.faEuro} color="#8ed081" /> <small>{h.price}</small>
+                                            <FontAwesomeIcon icon={Icons.faEuro} color="#00820B" /> <small>{h.price}</small>
                                         </div>
                                         <div className='p-3'>
-                                            <FontAwesomeIcon icon={Icons.faPeopleGroup} color="#8ed081" /> <small>{h.nbPerson}</small>
+                                            <FontAwesomeIcon icon={Icons.faPeopleGroup} color="#00820B" /> <small>{h.nbPerson}</small>
                                         </div>
                                         <div className='p-3'>
-                                            <FontAwesomeIcon icon={Icons.faDoorOpen} color="#8ed081" /> <small>{h.rooms}</small>
+                                            <FontAwesomeIcon icon={Icons.faDoorOpen} color="#00820B" /> <small>{h.rooms}</small>
                                         </div>
                                     </div>
                                 </Col>
                                 <Col sm={2}>
                                     <Button variant='flat' onClick={() => navigate('../houses/' + h.id + '/reservations')} className='text-warning btn-sm w-100'><FontAwesomeIcon icon={Icons.faReorder} /> Les réservations</Button>
 
-                                    <Button variant='flat' className='text-primary btn-sm w-100'><FontAwesomeIcon icon={Icons.faEdit} /> Modifier</Button>
+                                    <Button variant='flat' onClick={() => navigate('../houses/' + h.id + '/edit')} className='text-primary btn-sm w-100'><FontAwesomeIcon icon={Icons.faEdit} /> Modifier</Button>
                                     <Popconfirm title="Voulez-vous vraiment supprimer cette annonce?" onConfirm={() =>
                                         fetch(API_URL + '/houses/' + h.id, {
                                             method: 'DELETE',

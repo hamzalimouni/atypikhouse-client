@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react'
-import { Button, Form, Col, Container, Row, FloatingLabel } from 'react-bootstrap'
+import { Button, Form, Col, Container, Row, FloatingLabel, Image } from 'react-bootstrap'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
 import { Divider, Steps, message, Spin } from 'antd';
@@ -12,19 +12,24 @@ import Moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons';
 import CardHouse from '../components/CardHouse'
-import { API_URL } from '../Variables';
+import { API_URL, MEDIA_URL } from '../Variables';
 import Cookies from 'js-cookie';
 import axios from "axios";
 import done from "../assets/img/done.svg"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import notFoundImage from '../assets/img/notfound.svg'
 
 const { Step } = Steps;
 
 
-const NewHouse = () => {
+const Edit = () => {
+
+    let curUser = JSON.parse(Cookies.get('user') || null);
+
+    const { id } = useParams()
 
     useEffect(() => {
-        document.title = "Publier une annonce - AtypikHouse";
+        document.title = "Modifier une annonce - AtypikHouse";
     }, [])
 
     let navigate = useNavigate();
@@ -62,26 +67,103 @@ const NewHouse = () => {
     const [calendar, setCalendar] = useState([])
     const [images, setImages] = useState([])
     const [imageFiles, setImageFiles] = useState([])
+    const [houseData, setHouseData] = useState([])
     const [dragActive, setDragActive] = useState(false);
     const [published, isPublished] = useState(false)
     const inputRef = React.useRef(null);
     const [spining, setSpining] = useState(true);
+    const [found, setfound] = useState(true);
 
     useEffect(() => {
         getCategories()
         getEquipments()
     }, []);
 
+    const getHouse = () => {
+        fetch(API_URL + '/houses/' + id, {
+            headers: {
+                'Authorization': 'bearer ' + Cookies.get("token"),
+            },
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json()
+                } else if (response.status === 404) {
+                    return Promise.reject(404)
+                } else if (response.status === 403) {
+                    return Promise.reject(403)
+                }
+            })
+            .then((result) => {
+                setHouseData(result)
+                setData((data) => ({ ...data, 'category': result.category.id }))
+                setData((data) => ({ ...data, 'title': result.title }))
+                setData((data) => ({ ...data, 'price': result.price }))
+                setData((data) => ({ ...data, 'description': result.description }))
+                setData((data) => ({ ...data, 'surface': result.surface }))
+                setData((data) => ({ ...data, 'nbPerson': result.nbPerson }))
+                setData((data) => ({ ...data, 'rooms': result.rooms }))
+                setData((data) => ({ ...data, 'beds': result.beds }))
+
+                setAddress((address) => ({ ...address, 'country': result.address.country }))
+                setAddress((address) => ({ ...address, 'address': result.address.address }))
+                setAddress((address) => ({ ...address, 'city': result.address.city }))
+                setAddress((address) => ({ ...address, 'zipcode': result.address.zipcode }))
+                setAddress((address) => ({ ...address, 'longitude': result.address.longitude }))
+                setAddress((address) => ({ ...address, 'latitude': result.address.latitude }))
+
+                setIsValid((isValid) => ({ ...isValid, 'category': true }))
+                setIsValid((isValid) => ({ ...isValid, 'title': true }))
+                setIsValid((isValid) => ({ ...isValid, 'price': true }))
+                setIsValid((isValid) => ({ ...isValid, 'description': true }))
+                setIsValid((isValid) => ({ ...isValid, 'surface': true }))
+                setIsValid((isValid) => ({ ...isValid, 'nbPerson': true }))
+                setIsValid((isValid) => ({ ...isValid, 'rooms': true }))
+                setIsValid((isValid) => ({ ...isValid, 'beds': true }))
+                setIsValid((isValid) => ({ ...isValid, 'address': true }))
+                setIsValid((isValid) => ({ ...isValid, 'city': true }))
+                setIsValid((isValid) => ({ ...isValid, 'zipcode': true }))
+
+                result?.images?.map((i) => {
+                    setImages(images => [...images, MEDIA_URL + i.fileName])
+
+                    fetch(MEDIA_URL + 'images/' + i.fileName)
+                        .then(async response => {
+                            // const contentType = response.headers.get('Content-Type')
+                            const blob = await response.blob()
+                            const file = new File([blob], i.fileName)
+                            setImageFiles(imageFiles => [...imageFiles, file])
+                        })
+                })
+
+                result?.disponibilities?.map((d) => {
+                    setDisponibilities(disponibilities => [...disponibilities, Moment(d.date).format('YYYY-MM-DD')])
+                    setCalendar(calendar => [...calendar, Moment(d.date).format('YYYY-MM-DD')])
+                })
+
+                result?.properties?.map((p) => {
+                    setProperties((properties) => ({ ...properties, [p.propriety.id]: p.value == 1 ? true : p.value }))
+                })
+
+                getProperties(result?.category?.id);
+
+                setSpining(false)
+            })
+            .catch((e) => { console.log(e); setfound(false) })
+    }
+
     const getCategories = () => {
         fetch(API_URL + '/categories')
             .then(res => res.json())
-            .then((result) => { setCategories(result["hydra:member"]); setSpining(false) })
+            .then((result) => { setCategories(result["hydra:member"]); getHouse() })
     }
 
     const getEquipments = () => {
         fetch(API_URL + '/equipements')
             .then(res => res.json())
-            .then((result) => { setEquipmentsData(result["hydra:member"]) })
+            .then((result) => {
+                setEquipmentsData(result["hydra:member"])
+            })
     }
 
     const getProperties = (category) => {
@@ -100,7 +182,7 @@ const NewHouse = () => {
             return null
         });
         verifyValidity();
-    }, [images, data, current, address, properties, equipments, disponibilities, propsData,]);
+    }, [images, data, current, address, properties, disponibilities, propsData,]);
 
     const onInputDataChange = e => {
         const { name, value } = e.currentTarget
@@ -137,8 +219,7 @@ const NewHouse = () => {
     const onDisponibilitiesChange = e => {
         setCalendar(e)
         let dates = []
-        e.map((d) => dates.push(d.toDate()))
-
+        e.map((d) => dates.push(Moment(d.toDate()).format('YYYY-MM-DD')))
         setDisponibilities(dates)
     }
 
@@ -161,12 +242,29 @@ const NewHouse = () => {
             setDisabled(isValid.address && isValid.city && isValid.zipcode ? false : true)
         }
         if (current === 2) {
+            Object.keys(properties).map((key) => {
+                if (properties[key]) {
+                    let i = document.querySelector("input[name='" + key + "']");
+                    i && (i.checked = true)
+                }
+            })
+        }
+        if (current === 3) {
+            houseData?.equipments?.map((e) => {
+                let i = document.querySelector("input[name='" + e.id + "']");
+                i && (i.checked = true)
+                setEquipments([...equipments, e.id])
+            })
+        }
+        if (current === 2) {
             let isV = propsData.map((p) => { return p.isRequired ? isValid[p.id] : null }).filter(i => i === false).length === 0;
             setDisabled(isV && isValid.surface && isValid.nbPerson && isValid.rooms && isValid.beds ? false : true)
         }
         if (current === 5) {
             setDisabled(images.length > 0 ? false : true)
         }
+
+
     }
     const countryArr = Object.entries(countries.getNames("fr", { select: "official" })).map(([key, value]) => {
         return {
@@ -449,6 +547,7 @@ const NewHouse = () => {
                         name={e.id}
                         onChange={onInputEquipmentsChange}
                         type="checkbox"
+                        // checked={equipments.indexOf(this.state.operation) > -1}
                         label={e.name}
                     /></Col>
                 })}
@@ -496,7 +595,8 @@ const NewHouse = () => {
             <div class="d-flex flex-row flex-nowrap " style={{ overflowX: 'scroll' }}>
                 {
                     images.map((i) => {
-                        return <div className='bg-white shadow-sm m-2 border p-1 addHouseImage' onClick={() => { setImages(images.filter(item => item !== i)); }}>
+                        let filename = i.split('/')[i.split('/').length - 1];
+                        return <div className='bg-white shadow-sm m-2 border p-1 addHouseImage' onClick={() => { setImages(images.filter(item => item !== i)); setImageFiles(imageFiles.filter(item => item.name !== filename)); }}>
                             <div style={{
                                 height: 200, width: 300, backgroundImage: `url(${i})`, backgroundPosition: 'center',
                                 backgroundSize: 'contain',
@@ -540,13 +640,13 @@ const NewHouse = () => {
             content: Step6,
         },
         {
-            title: published ? '' : 'Votre annonce est prête à être publiée',
+            title: published ? '' : 'Vos modifications sont prête à être publiées',
             content: <div className='d-flex justify-content-center'>
                 {published ?
                     <div className='text-center'>
-                        <img src={done} alt="" width={300} srcset="" />
-                        <p className='mt-4'>votre publication a été publiée avec succès et elle sera examinée par notre équipe<br></br><small>vous serez averti si des informations supplémentaires sont nécessaires</small></p>
-                        <Button onClick={() => { navigate("/account/annonces") }} variant='atypik' >Mes annonces</Button>
+                        <img src={done} alt="" width={300} />
+                        <p className='mt-4'>Vos modifications a été publiées avec succès et elles sera examinées par notre équipe<br></br><small>vous serez averti si des informations supplémentaires sont nécessaires</small></p>
+                        <Button onClick={() => { navigate("/houses/" + id) }} variant='atypik' >Voir l'annonce</Button>
                     </div>
                     :
                     <Col lg={7}>
@@ -582,6 +682,7 @@ const NewHouse = () => {
 
         let formData = new FormData();
 
+        formData.append('id', id)
 
         Object.keys(data).forEach(e => {
             formData.append(e, data[e])
@@ -600,7 +701,7 @@ const NewHouse = () => {
             url: API_URL + '/houses',
             method: "POST",
             headers: {
-                authorization: 'bearer ' + Cookies.get("token"),
+                'Authorization': 'bearer ' + Cookies.get("token"),
             },
             data: formData,
         })
@@ -612,55 +713,63 @@ const NewHouse = () => {
     return (
         <>
             <Navbar />
-            <Container className='p-5'>
-                <Row className='d-flex justify-content-center pt-5'>
-                    <Col lg={8}>
-                        <Steps current={current} >
-                            <Step />
-                            <Step />
-                            <Step />
-                            <Step />
-                            <Step />
-                            <Step />
-                            <Step />
-                        </Steps>
-                        <Spin spinning={spining}>
-                            <Form onSubmit={handleSubmit}>
-                                {/* <h5 className='text-muted' style={{ color: '#b7b7b7' }}><strong className='text-black' style={{ fontSize: '2.25rem' }}>05</strong>/10</h5> */}
-                                <Container className=' mt-3 p-5 rounded shadow-sm'>
-                                    <Divider orientation="left pb-4"><h2 className='text-muted'>{contents[current].title}</h2></Divider>
+            {!found ?
+                <Container className='text-center mt-5'>
+                    <Image src={notFoundImage} height={300}></Image>
+                    <h2 className='mt-5'>Annonce non trouvée</h2>
+                    <a>Le lien que vous avez suivi est peut-être rompu ou l'annonce a été supprimée ou bien en cours de révision</a>
+                </Container>
+                :
+                <Container className='p-5'>
+                    <Row className='d-flex justify-content-center pt-5'>
+                        <Col lg={8}>
+                            <Steps current={current} >
+                                <Step />
+                                <Step />
+                                <Step />
+                                <Step />
+                                <Step />
+                                <Step />
+                                <Step />
+                            </Steps>
+                            <Spin spinning={spining}>
+                                <Form onSubmit={handleSubmit}>
+                                    {/* <h5 className='text-muted' style={{ color: '#b7b7b7' }}><strong className='text-black' style={{ fontSize: '2.25rem' }}>05</strong>/10</h5> */}
+                                    <Container className=' mt-3 p-5 rounded shadow-sm'>
+                                        <Divider orientation="left pb-4"><h2 className='text-muted'>{contents[current].title}</h2></Divider>
 
-                                    {contents[current].content}
+                                        {contents[current].content}
 
-                                </Container>
-                                {published ? null :
-                                    <div className="mt-3" style={{ textAlign: 'right' }} >
-                                        {current > 0 && (
-                                            <Button variant="atypik" style={{ margin: '0 8px' }} onClick={() => prev()}>
-                                                {'<'}
-                                            </Button>
-                                        )}
-                                        {current < contents.length - 1 && (
-                                            <Button variant="atypik" disabled={disabled} onClick={() => next()}>
-                                                Suivant
-                                            </Button>
-                                        )}
-                                        {current === contents.length - 1 && (
-                                            <Button variant="atypik" type="submit">
-                                                Publier votre annonce
-                                            </Button>
-                                        )}
-                                    </div>
-                                }
-                            </Form>
-                        </Spin>
-                    </Col>
+                                    </Container>
+                                    {published ? null :
+                                        <div className="mt-3" style={{ textAlign: 'right' }} >
+                                            {current > 0 && (
+                                                <Button variant="atypik" style={{ margin: '0 8px' }} onClick={() => prev()}>
+                                                    {'<'}
+                                                </Button>
+                                            )}
+                                            {current < contents.length - 1 && (
+                                                <Button variant="atypik" disabled={disabled} onClick={() => next()}>
+                                                    Suivant
+                                                </Button>
+                                            )}
+                                            {current === contents.length - 1 && (
+                                                <Button variant="atypik" type="submit">
+                                                    Publier les modifications
+                                                </Button>
+                                            )}
+                                        </div>
+                                    }
+                                </Form>
+                            </Spin>
+                        </Col>
 
-                </Row>
-            </Container>
+                    </Row>
+                </Container>
+            }
             <Footer />
         </>
     )
 }
 
-export default NewHouse
+export default Edit

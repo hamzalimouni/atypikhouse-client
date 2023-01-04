@@ -5,12 +5,17 @@ import { Card, Image, Row } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faLocationPin, faStar } from '@fortawesome/free-solid-svg-icons';
 import StarRatings from 'react-star-ratings';
+import { Rate, Avatar } from 'antd';
 
 const ReviewCard = (props) => {
 
     return (
         <Card style={{ maxWidth: '300px' }} className='mx-auto mt-4'>
-            <Image className='mx-auto mt-3 rounded-circle' src={bg} height="70px" width="70px" />
+            <Row className='mx-auto mt-4'>
+                <Avatar style={{ backgroundColor: '#F97316', verticalAlign: 'middle' }} size="large">
+                    {(props.name.charAt(0) + '.').toUpperCase()}
+                </Avatar>
+            </Row>
             <Card.Body>
                 <Row className='text-center'>
                     <h5>{props.name}</h5>
@@ -18,18 +23,9 @@ const ReviewCard = (props) => {
                 </Row>
             </Card.Body>
             <Card.Body className='text-center mt-2'>
-                <Card.Title style={{ fontSize: '1.1em' }}>{props.house}</Card.Title>
                 <small>{props.review}</small>
                 <br /><br />
-                <StarRatings
-                    rating={props.stars}
-                    starRatedColor="gold"
-                    numberOfStars={5}
-                    name='rating'
-                    starEmptyColor='#f2f2f2'
-                    starDimension='20'
-                    starSpacing='3'
-                />
+                <Rate disabled value={props.stars} style={{ fontSize: '1.2em' }} />
             </Card.Body>
         </Card>
     )
