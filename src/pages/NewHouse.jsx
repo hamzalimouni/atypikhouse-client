@@ -196,7 +196,6 @@ const NewHouse = () => {
             setImageFiles(imageFiles => [...imageFiles, i])
         })
 
-        console.log(imageFiles);
     }
 
     const handleDrag = function (e) {
@@ -596,8 +595,9 @@ const NewHouse = () => {
         formData.append('equipments', JSON.stringify(equipments))
         formData.append('properties', JSON.stringify(properties))
 
+
         axios({
-            url: API_URL + '/houses',
+            url: API_URL + 'houses',
             method: "POST",
             headers: {
                 authorization: 'bearer ' + Cookies.get("token"),
