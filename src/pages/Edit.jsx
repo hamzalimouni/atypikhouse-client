@@ -131,7 +131,6 @@ const Edit = () => {
                         .then(async response => {
                             // const contentType = response.headers.get('Content-Type')
                             const blob = await response.blob()
-                            console.log(blob)
                             const file = new File([blob], i.fileName)
                             setImageFiles(imageFiles => [...imageFiles, file])
                         })
@@ -152,10 +151,6 @@ const Edit = () => {
             })
             .catch((e) => { console.log(e); setfound(false) })
     }
-
-    useEffect(() => {
-        console.log(imageFiles)
-    }, [imageFiles])
 
     const getCategories = () => {
         fetch(API_URL + '/categories')

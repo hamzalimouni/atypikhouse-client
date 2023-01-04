@@ -24,6 +24,7 @@ const Houses = () => {
     travelers: parseInt(params.get("travelers")) || 1,
     rooms: parseInt(params.get("rooms")) || 1,
     category: params.get("category") || '',
+    order: params.get("order") || '',
     page: params.get("page") || 1
   });
   const [destination, setDestination] = useState(params.get("destination") || '');
@@ -67,10 +68,10 @@ const Houses = () => {
   const getHouses = async () => {
     let adrQuery = destination != "" ? "&address.city=" + destination.split(', ')[0] + "&address.country=" + destination.split(', ')[1] : '';
     await fetch(API_URL + "/houses?page=" + options.page + "&rooms[gte]=" + options.rooms +
-      `${adrQuery}&nbPerson[gte]=` + options.travelers + (
-        options.category != "" ? "&category.id=" + options.category : "") +
-      "&status=APPROVED" +
-      "&order[createdAt]=DESC")
+      `${adrQuery}&nbPerson[gte]=` + options.travelers +
+      (options.category != "" ? "&category.id=" + options.category : "") +
+      (options.order === "price" ? "&order[price]=ASC" : "&order[createdAt]=DESC") +
+      "&status=APPROVED")
       .then(response => {
         if (response.ok) {
           return response.json()
@@ -96,6 +97,7 @@ const Houses = () => {
         travelers: options.travelers,
         rooms: options.rooms,
         category: options.category,
+        order: options.order,
         page: options.page
       })}`
     })
@@ -215,10 +217,17 @@ const Houses = () => {
                   <h1>Destination</h1>
                   <div className="result-list-total-filter d-flex justify-content-between align-items-center">
                     <div className="result-total">
-                      <span>{nbHouses} logments trouvé <small>{options.category != "" && houses.length > 0 && ("( dans la catégory " + houses[0].category.name + ' )')}</small></span>
+                      <span>{nbHouses} logments trouvé <small>{options.category != "" && houses.length > 0 && ("( dans la catégory " + houses[0].category.name + ' ) ')}{options.category != "" && <span role='button' className='text-atypik' onClick={() => setOptions(prev => { return { ...prev, 'category': '' } })}>Afficher tout</span>}</small></span>
                     </div>
                     <div className="filter">
-                      <Button variant="atypik">Filter</Button>
+                      {/* <Button variant="atypik">Filter</Button> */}
+                      <Form.Select size="sm" onChange={(e) => {
+                        setOptions(prev => { return { ...prev, 'order': e.target.value } })
+                      }} >
+                        <option selected disabled value="">Trier par</option>
+                        <option value="date">Date</option>
+                        <option value="price">Prix</option>
+                      </Form.Select>
                     </div>
                   </div>
                 </Row>
