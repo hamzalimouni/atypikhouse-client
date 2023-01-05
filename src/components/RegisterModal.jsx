@@ -54,27 +54,31 @@ const RegisterModal = props => {
             firstname, lastname, email, birthday, number, password,
         });
         if ('email' in response) {
-            let login = fetch(API_URL + '/login', {
+            fetch(API_URL + '/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ username: email, password: password })
             })
+                .then((res) => res.json())
                 .then(data => {
-                    console.log(data)
-                    Cookies.set('token', data['token'], { expires: 1 })
-                    Cookies.set('user', JSON.stringify(data['data']), { expires: 1 })
+                    if ('token' in data) {
+                        Cookies.set('token', data['token'], { expires: 1 })
+                        Cookies.set('user', JSON.stringify(data['data']), { expires: 1 })
+                        onClose(true);
+                        setLoading(false);
+                    }
                 })
-            onClose(true);
-            console.log("true");
+
             //window.location.href = "/";
 
         } else {
             setAlertMessage(response['hydra:description'])
             setAlertShow(true);
+            setLoading(false);
         }
-        setLoading(false);
+
     };
 
     const onInputChange = e => {
