@@ -20,7 +20,6 @@ const Annonces = () => {
     const [houses, setHouses] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    console.log()
     useEffect(() => {
         getHouses()
     }, []);
@@ -93,7 +92,7 @@ const Annonces = () => {
                                                     getHouses();
                                                 }
                                             )
-                                    } onOpenChange={() => console.log('open change')}>
+                                    }>
                                         <Button variant='flat' className='text-danger btn-sm w-25'><FontAwesomeIcon icon={Icons.faTrash} /> Supprimer</Button>
                                     </Popconfirm>
 
@@ -102,7 +101,7 @@ const Annonces = () => {
                         }) :
                             <div className='row justify-content-md-center mt-5'>
                                 <Empty description="Aucune annonce publiée" />
-                                <Button variant="atypik" className='mt-5 w-25 btn-sm'>Publier votre première annonce</Button>
+                                <Button variant="atypik" className='mt-5 w-25 btn-sm' onClick={() => navigate('../houses/add')}>Publier votre première annonce</Button>
                             </div>
                         }
                     </Skeleton>

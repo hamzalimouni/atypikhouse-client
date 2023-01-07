@@ -64,7 +64,6 @@ const Paiment = () => {
                 }),
             })
                 .then((result) => {
-                    console.log(result.data)
                     setStripeClientSecret(result.data.client_secret)
                     setLoadingPayment(false)
                 })
@@ -262,7 +261,7 @@ const Paiment = () => {
                                                 disabledDate={disabledDate}
                                                 defaultValue={[Moment(options.from), Moment(options.to)]}
                                                 onChange={(d) => {
-                                                    setOptions({ ...options, from: d[0].toDate(), to: d[1].toDate(), total: houseData.price * Moment(d[1].toDate()).diff(d[0].toDate(), 'days') + 15 })
+                                                    setOptions({ ...options, from: d[0].toDate(), to: d[1].toDate(), total: houseData.price * Moment(d[1].toDate()).diff(d[0].toDate(), 'days') })
                                                 }}
                                                 style={{ border: '1px solid #f0f0f0', padding: 19, borderRadius: 10, width: '100%' }}
                                                 placeholder={["Date d'arrivé", "Date de départ"]}

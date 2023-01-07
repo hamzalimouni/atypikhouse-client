@@ -125,7 +125,6 @@ const Edit = () => {
                 setIsValid((isValid) => ({ ...isValid, 'zipcode': true }))
 
                 result?.images?.map((i) => {
-                    console.log(i)
                     setImages(images => [...images, MEDIA_URL + i.fileName])
 
                     fetch(API_URL + '/images/' + i.id)
@@ -133,7 +132,6 @@ const Edit = () => {
                             // const contentType = response.headers.get('Content-Type')
                             const blob = await response.blob()
                             const file = new File([blob], i.fileName)
-                            console.log(file)
                             setImageFiles(imageFiles => [...imageFiles, file])
                         })
                 })
@@ -296,7 +294,6 @@ const Edit = () => {
             setImageFiles(imageFiles => [...imageFiles, i])
         })
 
-        console.log(imageFiles);
     }
 
     const handleDrag = function (e) {
@@ -314,7 +311,10 @@ const Edit = () => {
         e.stopPropagation();
         setDragActive(false);
         if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-            Array.from(e.dataTransfer.files).forEach(i => setImages(images => [...images, URL.createObjectURL(i)]))
+            Array.from(e.dataTransfer.files).forEach(i => {
+                setImages(images => [...images, URL.createObjectURL(i)])
+                setImageFiles(imageFiles => [...imageFiles, i])
+            })
         }
     };
 
