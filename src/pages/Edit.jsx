@@ -125,13 +125,15 @@ const Edit = () => {
                 setIsValid((isValid) => ({ ...isValid, 'zipcode': true }))
 
                 result?.images?.map((i) => {
+                    console.log(i)
                     setImages(images => [...images, MEDIA_URL + i.fileName])
 
-                    fetch(MEDIA_URL + 'images/' + i.fileName)
+                    fetch(API_URL + '/images/image/' + i.id)
                         .then(async response => {
                             // const contentType = response.headers.get('Content-Type')
                             const blob = await response.blob()
                             const file = new File([blob], i.fileName)
+                            console.log(file)
                             setImageFiles(imageFiles => [...imageFiles, file])
                         })
                 })

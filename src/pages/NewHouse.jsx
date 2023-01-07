@@ -615,7 +615,7 @@ const NewHouse = () => {
             <Container className='p-5'>
                 <Row className='d-flex justify-content-center pt-5'>
                     <Col lg={8}>
-                        <Steps current={current} >
+                        <Steps current={current} responsive={false} >
                             <Step />
                             <Step />
                             <Step />

@@ -57,7 +57,7 @@ const Home = () => {
                         <Image className='atypik-img-title' src={campfire} height='70px' />
                         <h2 className='atypik-cur-title m-0 px-2'> Les meilleurs endroits</h2>
                     </div>
-                    <Row className='container py-4'>
+                    <Row className='container py-4 m-0'>
                         {
                             houses.length > 0 ? [1, 2, 3].map(function () {
                                 let rnd = Math.floor(Math.random() * houses.length)
@@ -90,7 +90,7 @@ const Home = () => {
                         <Image className='atypik-img-title' src={review} height='70px' />
                         <h2 className='atypik-cur-title m-0 px-2'> Ce que les gens disaient</h2>
                     </div>
-                    <Row className='container py-4'>
+                    <Row className='container py-4 m-0'>
                         {
                             reviews.length > 0 ? [1, 2, 3].map(function () {
                                 let rnd = Math.floor(Math.random() * reviews.length)

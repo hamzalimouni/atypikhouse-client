@@ -418,7 +418,7 @@ fieldset:disabled .btn {
 
 .sbTitle {
     color: white !important;
-    font-size: 3.5em;
+    font-size: calc(1.675rem + 1.5vw);
 }
 
 @media (max-width: 990px) {
@@ -493,7 +493,7 @@ input#rc_select_1 {
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    height: 34px;
+    height: 45px;
 }
 
 .hideScroll::-webkit-scrollbar {
