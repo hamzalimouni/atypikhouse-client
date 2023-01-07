@@ -128,7 +128,7 @@ const Edit = () => {
                     console.log(i)
                     setImages(images => [...images, MEDIA_URL + i.fileName])
 
-                    fetch(API_URL + '/images/image/' + i.id)
+                    fetch(API_URL + '/images/' + i.id)
                         .then(async response => {
                             // const contentType = response.headers.get('Content-Type')
                             const blob = await response.blob()

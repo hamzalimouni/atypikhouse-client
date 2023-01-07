@@ -22,6 +22,7 @@ const Home = () => {
     const [categories, setCategories] = useState([])
 
     useEffect(() => {
+        document.title = "AtypikHouse - Location insolites pour des vacances inoubliables";
         getHouses()
         getReviews()
         getCategories()
