@@ -81,12 +81,6 @@ const Confidentialite = () => {
                             </a>
                             <a className="list-group-item list-group-item-action">
                                 <div class="d-flex w-100 justify-content-between">
-                                    <h5 className="mb-2 text-atypik"></h5>
-                                </div>
-                                <p></p>
-                            </a>
-                            <a className="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
                                     <h5 className="mb-2 text-atypik">Rétention des données</h5>
                                 </div>
                                 <p>
