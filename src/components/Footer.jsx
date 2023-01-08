@@ -19,7 +19,7 @@ const Footer = () => {
                         <div className='d-flex  py-4'>
                             <FontAwesomeIcon className="px-3" icon={Brands.faCcVisa} color="#fff" size="2x" />
                             <FontAwesomeIcon className="px-3" icon={Brands.faCcMastercard} color="#fff" size="2x" />
-                            <FontAwesomeIcon className="px-3" icon={Brands.faPaypal} color="#fff" size="2x" />
+                            {/* <FontAwesomeIcon className="px-3" icon={Brands.faPaypal} color="#fff" size="2x" /> */}
                         </div>
                         <h5 className='text-white mt-4'>RETROUVEZ-NOUS SUR :</h5>
                         <div className='d-flex pt-4'>
@@ -37,7 +37,7 @@ const Footer = () => {
                             <ListGroup.Item role='button' onClick={() => navigate('/contact')} className='bg-atypik border-0 text-white py-1'>• Contactez-nous</ListGroup.Item>
                             <ListGroup.Item role='button' onClick={() => navigate('/about-us')} className='bg-atypik border-0 text-white py-1'>• À propos de nous</ListGroup.Item>
                             <ListGroup.Item role='button' onClick={() => navigate('/cgu')} className='bg-atypik border-0 text-white py-1'>• CGU / CGV</ListGroup.Item>
-                            <ListGroup.Item role='button' className='bg-atypik border-0 text-white py-1'>• Politique de confidentialité</ListGroup.Item>
+                            <ListGroup.Item role='button' onClick={() => navigate('/confidentialite')} className='bg-atypik border-0 text-white py-1'>• Politique de confidentialité</ListGroup.Item>
                             <ListGroup.Item role='button' onClick={() => navigate('/faq')} className='bg-atypik border-0 text-white py-1'>• FAQ</ListGroup.Item>
                         </ListGroup>
                     </Col>
@@ -60,7 +60,7 @@ const Footer = () => {
                     </Col>
                 </Row>
                 <Row>
-                    <span className='bg-light text-atypik text-center py-2'>© 2022 AtypikHouse - Tous droits réservés</span>
+                    <span className='bg-light text-atypik text-center py-2'>© 2023 AtypikHouse - Tous droits réservés</span>
                 </Row>
             </footer>
         </div>
