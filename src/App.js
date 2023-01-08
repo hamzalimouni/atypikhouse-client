@@ -26,6 +26,7 @@ import Users from './pages/admin/Users';
 import Apropos from './pages/Apropos';
 import NotFound from './pages/NotFound';
 import Edit from './pages/Edit';
+import Confidentialite from './pages/Confidentialite';
 
 function App() {
 
@@ -50,6 +51,7 @@ function App() {
         <Route path="/houses/:id/booking/done" element={requireAuth(<BookingConfirmation />)}></Route>
         <Route path="/contact" element={<Contact />}></Route>
         <Route path="/cgu" element={<ConditionGeneral />}></Route>
+        <Route path="/confidentialite" element={<Confidentialite />}></Route>
         <Route path="/faq" element={<Faq />}></Route>
         <Route path="/about-us" element={<Apropos />}></Route>
         <Route path="/account/settings" element={requireAuth(<Account />)}></Route>
