@@ -78,7 +78,7 @@ const Annonces = () => {
                     <FontAwesomeIcon icon={Icons.faTrash} />
                 </Button>
             </Popconfirm>
-            <Button variant='flat' className='text-primary' size='sm'>
+            <Button variant='flat' className='text-primary' size='sm' onClick={() => window.open('../houses/' + id + '/edit', '_blank')}>
                 <FontAwesomeIcon icon={Icons.faEdit} />
             </Button>
             <Button variant='flat' className='text-primary' size='sm' onClick={() => window.open('../houses/' + id, '_blank')}>

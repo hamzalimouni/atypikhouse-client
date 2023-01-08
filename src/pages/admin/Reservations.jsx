@@ -128,8 +128,8 @@ const Reservations = () => {
                     <Spin spinning={loading}>
                         <BootstrapTable data={items} search={false} options={options} pagination bordered={false} >
                             <TableHeaderColumn headerAlign='center' width={'3%'} dataSort={true} isKey dataField='id'>#</TableHeaderColumn>
-                            <TableHeaderColumn width={'10%'} dataSort={true} dataField='user' dataFormat={(u) => <span>{u.firstname.charAt(0)} {u.lastname.charAt(0)}  <FontAwesomeIcon role='button' onClick={() => { setIsModalOpen(true); setModalData(u) }} icon={Icons.faEye} color='#0a2d74' /></span>}>Voyageur</TableHeaderColumn>
-                            <TableHeaderColumn width={'25%'} dataSort={true} dataField='house' dataFormat={(u) => <span>{u.title}  <FontAwesomeIcon role='button' onClick={() => { window.open('/houses/' + u.id) }} icon={Icons.faEye} color='#0a2d74' /></span>}>Annonce</TableHeaderColumn>
+                            <TableHeaderColumn width={'10%'} dataSort={true} dataField='user' dataFormat={(u) => <span><FontAwesomeIcon role='button' onClick={() => { setIsModalOpen(true); setModalData(u) }} icon={Icons.faEye} color='#0a2d74' /> {u.firstname.charAt(0)} {u.lastname.charAt(0)}</span>}>Voyageur</TableHeaderColumn>
+                            <TableHeaderColumn width={'25%'} dataSort={true} dataField='house' dataFormat={(u) => <span><FontAwesomeIcon role='button' onClick={() => { window.open('/houses/' + u.id) }} icon={Icons.faEye} color='#0a2d74' /> {u.title}</span>}>Annonce</TableHeaderColumn>
                             <TableHeaderColumn dataSort={true} dataField='fromDate' dataFormat={(d) => moment(d).format('DD MMM YYYY')}>De</TableHeaderColumn>
                             <TableHeaderColumn dataSort={true} dataField='toDate' dataFormat={(d) => moment(d).format('DD MMM YYYY')}>A</TableHeaderColumn>
                             <TableHeaderColumn width={'10%'} dataSort={true} dataField='nbPersons'>Nb voyageurs</TableHeaderColumn>

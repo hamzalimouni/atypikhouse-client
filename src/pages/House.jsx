@@ -108,7 +108,7 @@ const House = () => {
           setfound(false)
         }
       })
-      .catch(error => { console.log("AWDI RAH ERROR " + error); setfound(false) });
+      .catch(error => { console.log(error); setfound(false) });
   }
 
   const getHouseParams = async () => {

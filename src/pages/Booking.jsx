@@ -64,7 +64,6 @@ const Paiment = () => {
                 }),
             })
                 .then((result) => {
-                    console.log(result.data)
                     setStripeClientSecret(result.data.client_secret)
                     setLoadingPayment(false)
                 })
@@ -248,28 +247,28 @@ const Paiment = () => {
                     :
                     <Row>
                         <Skeleton loading={loading} paragraph={{ rows: 10 }} active >
-                            <Col className='mx-5 border rounded'>
+                            <Col className='mx-md-5 mx-2 border rounded'>
                                 <div className="border-bottom text-center p-3">
                                     <h1 className='fs-2 m-0'>Réservation</h1>
                                     {/* <small>Confirmée sous 24h par votre hôte</small> */}
                                 </div>
-                                <div className="p-5 pb-1">
+                                <div className="p-md-5 p-2 pb-1">
                                     <Divider orientation='left'><h3>Voyage</h3></Divider>
 
                                     <Row className='my-5'>
-                                        <Col>
+                                        <Col md={6}>
                                             <RangePicker
                                                 disabledDate={disabledDate}
                                                 defaultValue={[Moment(options.from), Moment(options.to)]}
                                                 onChange={(d) => {
-                                                    setOptions({ ...options, from: d[0].toDate(), to: d[1].toDate(), total: houseData.price * Moment(d[1].toDate()).diff(d[0].toDate(), 'days') + 15 })
+                                                    setOptions({ ...options, from: d[0].toDate(), to: d[1].toDate(), total: houseData.price * Moment(d[1].toDate()).diff(d[0].toDate(), 'days') })
                                                 }}
-                                                style={{ border: '1px solid #f0f0f0', padding: 19, borderRadius: 10 }}
+                                                style={{ border: '1px solid #f0f0f0', padding: 19, borderRadius: 10, width: '100%' }}
                                                 placeholder={["Date d'arrivé", "Date de départ"]}
                                                 suffixIcon=""
                                                 separator={<FontAwesomeIcon icon={Icons.faArrowRight} color="#cecece" />} />
                                         </Col>
-                                        <Col>
+                                        <Col md={6}>
                                             <div style={{ border: '1px solid #f0f0f0', padding: 14, borderRadius: 10, height: 62 }}>
                                                 <div className="d-flex justify-content-around align-items-center">
                                                     <span>
@@ -295,7 +294,7 @@ const Paiment = () => {
                                         </Col>
                                     </Row>
                                 </div>
-                                <div className="px-5 pb-5 ">
+                                <div className="px-md-5 p-2 pb-5 ">
                                     <Divider orientation='left'><h3>Message</h3></Divider>
                                     <div className='ms-3'>
                                         <p className=''>N’hésitez pas à dire un mot à l'hébergeur au sujet de votre réservation.</p>
@@ -323,7 +322,7 @@ const Paiment = () => {
 
                                 </div>
                                 <form onSubmit={onBookHouse}>
-                                    <div className="px-5 pb-5 text-center">
+                                    <div className="px-md-5 p-2 pb-5 text-center">
                                         <Divider orientation='left'><h3>Paiement</h3></Divider>
                                         {errorMessage && <Tag color="error" className='p-2 fs-6 mb-3'>{errorMessage}</Tag>}
                                         <span className='d-flex align-items-center justify-content-center'>
@@ -409,7 +408,7 @@ const Paiment = () => {
                                             </Row>
                                         </Col> */}
                                     </div>
-                                    <div className="px-5 pb-5 ">
+                                    <div className="px-md-5 p-2 pb-5 ">
                                         {/* <Divider orientation='left'><h3>Confirmation</h3></Divider> */}
                                         <div className='text-center'>
                                             {/* onClick={() => bookHouse()} */}
@@ -422,7 +421,7 @@ const Paiment = () => {
                                     </div>
                                 </form>
                             </Col>
-                            <Col sm={12} md={6} lg={4} className='border rounded sticky-top h-100 p-5'>
+                            <Col md={6} xs={{ order: 'first' }} lg={{ span: 4, order: 'last' }} className='mx-md-5 mx-2 border rounded sticky-top h-100 p-5 mb-3'>
                                 <Image src={thumbnail} height={250} width='100%' style={{ objectFit: 'cover', borderRadius: 20 }} />
                                 <h4 className='p-2 text-center'>{houseData.title}</h4>
                                 <Divider />
