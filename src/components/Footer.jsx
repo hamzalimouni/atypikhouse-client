@@ -8,6 +8,11 @@ import * as Brands from '@fortawesome/free-brands-svg-icons';
 import { Row, Col, ListGroup, NavDropdown, Button, Image, Form, Container } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import CookieBanner from './CookieBanner';
+import MailchimpSubscribe from "react-mailchimp-subscribe"
+
+const url = "https://azurewebsites.us14.list-manage.com/subscribe/post?u=8772cd8c5640c8f3b066847fd&amp;id=484721ae2e&amp;f_id=004a9be0f0";
+
+const SimpleForm = () => <MailchimpSubscribe url={url} />
 
 const Footer = () => {
     let navigate = useNavigate();
@@ -41,6 +46,7 @@ const Footer = () => {
                                 <ListGroup.Item role='button' onClick={() => navigate('/cgu')} className='bg-atypik border-0 text-white py-1'>• CGU / CGV</ListGroup.Item>
                                 <ListGroup.Item role='button' onClick={() => navigate('/confidentialite')} className='bg-atypik border-0 text-white py-1'>• Politique de confidentialité</ListGroup.Item>
                                 <ListGroup.Item role='button' onClick={() => navigate('/faq')} className='bg-atypik border-0 text-white py-1'>• FAQ</ListGroup.Item>
+                                <ListGroup.Item role='button' onClick={() => navigate('/plan')} className='bg-atypik border-0 text-white py-1'>• Plan du site</ListGroup.Item>
                             </ListGroup>
                         </Col>
                         <Col className='p-5'>
@@ -50,15 +56,24 @@ const Footer = () => {
                                 Et accédez aux meilleures offres du
                                 moment
                             </span>
-                            <Form className='mt-3 p-3'>
+                            <div className='subscribe mt-4 bg-white rounded p-4'>
+                                <MailchimpSubscribe
+                                    url={url}
+                                    render={({ subscribe, status, message }) => (
+                                        <div style={{ color: "white !important" }}>
+                                            <SimpleForm onSubmitted={formData => { subscribe(formData) }} />
+                                        </div>
+                                    )}
+                                />
+                            </div>
+                            {/* <Form className='mt-3 p-3'>
                                 <div className='d-flex'>
                                     <Form.Control type="email" placeholder="Votre email" />
                                     <Button variant="atypik" type="submit">
                                         Inscrire
                                     </Button>
                                 </div>
-
-                            </Form>
+                            </Form> */}
                         </Col>
                     </Row>
                     <Row>

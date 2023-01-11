@@ -526,3 +526,32 @@ input#rc_select_1 {
 .ant-select-selection-search {
     padding-top: 4px !important;
 }
+
+.subscribe {
+    text-align: center;
+}
+.subscribe button {
+    background-color: var(--main-color) !important;
+    color: white !important;
+    padding: 7px;
+    border: 1px solid white;
+    border-radius: 12px;
+    width: 100px;
+    margin-top: 10px;
+}
+
+.subscribe input {
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    appearance: none;
+    border-radius: .375rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}

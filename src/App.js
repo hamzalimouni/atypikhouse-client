@@ -26,6 +26,7 @@ import Users from './pages/admin/Users';
 import Apropos from './pages/Apropos';
 import NotFound from './pages/NotFound';
 import Edit from './pages/Edit';
+import Plan from './pages/Plan';
 import Confidentialite from './pages/Confidentialite';
 
 function App() {
@@ -37,6 +38,8 @@ function App() {
   function requireAdmin(redirectTo) {
     return JSON.parse(Cookies.get('user') ? Cookies.get('user') : null)?.roles.indexOf('ROLE_ADMIN') > -1 ? redirectTo : <Navigate to={'/'} />
   }
+
+
 
   return (
     <BrowserRouter>
@@ -54,6 +57,7 @@ function App() {
         <Route path="/confidentialite" element={<Confidentialite />}></Route>
         <Route path="/faq" element={<Faq />}></Route>
         <Route path="/about-us" element={<Apropos />}></Route>
+        <Route path="/plan" element={<Plan />}></Route>
         <Route path="/account/settings" element={requireAuth(<Account />)}></Route>
         <Route path="/account/annonces" element={requireAuth(<Annonces />)}></Route>
         <Route path="/account/reservations" element={requireAuth(<Reservations />)}></Route>
