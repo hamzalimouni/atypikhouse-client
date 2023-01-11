@@ -163,7 +163,7 @@ const Home = () => {
                 <Container >
                     <div className='text-center mt-4 d-flex justify-content-center align-items-center py-2'>
                         <Image alt='Les plus belles expériences' className='atypik-img-title' src={happy} height='70px' />
-                        <h2 className='atypik-cur-title m-0 px-2'> Les plus belles expériences</h2>
+                        <h2 className='atypik-cur-title m-0 px-2'> Les meilleurs thématiques</h2>
                     </div>
                     <div className='d-flex py-4 px-2 justify-content-between hideScroll' style={{ overflow: 'auto' }}>
                         {

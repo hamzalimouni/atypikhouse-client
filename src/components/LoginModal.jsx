@@ -6,11 +6,13 @@ import { API_URL } from '../Variables';
 import { Spin } from 'antd';
 import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router-dom'
+import RegisterModal from './RegisterModal';
 
 
 const LoginModal = props => {
     let navigate = useNavigate();
     const { show, onClose } = props;
+    const [showRegister, setShowRegister] = useState(false);
     const [alertShow, setAlertShow] = useState(false);
     const [validated, setValidated] = useState(false);
     const [valid, setValid] = useState(false);
@@ -119,11 +121,16 @@ const LoginModal = props => {
                         </div>
 
                         <Modal.Footer className='mt-4 mb-0'>
-                            <a href="#"
+                            <span
+                                onClick={() => {
+                                    setShowRegister(true)
+                                }
+                                }
+                                role='button'
                                 className='text-atypik pt-3 d-flex mx-auto justify-content-center'
                                 style={{ fontWeight: '600', fontSize: '1.2em' }}>
                                 Créer un compte
-                            </a>
+                            </span>
                         </Modal.Footer>
 
 
@@ -131,6 +138,7 @@ const LoginModal = props => {
 
                 </Modal.Body>
             </Spin>
+            <RegisterModal show={showRegister} onClose={() => setShowRegister(false)} />
         </Modal>
     )
 }

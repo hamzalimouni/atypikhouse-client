@@ -354,7 +354,7 @@ const NewHouse = () => {
                         disabled
                         readOnly />
                 </FloatingLabel>
-                <FloatingLabel label="Latitude" className='my-4'>
+                <FloatingLabel label="Longitude" className='my-4'>
                     <Form.Control
                         value={address.longitude}
                         disabled

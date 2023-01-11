@@ -16,6 +16,7 @@ import { useParams } from "react-router-dom";
 import { API_URL, MEDIA_URL } from '../Variables';
 import notFoundImage from '../assets/img/notfound.svg'
 import Cookies from 'js-cookie';
+import CardHouse from '../components/CardHouse'
 
 const House = () => {
   const location = useLocation()
@@ -30,6 +31,7 @@ const House = () => {
   const [sending, setSending] = useState(false)
   const [loading, setLoading] = useState(true);
   const [images, setImages] = useState([])
+  const [recommendation, setRecommendation] = useState([])
   const [houseParams, setHouseParams] = useState([])
   const [indisponible, setIndisponible] = useState([])
   const [rating, setRating] = useState(3)
@@ -104,11 +106,19 @@ const House = () => {
             }
           })
           reservedDates.map((d) => setIndisponible((indisponible) => [...indisponible, d]))
+          getRecommendations();
         } else {
           setfound(false)
         }
       })
       .catch(error => { console.log(error); setfound(false) });
+  }
+
+  const getRecommendations = async () => {
+    await fetch(API_URL + "/houses?status=APPROVED&category.id=" + houseData?.category?.id)
+      .then(res => res.json())
+      .then(data => setRecommendation(data['hydra:member']))
+      .catch(error => { console.log(error); setRecommendation([]) });
   }
 
   const getHouseParams = async () => {
@@ -327,7 +337,7 @@ const House = () => {
                     </div>
                   </Row>
                   <Row className='shadow-sm rounded p-4 mt-4'>
-                    <h4>Descritpion</h4>
+                    <h4>Description</h4>
                     <Divider className='mt-0' />
                     <span >
                       {houseData.description}
@@ -505,6 +515,38 @@ const House = () => {
                 </Skeleton>
               </Col>
             </Row>
+            <Container className='mt-4 pt-5'>
+              <div className='text-center'>
+                <h4>Lieux similaires que vous pourriez impressionné</h4>
+
+              </div>
+              <Divider className='mt-0' />
+              <Row>
+                {
+                  recommendation.length > 0 ? [1, 2, 3].map(function () {
+                    let rnd = Math.floor(Math.random() * recommendation.length)
+                    let ravg = 0;
+                    recommendation[rnd]?.reviews.map((r) => ravg += r.grade / recommendation[rnd]?.reviews.length)
+                    return <Col role='article' onClick={() => window.open('/houses/' + recommendation[rnd]?.id)} sm={12} md={6} lg={4}><CardHouse
+                      image={MEDIA_URL + recommendation[rnd]?.images[0]?.fileName}
+                      title={recommendation[rnd]?.title}
+                      destination={recommendation[rnd]?.address?.city + ', ' + recommendation[rnd]?.address?.country}
+                      price={recommendation[rnd]?.price}
+                      reviews={ravg == 0 ? '-' : ravg.toFixed(1) + ' (' + recommendation[rnd].reviews.length + ')'} /></Col>
+                  }) : <>
+                    <Col>
+                      <Skeleton loading={true} active></Skeleton>
+                    </Col>
+                    <Col>
+                      <Skeleton loading={true} active></Skeleton>
+                    </Col>
+                    <Col>
+                      <Skeleton loading={true} active></Skeleton>
+                    </Col>
+                  </>
+                }
+              </Row>
+            </Container>
           </Container>
         </>
       }
