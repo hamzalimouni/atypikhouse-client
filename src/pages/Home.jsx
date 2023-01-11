@@ -55,7 +55,7 @@ const Home = () => {
             <div className="py-5">
                 <Container>
                     <div className='text-center d-flex justify-content-center align-items-center py-2'>
-                        <Image className='atypik-img-title' src={campfire} height='70px' />
+                        <Image alt='Les meilleurs endroits' className='atypik-img-title' src={campfire} height='70px' />
                         <h2 className='atypik-cur-title m-0 px-2'> Les meilleurs endroits</h2>
                     </div>
                     <Row className='container py-4 m-0'>
@@ -64,7 +64,7 @@ const Home = () => {
                                 let rnd = Math.floor(Math.random() * houses.length)
                                 let ravg = 0;
                                 houses[rnd]?.reviews.map((r) => ravg += r.grade / houses[rnd]?.reviews.length)
-                                return <Col onClick={() => window.open('houses/' + houses[rnd]?.id)} sm={12} md={6} lg={4}><CardHouse
+                                return <Col role='article' onClick={() => window.open('houses/' + houses[rnd]?.id)} sm={12} md={6} lg={4}><CardHouse
                                     image={MEDIA_URL + houses[rnd]?.images[0]?.fileName}
                                     title={houses[rnd]?.title}
                                     destination={houses[rnd]?.address?.city + ', ' + houses[rnd]?.address?.country}
@@ -88,7 +88,7 @@ const Home = () => {
             <div className="main-background-color py-5">
                 <Container >
                     <div className='text-center mt-4 d-flex justify-content-center align-items-center py-2'>
-                        <Image className='atypik-img-title' src={review} height='70px' />
+                        <Image alt='Ce que les gens disaient' className='atypik-img-title' src={review} height='70px' />
                         <h2 className='atypik-cur-title m-0 px-2'> Ce que les gens disaient</h2>
                     </div>
                     <Row className='container py-4 m-0'>
@@ -119,7 +119,7 @@ const Home = () => {
             <div className="py-5">
                 <Container >
                     <div className='text-center mt-4 d-flex justify-content-center align-items-center py-2'>
-                        <Image className='atypik-img-title' src={happy} height='70px' />
+                        <Image alt='Les plus belles expériences' className='atypik-img-title' src={happy} height='70px' />
                         <h2 className='atypik-cur-title m-0 px-2'> Les plus belles expériences</h2>
                     </div>
                     <div className='d-flex py-4 px-2 justify-content-between hideScroll' style={{ overflow: 'auto' }}>

@@ -49,9 +49,9 @@ const AppNavbar = () => {
     const handleShowRegister = () => setShowRegister(true);
 
     return (
-        <Navbar collapseOnSelect expand="lg" className='border-bottom'>
+        <Navbar collapseOnSelect expand="lg" className='border-bottom' role='banner'>
             <Container className='pt-1'>
-                <Navbar.Brand><Image onClick={() => { navigate("/") }} className="logo" src={logo} height='30px' /></Navbar.Brand>
+                <Navbar.Brand><Image alt='Atypikhouse logo' onClick={() => { navigate("/") }} className="logo" src={logo} height='30px' /></Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="mx-auto">
@@ -102,7 +102,7 @@ const AppNavbar = () => {
             </Container>
             <LoginModal show={showLogin} onClose={handleCloseLogin} />
             <RegisterModal show={showRegister} onClose={handleCloseRegister} />
-            <Drawer title="Notifications" placement="right" onClose={() => setOpen(false)} open={open}>
+            <Drawer title="Notifications" style={{ zIndex: 999999 }} placement="right" onClose={() => setOpen(false)} open={open}>
                 <Skeleton loading={loadingNotifs} active>
                     {
                         notifications.length > 0 && notifications?.map((n) => {

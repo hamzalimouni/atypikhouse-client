@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Button, Col, Container, FloatingLabel, Form, Row } from 'react-bootstrap'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
-import { Divider, Skeleton, Avatar } from 'antd';
+import { Divider, Skeleton, Avatar, Breadcrumb } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons';
 import Cookies from 'js-cookie'
@@ -124,6 +124,13 @@ const Messages = () => {
         <div>
             <Navbar />
             <Container className='mt-5'>
+                <Breadcrumb className='bg-light p-2 rounded-pill ps-4 mb-3'>
+                    <Breadcrumb.Item href="/">
+                        <FontAwesomeIcon icon={Icons.faHome} color="#767A82" className='pe-2' />
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item>Mon compte</Breadcrumb.Item>
+                    <Breadcrumb.Item>Messages</Breadcrumb.Item>
+                </Breadcrumb>
                 <Container className='w-75 mx-auto border'>
                     <Row >
                         <Col lg={4} className="bg-light border-end p-0 overflow-auto" style={{ height: 520 }}>

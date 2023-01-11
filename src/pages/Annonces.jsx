@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Button, Col, Container, Image, Row } from 'react-bootstrap'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
-import { Divider, Skeleton, Badge, Popconfirm, message, Empty } from 'antd';
+import { Divider, Skeleton, Badge, Popconfirm, message, Empty, Breadcrumb } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons';
 import Cookies from 'js-cookie'
@@ -34,6 +34,13 @@ const Annonces = () => {
         <div>
             <Navbar />
             <Container className='mt-5'>
+                <Breadcrumb className='bg-light p-2 rounded-pill ps-4 mb-3'>
+                    <Breadcrumb.Item href="/">
+                        <FontAwesomeIcon icon={Icons.faHome} color="#767A82" className='pe-2' />
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item>Mon compte</Breadcrumb.Item>
+                    <Breadcrumb.Item>Mes annonces</Breadcrumb.Item>
+                </Breadcrumb>
                 <Divider><h2 className='text-center text-blue'>Mes annonces</h2></Divider>
                 <Container>
                     <Skeleton loading={loading} paragraph={{ rows: 10 }} active >

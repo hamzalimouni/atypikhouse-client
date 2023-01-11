@@ -10,7 +10,7 @@ import HouseImages from '../components/HouseImages'
 import { useNavigate, useLocation, createSearchParams } from "react-router-dom";
 import { Avatar, Divider, Rate } from 'antd';
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
-import { DatePicker, Badge, Skeleton, message, Popconfirm, Tag, Modal } from 'antd';
+import { DatePicker, Badge, Skeleton, message, Popconfirm, Tag, Modal, Breadcrumb } from 'antd';
 import Moment from 'moment';
 import { useParams } from "react-router-dom";
 import { API_URL, MEDIA_URL } from '../Variables';
@@ -281,6 +281,15 @@ const House = () => {
                     <Tag color="success" className='p-2 my-3'>Vous avez déja réservé cette habitat <strong role='button' onClick={() => navigate('/account/reservations')}>voir mes réservation</strong></Tag>
                     : null
                   }
+                  <Breadcrumb className='bg-light p-2 rounded-pill ps-4'>
+                    <Breadcrumb.Item href="/">
+                      <FontAwesomeIcon icon={Icons.faHome} color="#767A82" className='pe-2' />
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item href={"/houses?category=" + houseData.category.id}>
+                      <span>{houseData.category.name}</span>
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item>{houseData.title}</Breadcrumb.Item>
+                  </Breadcrumb>
                   <HouseImages images={images} loading={loading} />
                 </>
               }

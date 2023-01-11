@@ -8,7 +8,7 @@ import { useState } from 'react';
 import PhoneInput from 'react-phone-input-2';
 import Footer from '../components/Footer';
 import { API_URL } from '../Variables';
-import { Skeleton } from 'antd';
+import { Breadcrumb, Skeleton } from 'antd';
 import Cookies from 'js-cookie';
 import { format } from 'date-fns';
 import countries from "i18n-iso-countries";
@@ -53,6 +53,13 @@ const Account = () => {
         <div>
             < Navbar />
             <Container className='mt-5'>
+                <Breadcrumb className='bg-light p-2 rounded-pill ps-4 mb-3'>
+                    <Breadcrumb.Item href="/">
+                        <FontAwesomeIcon icon={Icons.faHome} color="#767A82" className='pe-2' />
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item>Mon compte</Breadcrumb.Item>
+                    <Breadcrumb.Item>Mes informations</Breadcrumb.Item>
+                </Breadcrumb>
                 <h2 className='text-center text-blue'><FontAwesomeIcon icon={Icons.faUserEdit} color="#0A2D74" /> Mon compte</h2>
                 <div className='row justify-content-md-center mt-5'>
                     <div className='col col-lg-7'>
@@ -118,7 +125,7 @@ const Account = () => {
                                 onClick={() => setPwIsEdit(!isPwEdit)}> {isPwEdit ? 'Annuler' : 'Modifier'}</Button>
                         </div>
                         {isPwEdit ?
-                            <div className='mt-5 px-5'><EditPassword items={items}/></div> : ''}
+                            <div className='mt-5 px-5'><EditPassword items={items} /></div> : ''}
                     </div>
                 </div>
             </Container >

@@ -1,8 +1,10 @@
+import { Breadcrumb } from 'antd'
 import React, { useEffect } from 'react'
 import { Accordion, Container, Row } from 'react-bootstrap'
 import Footer from '../components/Footer'
 import AppNavbar from '../components/Navbar'
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import * as Icons from '@fortawesome/free-solid-svg-icons';
 const Apropos = () => {
 
     useEffect(() => {
@@ -13,6 +15,12 @@ const Apropos = () => {
         <div>
             <AppNavbar />
             <Container className='py-4'>
+                <Breadcrumb className='bg-light p-2 rounded-pill ps-4 mb-3'>
+                    <Breadcrumb.Item href="/">
+                        <FontAwesomeIcon icon={Icons.faHome} color="#767A82" className='pe-2' />
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item>Qui sommes-nous</Breadcrumb.Item>
+                </Breadcrumb>
                 <Row className='text-center mb-4'>
                     <h2 className='atypik-cur-title m-0 px-2 text-uppercase'>Qui sommes-nous?</h2>
                 </Row>

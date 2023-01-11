@@ -4,7 +4,8 @@ import Footer from '../components/Footer'
 import AppNavbar from '../components/Navbar'
 import review from '../assets/icons/review.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faContactCard, faLocationDot, faPhone } from '@fortawesome/free-solid-svg-icons'
+import { faContactCard, faHome, faLocationDot, faPhone } from '@fortawesome/free-solid-svg-icons'
+import { Breadcrumb } from 'antd'
 
 const Contact = () => {
 
@@ -17,6 +18,12 @@ const Contact = () => {
             <AppNavbar />
             <div className="py-4">
                 <Container>
+                    <Breadcrumb className='bg-light p-2 rounded-pill ps-4 mb-3'>
+                        <Breadcrumb.Item href="/">
+                            <FontAwesomeIcon icon={faHome} color="#767A82" className='pe-2' />
+                        </Breadcrumb.Item>
+                        <Breadcrumb.Item>Nous contacter</Breadcrumb.Item>
+                    </Breadcrumb>
                     <div className='text-center py-4 d-flex justify-content-center align-items-center'>
                         <Image className='atypik-img-title' src={review} height='70px' />
                         <h2 className='atypik-cur-title m-0 px-2'> contact</h2>

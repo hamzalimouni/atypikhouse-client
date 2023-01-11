@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react'
 import { Button as Btn, Col, Container, Image, Row, Form, FloatingLabel } from 'react-bootstrap'
 import AppNavbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import { DatePicker, Badge, Avatar, Spin, Divider, Skeleton, Tag, message } from 'antd';
+import { DatePicker, Badge, Avatar, Spin, Divider, Skeleton, Tag, Breadcrumb } from 'antd';
 import Moment from 'moment';
 import { useNavigate, useParams, useLocation, createSearchParams } from "react-router-dom";
 import { API_URL, MEDIA_URL } from '../Variables';
@@ -247,6 +247,16 @@ const Paiment = () => {
                     :
                     <Row>
                         <Skeleton loading={loading} paragraph={{ rows: 10 }} active >
+                            <Breadcrumb className='bg-light p-2 rounded-pill ps-4 mb-3'>
+                                <Breadcrumb.Item href="/">
+                                    <FontAwesomeIcon icon={Icons.faHome} color="#767A82" className='pe-2' />
+                                </Breadcrumb.Item>
+                                <Breadcrumb.Item href={"/houses?category=" + houseData?.category?.id}>
+                                    <span>{houseData?.category?.name}</span>
+                                </Breadcrumb.Item>
+                                <Breadcrumb.Item href={"/houses/" + houseData?.id}>{houseData?.title}</Breadcrumb.Item>
+                                <Breadcrumb.Item>Réserver</Breadcrumb.Item>
+                            </Breadcrumb>
                             <Col className='mx-md-5 mx-2 border rounded'>
                                 <div className="border-bottom text-center p-3">
                                     <h1 className='fs-2 m-0'>Réservation</h1>
@@ -445,7 +455,7 @@ const Paiment = () => {
             </Container>
             <LoginModal show={showLogin} onClose={() => setShowLogin(false)} />
             <Footer />
-        </div>
+        </div >
     )
 }
 
