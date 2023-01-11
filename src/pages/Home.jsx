@@ -7,6 +7,7 @@ import { Card, Col, Container, Image, Row } from 'react-bootstrap'
 import { Skeleton } from 'antd'
 import campfire from '../assets/icons/campfire.png'
 import review from '../assets/icons/review.png'
+import money from '../assets/icons/money.png'
 import happy from '../assets/icons/happy.png'
 import ReviewCard from '../components/ReviewCard'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -18,6 +19,7 @@ const Home = () => {
     const navigate = useNavigate();
 
     const [houses, setHouses] = useState([])
+    const [cheapHouses, setCheapHouses] = useState([])
     const [reviews, setReviews] = useState([])
     const [categories, setCategories] = useState([])
 
@@ -26,13 +28,21 @@ const Home = () => {
         getHouses()
         getReviews()
         getCategories()
+        getCheapestHouses()
     }, []);
 
     const getHouses = async () => {
-        await fetch(API_URL + "/houses")
+        await fetch(API_URL + "/houses?status=APPROVED")
             .then(res => res.json())
             .then(data => setHouses(data['hydra:member']))
             .catch(error => { console.log(error); setHouses([]) });
+    }
+
+    const getCheapestHouses = async () => {
+        await fetch(API_URL + "/houses?order[price]=ASC&status=APPROVED")
+            .then(res => res.json())
+            .then(data => setCheapHouses(data['hydra:member']))
+            .catch(error => { console.log(error); setCheapHouses([]) });
     }
 
     const getReviews = async () => {
@@ -70,6 +80,39 @@ const Home = () => {
                                     destination={houses[rnd]?.address?.city + ', ' + houses[rnd]?.address?.country}
                                     price={houses[rnd]?.price}
                                     reviews={ravg == 0 ? '-' : ravg.toFixed(1) + ' (' + houses[rnd].reviews.length + ')'} /></Col>
+                            }) : <>
+                                <Col>
+                                    <Skeleton loading={true} active></Skeleton>
+                                </Col>
+                                <Col>
+                                    <Skeleton loading={true} active></Skeleton>
+                                </Col>
+                                <Col>
+                                    <Skeleton loading={true} active></Skeleton>
+                                </Col>
+                            </>
+                        }
+                    </Row>
+                </Container>
+            </div>
+            <div className="py-5">
+                <Container>
+                    <div className='text-center d-flex justify-content-center align-items-center py-2'>
+                        <Image alt='Les meilleurs endroits' className='atypik-img-title' src={money} height='70px' />
+                        <h2 className='atypik-cur-title m-0 px-2'> Les moins chers</h2>
+                    </div>
+                    <Row className='container py-4 m-0'>
+                        {
+                            cheapHouses.length > 0 ? cheapHouses.slice(0, 3).map((h) => {
+
+                                let ravg = 0;
+                                h?.reviews?.map((r) => ravg += r.grade / h?.reviews.length)
+                                return <Col role='article' onClick={() => window.open('houses/' + h?.id)} sm={12} md={6} lg={4}><CardHouse
+                                    image={MEDIA_URL + h?.images[0]?.fileName}
+                                    title={h?.title}
+                                    destination={h?.address?.city + ', ' + h?.address?.country}
+                                    price={h?.price}
+                                    reviews={ravg == 0 ? '-' : ravg.toFixed(1) + ' (' + h.reviews.length + ')'} /></Col>
                             }) : <>
                                 <Col>
                                     <Skeleton loading={true} active></Skeleton>

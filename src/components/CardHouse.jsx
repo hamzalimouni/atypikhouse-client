@@ -25,7 +25,7 @@ const CardHouse = (props) => {
                 hasIndexBoard={false}
                 hasDotButtons={"bottomCenter"} /> */}
             <Card.Body>
-                <Card.Title>{props.title}</Card.Title>
+                <Card.Title className='searchItemTitle'>{props.title}</Card.Title>
                 <Card.Text><FontAwesomeIcon icon={Icons.faLocationDot} color="#c0c0c0" /> {props.destination}</Card.Text>
             </Card.Body>
             <Card.Body>

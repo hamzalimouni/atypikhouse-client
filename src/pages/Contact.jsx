@@ -4,8 +4,11 @@ import Footer from '../components/Footer'
 import AppNavbar from '../components/Navbar'
 import review from '../assets/icons/review.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { message } from 'antd'
 import { faContactCard, faHome, faLocationDot, faPhone } from '@fortawesome/free-solid-svg-icons'
 import { Breadcrumb } from 'antd'
+import ReCAPTCHA from "react-google-recaptcha";
+
 
 const Contact = () => {
 
@@ -52,21 +55,38 @@ const Contact = () => {
                         <Col sm={12} md={6} lg={4} xl={5}>
                             <Card className="p-5">
                                 <Card.Title className='text-center pb-4'>Formulaire de contact</Card.Title>
-                                <Form>
+                                <Form onSubmit={(e) => {
+                                    e.preventDefault()
+                                    message.success('Message envoyé avec succès')
+                                    document.querySelector('#sendBtn').setAttribute('disabled', true)
+                                    e.target.reset();
+                                }}>
                                     <Form.Group className='mb-3'>
-                                        <Form.Control type='text' placeholder='Nom et Prénom' />
+                                        <Form.Label>Nom et prénom</Form.Label>
+                                        <Form.Control type='text' required />
                                     </Form.Group>
                                     <Form.Group className='mb-3'>
-                                        <Form.Control type='email' placeholder='Email' />
+                                        <Form.Label>Email</Form.Label>
+                                        <Form.Control type='email' required />
                                     </Form.Group>
                                     <Form.Group className='mb-3'>
-                                        <Form.Control type='tel' placeholder='Telephone' />
+                                        <Form.Label>Téléphone</Form.Label>
+                                        <Form.Control type='tel' required />
                                     </Form.Group>
                                     <Form.Group className='mb-3'>
-                                        <textarea className='form-control' placeholder='Message' name="" id="" rows="5"></textarea>
+                                        <Form.Label>Objet de votre message</Form.Label>
+                                        <Form.Control type='tel' required />
                                     </Form.Group>
-                                    <Form.Group className='d-flex justify-content-end'>
-                                        <Button variant="atypik" className='w-50'>Envoyer</Button>
+                                    <Form.Group className='mb-3'>
+                                        <Form.Label>Message</Form.Label>
+                                        <textarea className='form-control' placeholder='Message' name="" id="" rows="5" required></textarea>
+                                    </Form.Group>
+                                    <ReCAPTCHA
+                                        sitekey="6Lcef-sjAAAAANIurj3XedD2Sd824zWAI-wVv2Qy"
+                                        onChange={(v) => document.querySelector('#sendBtn').removeAttribute('disabled')}
+                                    />
+                                    <Form.Group className='d-flex justify-content-end mt-3'>
+                                        <Button variant="atypik" type='submit' id='sendBtn' disabled className='w-100' >Envoyer</Button>
                                     </Form.Group>
                                 </Form>
                             </Card>

@@ -3,7 +3,8 @@ import 'antd/dist/antd.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/css/main.css'
 import '../assets/css/navbar.css'
-import bg from '../assets/img/bg.png';
+// import bg from '../assets/img/bg.png';
+import bg from '../assets/img/background.webp';
 import { Container, Row, Col, Form, Button, InputGroup, Badge } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarDays, faLocationPin, faPeopleGroup } from '@fortawesome/free-solid-svg-icons'
@@ -75,14 +76,14 @@ const SearchForm = () => {
     };
     return (
         <Container fluid className='p-0 d-flex align-items-center justify-content-center' style={{
-            height: 500, backgroundImage: `url(${bg})`, backgroundPosition: 'center',
+            height: 'calc(100vh - 78px)', backgroundImage: `url(${bg})`, backgroundPosition: 'center',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
         }}>
 
             <Container className="align-items-center">
                 <Row className="align-items-center">
-                    <h1 className='sbTitle'>Quelle sera votre prochaine destination ?</h1>
+                    <h1 className='sbTitle'>Offrez-vous une nuit magique dans un lieu unique !</h1>
                 </Row>
                 <Row className="align-items-center my-5 bg-white p-2 rounded">
                     <Col lg className='py-2'>
