@@ -7,8 +7,10 @@ import { useState } from 'react';
 import { API_URL } from '../Variables';
 import { Spin } from 'antd';
 import Cookies from 'js-cookie'
+import { useNavigate } from 'react-router-dom'
 
 const RegisterModal = props => {
+    let navigate = useNavigate();
     const [validated, setValidated] = useState(false);
     const [valid, setValid] = useState(false);
     const [alertShow, setAlertShow] = useState(false);
@@ -68,6 +70,7 @@ const RegisterModal = props => {
                         Cookies.set('user', JSON.stringify(data['data']), { expires: 1 })
                         onClose(true);
                         setLoading(false);
+                        navigate(0)
                     }
                 })
 

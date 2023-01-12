@@ -22,6 +22,7 @@ const Sidebar = () => {
                 <Nav.Link eventKey="equipment" className='my-1' onClick={() => navigate('/admin/equipment')} ><FontAwesomeIcon icon={Icons.faTv} className='me-3' /><strong>Équipements</strong></Nav.Link>
                 <Nav.Link eventKey="properties" className='my-1' onClick={() => navigate('/admin/properties')} ><FontAwesomeIcon icon={Icons.faListCheck} className='me-3' /><strong>Propriétés</strong></Nav.Link>
                 <Nav.Link eventKey="users" className='my-1' onClick={() => navigate('/admin/users')} ><FontAwesomeIcon icon={Icons.faUserGroup} className='me-3' /><strong>Utilisateurs</strong></Nav.Link>
+                <Nav.Link eventKey="requests" className='my-1' onClick={() => navigate('/admin/requests')} ><FontAwesomeIcon icon={Icons.faUsersCog} className='me-3' /><strong>Demandes propriétaires</strong></Nav.Link>
             </Nav>
 
             <div className="dropdown">

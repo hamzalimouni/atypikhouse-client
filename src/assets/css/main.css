@@ -60,6 +60,11 @@ fieldset:disabled .btn {
     color: white !important;
 }
 
+.btn-orange {
+    background-color: var(--orange-color) !important;
+    color: white !important;
+}
+
 .btn-atypik:hover {
     background-color: var(--main-color-hovered) !important;
     color: white !important;
@@ -382,6 +387,7 @@ fieldset:disabled .btn {
     background-color: var(--main-color) !important;
     color: var(--second-color);
 }
+
 
 .dropdown-toggle::after {
     display: none !important;

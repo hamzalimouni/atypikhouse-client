@@ -159,7 +159,7 @@ const Users = () => {
                             <TableHeaderColumn className='border' dataSort={true} dataField='email'>Email</TableHeaderColumn>
                             <TableHeaderColumn className='border' dataSort={true} dataField='number'>Tél</TableHeaderColumn>
                             <TableHeaderColumn width='13*%' className='border' dataSort={true} dataField='birthday' dataFormat={(b) => moment(b).format('DD MMM YYYY')}>Date de naissance</TableHeaderColumn>
-                            <TableHeaderColumn width='8%' className='border' dataSort={true} dataField='roles' dataFormat={(roles) => roles[0] === "ROLE_ADMIN" ? <Badge bg='primary'>Admin</Badge> : <Badge bg='atypik'>User</Badge>}>Role</TableHeaderColumn>
+                            <TableHeaderColumn width='8%' className='border' dataSort={true} dataField='roles' dataFormat={(roles) => roles[0] === "ROLE_ADMIN" ? <Badge bg='primary'>Admin</Badge> : roles[0] === "ROLE_OWNER" ? <Badge bg='warning'>Propriétaire</Badge> : <Badge bg='atypik'>Utilisateur</Badge>}>Role</TableHeaderColumn>
                             <TableHeaderColumn className='border' dataField='id' dataFormat={actionFormat}>-</TableHeaderColumn>
                         </BootstrapTable>
                     </Spin>
@@ -167,7 +167,7 @@ const Users = () => {
                 <Modal title="Fiche de l'utilisateur" open={isModalOpen} onOk={() => setIsModalOpen(false)} onCancel={() => setIsModalOpen(false)}>
                     <Container>
                         <Descriptions bordered column={1}>
-                            <Descriptions.Item label="Role">{modalData?.roles && modalData?.roles[0] === "ROLE_ADMIN" ? <Badge bg='primary'>Admin</Badge> : <Badge bg='atypik'>User</Badge>}</Descriptions.Item>
+                            <Descriptions.Item label="Role">{modalData?.roles && modalData?.roles[0] === "ROLE_ADMIN" ? <Badge bg='primary'>Admin</Badge> : modalData?.roles && modalData?.roles[0] === "ROLE_OWNER" ? <Badge bg='warning'>Propriétaire</Badge> : <Badge bg='atypik'>Utilisateur</Badge>}</Descriptions.Item>
                             <Descriptions.Item label="Nom">{modalData?.firstname}</Descriptions.Item>
                             <Descriptions.Item label="Prénom">{modalData.lastname}</Descriptions.Item>
                             <Descriptions.Item label="Tél">{modalData.number}</Descriptions.Item>

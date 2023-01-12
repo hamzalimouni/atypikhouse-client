@@ -9,6 +9,7 @@ import AnnoncesAdmin from './pages/admin/Annonces';
 import Dashboard from './pages/admin/Dashboard';
 import Categories from './pages/admin/Categories';
 import Equipment from './pages/admin/Equipment';
+import Requests from './pages/admin/Requests';
 import ReservationsAdmin from './pages/admin/Reservations'
 import Contact from './pages/Contact';
 import Properties from './pages/admin/Properties';
@@ -28,6 +29,7 @@ import NotFound from './pages/NotFound';
 import Edit from './pages/Edit';
 import Plan from './pages/Plan';
 import Confidentialite from './pages/Confidentialite';
+import DevenirProprietaire from './pages/DevenirProprietaire';
 
 function App() {
 
@@ -58,6 +60,7 @@ function App() {
         <Route path="/faq" element={<Faq />}></Route>
         <Route path="/about-us" element={<Apropos />}></Route>
         <Route path="/plan" element={<Plan />}></Route>
+        <Route path="/devenir-proprietaire" element={<DevenirProprietaire />}></Route>
         <Route path="/account/settings" element={requireAuth(<Account />)}></Route>
         <Route path="/account/annonces" element={requireAuth(<Annonces />)}></Route>
         <Route path="/account/reservations" element={requireAuth(<Reservations />)}></Route>
@@ -71,6 +74,7 @@ function App() {
         <Route path="/admin/equipment" element={requireAdmin(<Equipment />)}></Route>
         <Route path="/admin/users" element={requireAdmin(<Users />)}></Route>
         <Route path="/admin/properties" element={requireAdmin(<Properties />)}></Route>
+        <Route path="/admin/requests" element={requireAdmin(<Requests />)}></Route>
         <Route path='*' element={<NotFound />} />
       </Routes>
     </BrowserRouter>

@@ -25,6 +25,8 @@ const AppNavbar = () => {
     const [loadingNotifs, setLoadingNotifs] = useState(true);
 
 
+    let isAdmin = curUser && JSON.parse(curUser)?.roles.indexOf('ROLE_ADMIN') > -1
+    let isOwner = curUser && JSON.parse(curUser)?.roles.indexOf('ROLE_OWNER') > -1
 
     useEffect(() => {
         getNotifications();
@@ -73,22 +75,27 @@ const AppNavbar = () => {
                         </Nav> :
                         <Nav>
                             {
-                                JSON.parse(curUser)?.roles.indexOf('ROLE_ADMIN') > -1 ?
+                                isAdmin ?
                                     <Nav.Link href=""><Button variant="blue" onClick={() => { navigate("/admin/dashboard") }}>Admin panel</Button></Nav.Link>
-                                    :
-                                    <div>
-                                        <Nav.Link href=""><Button variant="flat border" onClick={() => { navigate("/houses/add") }}>Publier une annonce</Button></Nav.Link>
-                                    </div>
+                                    : isOwner ?
+                                        <div>
+                                            <Nav.Link href=""><Button variant="atypik border" onClick={() => { navigate("/houses/add") }}>Publier une annonce</Button></Nav.Link>
+                                        </div>
+                                        :
+                                        <div>
+                                            <Nav.Link href=""><Button variant="atypik border" onClick={() => { navigate("/devenir-proprietaire") }}>Devenir Propriétaire</Button></Nav.Link>
+                                        </div>
+
                             }
                             <Nav.Link onClick={() => setOpen(true)} className='pt-3 px-3'>
                                 <Badge count={notifications.length} >
                                     <FontAwesomeIcon icon={Icons.faBell} color="#5A626F" stroke='#5A626F' size="2x" />
                                 </Badge>
                             </Nav.Link>
-                            <NavDropdown title="Mon compte" className='py-2 fs-6'>
+                            <NavDropdown title={isOwner ? "Espace propriétaire" : "Mon compte"} className='py-2 fs-6'>
                                 <NavDropdown.Item onClick={() => { navigate("/account/settings") }}>Gérer mon compte</NavDropdown.Item>
                                 <NavDropdown.Item onClick={() => { navigate("/account/messages") }}>Messages</NavDropdown.Item>
-                                <NavDropdown.Item onClick={() => { navigate("/account/annonces") }}>Mes annonces</NavDropdown.Item>
+                                {isOwner && <NavDropdown.Item onClick={() => { navigate("/account/annonces") }}>Mes annonces</NavDropdown.Item>}
                                 <NavDropdown.Item onClick={() => { navigate("/account/reservations") }}>Mes réservations</NavDropdown.Item>
                                 <NavDropdown.Divider></NavDropdown.Divider>
                                 <NavDropdown.Item onClick={() => {
