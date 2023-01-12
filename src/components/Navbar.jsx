@@ -65,7 +65,7 @@ const AppNavbar = () => {
                     </Nav>
                     {!curUser ?
                         <Nav>
-                            <Nav.Link onClick={handleShowRegister}><Button variant="atypik">Devenir hôte</Button></Nav.Link>
+                            <Nav.Link onClick={() => { navigate("/devenir-proprietaire") }}><Button variant="atypik">Devenir propriétaire</Button></Nav.Link>
                             {/* <Nav.Link> */}
                             <NavDropdown title="Mon compte" className='py-2'>
                                 <NavDropdown.Item onClick={handleShowLogin} >Connexion</NavDropdown.Item>
@@ -95,7 +95,7 @@ const AppNavbar = () => {
                             <NavDropdown title={isOwner ? "Espace propriétaire" : "Mon compte"} className='py-2 fs-6'>
                                 <NavDropdown.Item onClick={() => { navigate("/account/settings") }}>Gérer mon compte</NavDropdown.Item>
                                 <NavDropdown.Item onClick={() => { navigate("/account/messages") }}>Messages</NavDropdown.Item>
-                                {isOwner && <NavDropdown.Item onClick={() => { navigate("/account/annonces") }}>Mes annonces</NavDropdown.Item>}
+                                {(isOwner || isAdmin) && <NavDropdown.Item onClick={() => { navigate("/account/annonces") }}>Mes annonces</NavDropdown.Item>}
                                 <NavDropdown.Item onClick={() => { navigate("/account/reservations") }}>Mes réservations</NavDropdown.Item>
                                 <NavDropdown.Divider></NavDropdown.Divider>
                                 <NavDropdown.Item onClick={() => {
@@ -220,7 +220,31 @@ const AppNavbar = () => {
                                                                                 <p className='p-0 m-0'>{n.content}</p>
                                                                                 <small>{moment(n.createdAt).fromNow()}</small>
                                                                             </Col>
-                                                                        </Row> : <></>
+                                                                        </Row> : n.type == "OWNER_APPROVED" ?
+                                                                            <Row>
+                                                                                <Col md={2}>
+                                                                                    <Tag
+                                                                                        icon={<FontAwesomeIcon icon={Icons.faCheck} />}
+                                                                                        color="success"
+                                                                                        className='rounded-pill'></Tag>
+                                                                                </Col>
+                                                                                <Col md={10}>
+                                                                                    <p className='p-0 m-0'>{n.content}</p>
+                                                                                    <small>{moment(n.createdAt).fromNow()}</small>
+                                                                                </Col>
+                                                                            </Row> : n.type == "OWNER_REJECTED" ?
+                                                                                <Row>
+                                                                                    <Col md={2}>
+                                                                                        <Tag
+                                                                                            icon={<FontAwesomeIcon icon={Icons.faXmark} />}
+                                                                                            color="error"
+                                                                                            className='rounded-pill'></Tag>
+                                                                                    </Col>
+                                                                                    <Col md={10}>
+                                                                                        <p className='p-0 m-0'>{n.content}</p>
+                                                                                        <small>{moment(n.createdAt).fromNow()}</small>
+                                                                                    </Col>
+                                                                                </Row> : <></>
 
                                     }
 

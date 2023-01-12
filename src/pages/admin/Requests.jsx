@@ -76,46 +76,9 @@ const Users = () => {
 
     const onSubmit = async (status) => {
         setLoading(true);
-
-        status == "APPROVED" ? (await fetch(API_URL + '/users/' + modalData?.user?.id + '/update', {
-            method: "PATCH",
-            headers: {
-                'Authorization': 'bearer ' + Cookies.get("token"),
-                'Content-Type': 'application/merge-patch+json'
-            },
-            body: JSON.stringify(
-                {
-                    "roles": [
-                        "ROLE_OWNER"
-                    ]
-                }
-            )
-        })
-            .then(data => data.json())
-            .then(res => {
-
-                fetch(API_URL + '/owner_requests/' + modalData?.id, {
-                    method: "PATCH",
-                    headers: {
-                        'Authorization': 'bearer ' + Cookies.get("token"),
-                        'Content-Type': 'application/merge-patch+json'
-                    },
-                    body: JSON.stringify(
-                        {
-                            "status": "APPROVED"
-                        }
-                    )
-                })
-                    .then(data => data.json())
-                    .then(res => {
-                        setIsModalOpen(false)
-                        getRequests();
-                    })
-                    .catch(err => { console.log(err); setLoading(false); })
-            })
-            .catch(err => { console.log(err); setLoading(false); })) :
+        status === "approved" ?
             (
-                fetch(API_URL + '/owner_requests/' + modalData?.id, {
+                await fetch(API_URL + '/users/' + modalData?.user?.id + '/update', {
                     method: "PATCH",
                     headers: {
                         'Authorization': 'bearer ' + Cookies.get("token"),
@@ -123,16 +86,74 @@ const Users = () => {
                     },
                     body: JSON.stringify(
                         {
-                            "status": "REFUSED"
+                            "roles": [
+                                "ROLE_OWNER"
+                            ]
                         }
                     )
                 })
                     .then(data => data.json())
                     .then(res => {
-                        setIsModalOpen(false)
-                        getRequests();
+
+                        fetch(API_URL + '/owner_requests/' + modalData?.id, {
+                            method: "PATCH",
+                            headers: {
+                                'Authorization': 'bearer ' + Cookies.get("token"),
+                                'Content-Type': 'application/merge-patch+json'
+                            },
+                            body: JSON.stringify(
+                                {
+                                    "status": "APPROVED"
+                                }
+                            )
+                        })
+                            .then(data => data.json())
+                            .then(res => {
+                                setIsModalOpen(false)
+                                getRequests();
+                            })
+                            .catch(err => { console.log(err); setLoading(false); })
                     })
                     .catch(err => { console.log(err); setLoading(false); })
+            )
+            :
+            (await fetch(API_URL + '/users/' + modalData?.user?.id + '/update', {
+                method: "PATCH",
+                headers: {
+                    'Authorization': 'bearer ' + Cookies.get("token"),
+                    'Content-Type': 'application/merge-patch+json'
+                },
+                body: JSON.stringify(
+                    {
+                        "roles": [
+                            "ROLE_USER"
+                        ]
+                    }
+                )
+            })
+                .then(data => data.json())
+                .then(res => {
+
+                    fetch(API_URL + '/owner_requests/' + modalData?.id, {
+                        method: "PATCH",
+                        headers: {
+                            'Authorization': 'bearer ' + Cookies.get("token"),
+                            'Content-Type': 'application/merge-patch+json'
+                        },
+                        body: JSON.stringify(
+                            {
+                                "status": "REFUSED"
+                            }
+                        )
+                    })
+                        .then(data => data.json())
+                        .then(res => {
+                            setIsModalOpen(false)
+                            getRequests();
+                        })
+                        .catch(err => { console.log(err); setLoading(false); })
+                })
+                .catch(err => { console.log(err); setLoading(false); })
             )
 
 
@@ -172,7 +193,7 @@ const Users = () => {
                         </Descriptions>
                     </Container>
                 </Modal> */}
-                <Modal title="Demande du propriétaire" open={isModalOpen} footer={<> <Button variant="atypik" onClick={() => onSubmit('approved')}>Accepter</Button> <Button variant="danger" onClick={() => onSubmit('approved')}>Refuser</Button></>} onCancel={() => setIsModalOpen(false)}>
+                <Modal title="Demande du propriétaire" open={isModalOpen} footer={<> <Button variant="atypik" onClick={() => onSubmit('approved')}>Accepter</Button> <Button variant="danger" onClick={() => onSubmit('refused')}>Refuser</Button></>} onCancel={() => setIsModalOpen(false)}>
                     <Spin spinning={loading}>
 
                         <Container className='p-0'>

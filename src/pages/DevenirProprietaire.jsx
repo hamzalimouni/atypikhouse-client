@@ -4,7 +4,7 @@ import Footer from '../components/Footer'
 import AppNavbar from '../components/Navbar'
 import { useNavigate } from 'react-router-dom'
 import bg from '../assets/img/hotebg.jpeg'
-import { Tag, Steps, Spin } from 'antd'
+import { Alert, Steps, Spin, Tag } from 'antd'
 import Cookies from 'js-cookie'
 import LoginModal from '../components/LoginModal'
 import RegisterModal from '../components/RegisterModal'
@@ -24,6 +24,7 @@ const DevenirProprietaire = () => {
     const [showLogin, setShowLogin] = useState(false);
     const [showRegister, setShowRegister] = useState(false);
     const [submited, isSubmited] = useState(false);
+    const [refused, isRefused] = useState(false);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -40,6 +41,12 @@ const DevenirProprietaire = () => {
                     (result) => {
                         if (result['hydra:totalItems'] > 0) {
                             isSubmited(true)
+                            console.log(result['hydra:member'][0])
+                            if (result['hydra:member'][0]?.status === "REFUSED") {
+                                isRefused(true)
+                            } else {
+                                navigate('/')
+                            }
                         }
                         setLoading(false);
                     },
@@ -103,7 +110,20 @@ const DevenirProprietaire = () => {
                                 curUser ? <>
                                     {submited ?
                                         <>
-                                            <Tag color="success" className='p-2 my-3 mx-auto w-100'>Votre demande a été envoyée avec succès et sera traitée dans les meilleurs delai.</Tag>
+                                            {
+                                                refused ?
+                                                    <Alert
+                                                        description="Nous sommes désolés de vous informer que votre demande pour devenir un propriétaire n'a pas été approuvée. Si vous souhaitez faire appel de cette décision, veuillez nous contacter pour vous fournir des informations supplémentaires."
+                                                        type="error"
+                                                        showIcon
+                                                    />
+                                                    :
+                                                    <Alert
+                                                        description="Votre demande a été envoyée avec succès et sera traitée dans les meilleurs delai."
+                                                        type="success"
+                                                        showIcon
+                                                    />
+                                            }
                                         </>
                                         :
                                         <>
@@ -134,7 +154,7 @@ const DevenirProprietaire = () => {
                                             </Spin>
                                         </>}
                                 </> :
-                                    <p className='py-5 pb-4'>Vous devez <strong role='button' onClick={() => setShowLogin(true)} className='text-atypik'>vous connecter</strong> pour faire la demande si vous n'avez pas de compte inscrivez vous par <strong role='button' onClick={() => setShowRegister(true)} className='text-atypik'>ici</strong></p>
+                                    <p className='py-5 pb-4 fs-6'>Vous devez <strong role='button' onClick={() => setShowLogin(true)} className='text-atypik'>vous connecter</strong> pour faire la demande si vous n'avez pas de compte inscrivez vous par <strong role='button' onClick={() => setShowRegister(true)} className='text-atypik'>ici</strong></p>
                             }
 
                         </Container>
