@@ -37,7 +37,7 @@ const Annonces = () => {
 
     const getAnnonces = (filter) => {
         setLoading(true)
-        fetch(API_URL + '/houses?order[createdAt]=DESC' + (filter ? '&status=' + filter : ''))
+        fetch(API_URL + '/houses?order[createdAt]=DESC&&pagination=false' + (filter ? '&status=' + filter : ''))
             .then(res => res.json())
             .then(
                 (result) => {
@@ -94,7 +94,9 @@ const Annonces = () => {
 
 
     const options = {
-        btnGroup: myButton
+        btnGroup: myButton,
+        defaultSortName: 'id',
+        defaultSortOrder: 'desc'
     };
 
     return (
