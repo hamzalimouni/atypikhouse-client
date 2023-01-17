@@ -40,7 +40,7 @@ const Footer = () => {
                         <Col className='p-5'>
                             <h5 className='text-white'>LIENS UTILES :</h5>
                             <ListGroup variant="flush" className='mt-4'>
-                                <ListGroup.Item role='button' className='bg-atypik border-0 text-white py-1'>• Devenir hôte</ListGroup.Item>
+                                <ListGroup.Item role='button' onClick={() => navigate('/devenir-proprietaire')} className='bg-atypik border-0 text-white py-1'>• Devenir propriétaire</ListGroup.Item>
                                 <ListGroup.Item role='button' onClick={() => navigate('/contact')} className='bg-atypik border-0 text-white py-1'>• Contactez-nous</ListGroup.Item>
                                 <ListGroup.Item role='button' onClick={() => navigate('/about-us')} className='bg-atypik border-0 text-white py-1'>• À propos de nous</ListGroup.Item>
                                 <ListGroup.Item role='button' onClick={() => navigate('/cgu')} className='bg-atypik border-0 text-white py-1'>• CGU / CGV</ListGroup.Item>
@@ -50,7 +50,7 @@ const Footer = () => {
                             </ListGroup>
                         </Col>
                         <Col className='p-5'>
-                            <h5 className='text-white mb-4'>NOTRE NEWSLETTER:</h5>
+                            <h5 className='text-white mb-4'>NEWSLETTER:</h5>
                             <span>
                                 Inscrivez-vous à nos communications
                                 Et accédez aux meilleures offres du

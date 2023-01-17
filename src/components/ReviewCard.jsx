@@ -23,11 +23,17 @@ const ReviewCard = (props) => {
                 </Row>
             </Card.Body>
             <Card.Body className='text-center mt-2'>
-                <small>{props.review}</small>
+                <small style={{
+                    'display': '-webkit-box',
+                    '-webkit-line-clamp': '4',
+                    '-webkit-box-orient': 'vertical',
+                    'overflow': 'hidden',
+                    'text-overflow': 'ellipsis'
+                }}>{props.review}</small>
                 <br /><br />
                 <Rate disabled value={props.stars} style={{ fontSize: '1.2em' }} />
             </Card.Body>
-        </Card>
+        </Card >
     )
 }
 

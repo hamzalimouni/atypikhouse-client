@@ -83,7 +83,7 @@ const SearchForm = () => {
 
             <Container className="align-items-center">
                 <Row className="align-items-center">
-                    <h1 className='sbTitle'>Trouvez votre destination de rêve parmi nos logements uniques et insolites</h1>
+                    <h1 className='sbTitle'>Trouvez votre habitat alternatif idéal pour un séjour insolite</h1>
                 </Row>
                 <Row className="align-items-center my-5 bg-white p-2 rounded">
                     <Col lg className='py-2'>
